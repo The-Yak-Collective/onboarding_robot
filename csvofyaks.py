@@ -23,7 +23,7 @@ async def on_ready(): #note l is used differently in github
         except:
             print("couldnotprintthisname",",", u.id)
 
-    exit(0)
+    #exit(0)
 
 @client.event
 async def on_message(message):
