@@ -7,7 +7,7 @@ l=[]
 @client.event
 async def on_ready(): #note l is used differently in github
     global l
-    #print('We have logged in as {0.user}'.format(client),  client.guilds)#, client.guilds[0].text_channels)
+    print('We have logged in as {0.user}'.format(client),  client.guilds)#, client.guilds[0].text_channels)
     l=[]
     for u in client.guilds[0].members:
       #if('madeyak' in [x.name for x in u.roles]):
