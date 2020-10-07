@@ -2,32 +2,18 @@ import discord
 import base64
 import os
 client = discord.Client()
-l=[]
 
+mem=[];
 @client.event
-async def on_ready(): #note l is used differently in github
-    global l
+async def on_ready(): 
+
     print('We have logged in as {0.user}'.format(client),  client.guilds)#, client.guilds[0].text_channels)
-    l=[]
-    for u in client.guilds[0].members:
+    g=client.guilds[0]
+    mem=await g.fetch_members().flatten()
+    for u in mem:
         print(u,u.id)
         
-def afunctionthatneverruns():
-    for u in client.guilds[0].members:
-      #if('madeyak' in [x.name for x in u.roles]):
-        r=[x.name for x in u.roles if x.name !='@everyone']
-        l.append((str(u),r))
-        listofr=str(r).replace("'"," ").replace(",",";")
-        try:
-            thename=u.name.encode('utf-8').decode('utf-8','replace').replace(",",";")
-        except:
-            thename="could not parse"
-        try:
-            print( thename, ",", u.id, "," ,listofr)
-        except:
-            print("couldnotprintthisname",",", u.id)
 
-    #exit(0)
 
 @client.event
 async def on_message(message):
