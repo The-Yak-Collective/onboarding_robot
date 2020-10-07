@@ -13,6 +13,10 @@ async def on_ready():
     for u in mem:
         print(u,u.id)
         
+@client.event
+async def on_member_join(member):
+    me = await client.get_user(747357865513189436)
+    await client.send_message(me, "new member"+str(member.name))
 
 
 @client.event
