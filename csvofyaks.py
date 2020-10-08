@@ -22,7 +22,7 @@ async def on_ready():
         
 @client.event
 async def on_member_join(member):
-    print("new member"+str(member.name))
+    print("new member"+str(member.name), flush=True)
     newones.append("new member"+str(member.name))
     me = await client.get_user(747357865513189436)
     await client.send_message(me, "new member"+str(member.name))
