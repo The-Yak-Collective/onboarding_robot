@@ -1,7 +1,13 @@
 import discord
 import base64
 import os
-client = discord.Client()
+
+intents = discord.Intents.default()
+intents.members = True
+
+
+client = discord.Client(intents=intents)
+
 
 newones=[]
 mem=[]
@@ -16,6 +22,7 @@ async def on_ready():
         
 @client.event
 async def on_member_join(member):
+    print("new member"+str(member.name))
     newones.append("new member"+str(member.name))
     me = await client.get_user(747357865513189436)
     await client.send_message(me, "new member"+str(member.name))
