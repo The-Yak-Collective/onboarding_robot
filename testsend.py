@@ -24,9 +24,9 @@ async def on_message(message):
     if message.author == client.user:
         return
     if message.content.startswith('$test'):
-      me = await client.get_user(747357865513189436)
+      me = client.get_user(747357865513189436)
       await me.send( "a test message")
-      me2 = await client.get_user(710573356759384075)
+      me2 = client.get_user(710573356759384075)
       await me2.send( "a test message")
     if message.content.startswith('$hello'):
         await message.channel.send('Hello too!')
