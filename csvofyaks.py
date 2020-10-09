@@ -1,6 +1,9 @@
 import discord
 import base64
 import os
+from dotenv import load_dotenv
+
+load_dotenv('.env')
 
 intents = discord.Intents.default()
 intents.members = True
