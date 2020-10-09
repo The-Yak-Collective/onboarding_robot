@@ -22,12 +22,10 @@ async def on_ready():
         
 @client.event
 async def on_member_join(member):
-    print("new member"+str(member.name), flush=True)
+    print("new member: "+str(member.name), flush=True)
     newones.append("new member"+str(member.name))
-    me = await client.get_user(747357865513189436)
-    await client.send_message(me, "new member"+str(member.name))
-    me2 = await client.get_user(710573356759384075)
-    await client.send_message(me2, "new member"+str(member.name))
+    me2 = client.get_user(710573356759384075).dm_channel #for now send messages to me
+    await client.send_message(me2, "new member: "+str(member.name)+"id: "+str(member.id))
     
 
 
