@@ -18,12 +18,6 @@ async def on_ready():
 
         
 
-    me = await client.get_user(747357865513189436)
-    await client.send_message(me, "new member"+str(member.name))
-    me2 = await client.get_user(710573356759384075)
-    await client.send_message(me2, "new member"+str(member.name))
-    
-
 
 @client.event
 async def on_message(message):
@@ -31,9 +25,9 @@ async def on_message(message):
         return
     if message.content.startswith('$test'):
       me = await client.get_user(747357865513189436)
-      await client.send_message(me, "a test message")
+      await me.send( "a test message")
       me2 = await client.get_user(710573356759384075)
-      await client.send_message(me2, "a test message")
+      await me2.send( "a test message")
     if message.content.startswith('$hello'):
         await message.channel.send('Hello too!')
     if message.content.startswith('$die!'):
