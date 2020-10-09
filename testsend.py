@@ -25,6 +25,7 @@ async def on_message(message):
         return
     if message.content.startswith('$test'):
       me = client.get_user(747357865513189436)
+      print("me:", me)
       await me.send( "a test message")
       me2 = client.get_user(710573356759384075)
       await me2.send( "a test message")
