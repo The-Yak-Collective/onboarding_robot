@@ -47,8 +47,8 @@ async def on_message(message):
         t=int(message.content[3:])
         target=client.get_user(t).dm_channel
         if (not target):
-            target=client.get_user(t).create_dm()
-        await target.send('Hello! i was told by yakscraper to contact you')
+            target=await client.get_user(t).create_dm()
+        await target.send('Hello! i was told by '+message.author+' to contact you')
 
 discord_token=os.getenv('DISCORD_KEY')
 client.run(discord_token)
