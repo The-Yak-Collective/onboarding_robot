@@ -21,7 +21,7 @@ async def on_ready():
     g=client.guilds[0]
     mem=await g.fetch_members().flatten()
     for u in mem:
-        print(u,u.id)
+        pass #print(u,u.id)
         
 @client.event
 async def on_member_join(member):
@@ -44,10 +44,13 @@ async def on_message(message):
     if message.content.startswith('$die!'):
         exit(0)
     if message.content.startswith('$dm'):
+        print("dm",flush=True);
         t=int(message.content[3:])
         target=client.get_user(t).dm_channel
         if (not target):
+            print("need to create dm channel")
             target=await client.get_user(t).create_dm()
+        print("target is:",target)    
         await target.send('Hello! i was told by '+message.author+' to contact you')
 
 discord_token=os.getenv('DISCORD_KEY')
