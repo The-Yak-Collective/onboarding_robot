@@ -39,6 +39,7 @@ async def on_message(message):
 
     if message.content.startswith('$hello'):
         await message.channel.send('Hello!')
+        print("hello mess from "+message.author.name,flush=True);
     if message.content.startswith('$whosenew'):
         await message.channel.send(str(newones))
     if message.content.startswith('$die!'):
@@ -48,10 +49,10 @@ async def on_message(message):
         t=int(message.content[3:])
         target=client.get_user(t).dm_channel
         if (not target):
-            print("need to create dm channel")
+            print("need to create dm channel",flush=True)
             target=await client.get_user(t).create_dm()
-        print("target is:",target)    
-        await target.send('Hello! i was told by '+message.author+' to contact you')
+        print("target is:",target,flush=True)    
+        await target.send('Hello! i was told by '+message.author.name+' to contact you')
 
 discord_token=os.getenv('DISCORD_KEY')
 client.run(discord_token)
