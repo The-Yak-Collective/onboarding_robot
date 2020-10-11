@@ -28,7 +28,7 @@ async def on_member_join(member):
     print("new member: "+str(member.name), flush=True)
     newones.append("new member"+str(member.name))
     me2 = client.get_user(710573356759384075).dm_channel #for now send messages to me
-    await client.send_message(me2, "new member: "+str(member.name)+"id: "+str(member.id))
+    await me2.send("new member: "+str(member.name)+"id: "+str(member.id))
     
 
 
@@ -43,5 +43,12 @@ async def on_message(message):
         await message.channel.send(str(newones))
     if message.content.startswith('$die!'):
         exit(0)
+    if message.content.startswith('$dm'):
+        t=int(message.content[3:])
+        target=client.get_user(t).dm_channel
+        if (not target):
+            target=client.get_user(t).create_dm()
+        await target.send('Hello! i was told by yakscraper to contact you')
+
 discord_token=os.getenv('DISCORD_KEY')
 client.run(discord_token)
