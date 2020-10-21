@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 SERVER_UPDATE=os.getenv("SERVER_UPDATE")
 
-@app.route('/update_server', methods=['POST'])
+@app.route('/update_robot', methods=['POST'])
 def webhook():
     print("got update request")
     if request.method == 'POST':
