@@ -31,6 +31,7 @@ def webhook():
 
 @app.route('/version', methods=['GET'])
 def whatisversion():
+    print("with Talisman?")
     return jsonify(os.getenv("TIMEVERSION"))
 
 def is_valid_signature(x_hub_signature, data, private_key):
