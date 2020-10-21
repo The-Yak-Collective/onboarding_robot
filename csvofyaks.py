@@ -60,7 +60,7 @@ async def on_message(message):
         print("target is:",target,flush=True)    
         await target.send('Hello! i was told by '+message.author.name+' to contact you')
 
-async def makecsvfile():
+async def makecsvfile(): 
     g=client.guilds[0]
     mem=await g.fetch_members().flatten()
     with open("memberlist.csv",'w') as f:
