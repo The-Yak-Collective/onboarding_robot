@@ -2,12 +2,13 @@
 from flask import request, jsonify, Flask
 import git
 import os 
+from flask_talisman import Talisman
 
 import hmac
 import hashlib
 
 app = Flask(__name__) 
-
+Talsiman(app)
 SERVER_UPDATE=os.getenv("SERVER_UPDATE")
 
 @app.route('/update_robot', methods=['POST'])
