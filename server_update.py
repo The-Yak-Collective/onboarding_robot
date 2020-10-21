@@ -29,7 +29,7 @@ def webhook():
         print("pulling:",origin.pull()) #not supposed to affect local files we changed that are not changed on parent
         print("... with secret") 
         os.environ["TIMEVERSION"]=str(int(time.time()))
-        os.system('bash .git/hooks/post-merge') 
+        os.system('bash .git/hooks/post-merge') #seems we are doing a fast forward so post-merge is not called as there is no merge. so execute manually
         return 'Updated robot successfully', 200
     else:
         return 'Wrong event type', 400
