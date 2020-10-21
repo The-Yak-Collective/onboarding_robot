@@ -3,6 +3,7 @@ from flask import request, jsonify, Flask
 import git
 import os 
 from flask_talisman import Talisman
+import time
 
 import hmac
 import hashlib
@@ -27,6 +28,7 @@ def webhook():
         print("origin:",origin)
         origin.pull() #not supposed to affect local files we changed that are not changed on parent
         print("now with secret")
+        os.environ["TIMEVERSION"]=str(int(time.time()))
         return 'Updated robot successfully', 200
     else:
         return 'Wrong event type', 400

@@ -44,6 +44,7 @@ async def on_message(message):
     if message.content.startswith('$whosenew'):
         await message.channel.send(str(newones))
     if message.content.startswith('$givemecsv'):
+        print("working on memberlist")
         await makecsvfile()
         await message.channel.send("pretend this is a csv file of all yaks")
     if message.content.startswith('$die!'):
