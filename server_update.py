@@ -9,6 +9,8 @@ import hashlib
 
 app = Flask(__name__) 
 #Talisman(app) 
+#GIT_USER=os.getenv("GIT_USER")
+#GIT_PASS=os.getenv("GIT_PASS")
 SERVER_UPDATE=os.getenv("SERVER_UPDATE")
 
 @app.route('/update_robot', methods=['POST'])
