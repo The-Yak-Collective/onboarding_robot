@@ -6,7 +6,7 @@ import os
 import hmac
 import hashlib
 
-app = Flask(__name__)
+app = Flask(__name__) 
 
 SERVER_UPDATE=os.getenv("SERVER_UPDATE")
 
