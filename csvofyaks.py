@@ -23,6 +23,14 @@ async def on_ready():
     for u in mem:
         pass #print(u,u.id)
         
+async def makecsvfile():
+    g=client.guilds[0]
+    mem=await g.fetch_members().flatten()
+    with open("memberlist.csv",'w') as f:
+        for u in mem:
+            f.write('"{0}", "{1}", "{2}", "{3}"'.format(u.display_name,u.id, u.created_at, str(u.roles))
+
+
 @client.event
 async def on_member_join(member):
     print("new member: "+str(member.name), flush=True)
@@ -42,6 +50,9 @@ async def on_message(message):
         print("hello mess from "+message.author.name,flush=True);
     if message.content.startswith('$whosenew'):
         await message.channel.send(str(newones))
+    if message.content.startswith('$givemecsv'):
+        makecsvfile()
+        await message.channel.send("pretend this is a csv file of all yaks")
     if message.content.startswith('$die!'):
         exit(0)
     if message.content.startswith('$dm'):

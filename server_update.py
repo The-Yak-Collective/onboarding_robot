@@ -7,7 +7,7 @@ from flask_talisman import Talisman
 import hmac
 import hashlib
 
-app = Flask(__name__) 
+app = Flask(__name__) #run using "flask run --host 0.0.0.0:5000 #and note fals_app is an enriromen varabe and you need kill -9 to kill flask server. maybe nohup is needed
 #Talisman(app) 
 #GIT_USER=os.getenv("GIT_USER")
 #GIT_PASS=os.getenv("GIT_PASS")
