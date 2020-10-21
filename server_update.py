@@ -26,8 +26,8 @@ def webhook():
         print("repo:",repo) 
         origin = repo.remotes.origin
         print("origin:",origin)
-        origin.pull() #not supposed to affect local files we changed that are not changed on parent
-        print("now with secret")
+        print("pulling:",origin.pull()) #not supposed to affect local files we changed that are not changed on parent
+        print("... with secret")
         os.environ["TIMEVERSION"]=str(int(time.time()))
         return 'Updated robot successfully', 200
     else:
@@ -41,8 +41,8 @@ def whatisversion():
 def is_valid_signature(x_hub_signature, data, private_key):
     # x_hub_signature and data are from the webhook payload
     # private key is your webhook secret
-    print('signature=',x_hub_signature)
-    print("private key=",private_key)
+    #print('signature=',x_hub_signature)
+    #print("private key=",private_key)
     hash_algorithm, github_signature = x_hub_signature.split('=', 1)
     algorithm = hashlib.__dict__.get(hash_algorithm)
     encoded_key = bytes(private_key, 'latin-1')
