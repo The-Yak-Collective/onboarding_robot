@@ -65,7 +65,7 @@ async def makecsvfile():
     mem=await g.fetch_members().flatten()
     with open("memberlist.csv",'w') as f:
         for u in mem:
-            f.write('"{0}", "{1}", "{2}", "{3}"\n'.format(u.display_name,u.id, u.created_at, ",".join([x.name for x in u.roles])))
+            f.write('"{0}", "{1}", "{2}", "{3}"\n'.format(u.display_name,u.id, u.created_at, ";".join([x.name for x in u.roles])))
 
 discord_token=os.getenv('DISCORD_KEY')
 client.run(discord_token)
