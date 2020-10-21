@@ -48,7 +48,9 @@ async def on_message(message):
         await makecsvfile()
         await message.channel.send("pretend this is a csv file of all yaks")
         await message.channel.send("actual file?", file=discord.File("memberlist.csv"))
-    if message.content.startswith('$die!'):
+    if message.content.startswith('$test'):
+        await message.channel.send("this is a test")
+    if (message.content.startswith('$die!') and message.author.id==710573356759384075):
         exit(0)
     if message.content.startswith('$dm'):
         print("dm",flush=True);
