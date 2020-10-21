@@ -23,7 +23,7 @@ async def on_ready():
     for u in mem:
         pass #print(u,u.id)
         
-async def makecsvfile():
+def makecsvfile():
     g=client.guilds[0]
     mem=await g.fetch_members().flatten()
     with open("memberlist.csv",'w') as f:
