@@ -23,13 +23,6 @@ async def on_ready():
     for u in mem:
         pass #print(u,u.id)
         
-def makecsvfile():
-    g=client.guilds[0]
-    mem=await g.fetch_members().flatten()
-    with open("memberlist.csv",'w') as f:
-        for u in mem:
-            f.write('"{0}", "{1}", "{2}", "{3}"'.format(u.display_name,u.id, u.created_at, str(u.roles))
-
 
 @client.event
 async def on_member_join(member):
@@ -51,7 +44,7 @@ async def on_message(message):
     if message.content.startswith('$whosenew'):
         await message.channel.send(str(newones))
     if message.content.startswith('$givemecsv'):
-        makecsvfile()
+        await makecsvfile()
         await message.channel.send("pretend this is a csv file of all yaks")
     if message.content.startswith('$die!'):
         exit(0)
@@ -64,6 +57,13 @@ async def on_message(message):
             target=await client.get_user(t).create_dm()
         print("target is:",target,flush=True)    
         await target.send('Hello! i was told by '+message.author.name+' to contact you')
+
+async def makecsvfile():
+    g=client.guilds[0]
+    mem=await g.fetch_members().flatten()
+    with open("memberlist.csv",'w') as f:
+        for u in mem:
+            f.write('"{0}", "{1}", "{2}", "{3}"'.format(u.display_name,u.id, u.created_at, str(u.roles))
 
 discord_token=os.getenv('DISCORD_KEY')
 client.run(discord_token)
