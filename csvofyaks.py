@@ -54,7 +54,7 @@ async def on_message(message):
         print("dm",flush=True);
         t=int(message.content[3:])
         target=client.get_user(t).dm_channel
-        if (not target):
+        if (not target): 
             print("need to create dm channel",flush=True)
             target=await client.get_user(t).create_dm()
         print("target is:",target,flush=True)    
