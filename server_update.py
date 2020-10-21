@@ -8,7 +8,7 @@ import hmac
 import hashlib
 
 app = Flask(__name__) 
-Talsiman(app)
+Talisman(app)
 SERVER_UPDATE=os.getenv("SERVER_UPDATE")
 
 @app.route('/update_robot', methods=['POST'])
