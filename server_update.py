@@ -23,7 +23,7 @@ def webhook():
             print("missing correct token/secret for server_update")
             return 'missing password', 400
         repo = git.Repo('.')
-        print("repo:",repo)
+        print("repo:",repo) 
         origin = repo.remotes.origin
         print("origin:",origin)
         origin.pull() #not supposed to affect local files we changed that are not changed on parent
