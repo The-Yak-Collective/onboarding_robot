@@ -7,7 +7,7 @@ from flask_talisman import Talisman
 import hmac
 import hashlib
 
-app = Flask(__name__) 
+app = Flask(__name__)
 #Talisman(app) 
 SERVER_UPDATE=os.getenv("SERVER_UPDATE")
 
