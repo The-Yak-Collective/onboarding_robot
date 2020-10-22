@@ -46,10 +46,10 @@ async def on_message(message):
     if message.content.startswith('$givemecsv'):
         print("working on memberlist")
         await makecsvfile()
-        await message.channel.send("pretend this is a csv file of all yaks")
-        await message.channel.send("actual file?", file=discord.File("memberlist.csv"))
+        await message.channel.send("a csv file of all yaks")
+        await message.channel.send("actual file:", file=discord.File("memberlist.csv"))
     if message.content.startswith('$test'):
-        await message.channel.send("this is a test: "+str([(x.name,x.created_at) for x in message.author.roles]))
+        await message.channel.send("this is a test")#: "+str([(x.name,x.created_at) for x in message.author.roles]))
     if (message.content.startswith('$die!') and message.author.id==710573356759384075):
         exit(0)
     if message.content.startswith('$dm'):
