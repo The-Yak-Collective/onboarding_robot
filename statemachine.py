@@ -15,19 +15,19 @@ newyak={
     'onenter_params': ['welcome to the yak collective.\n\nPlease post an introduction within 7 days.\n\nStart here (we use roam for data display): (some link to roam)'],
     'transitions':[
         {"on_message":{#notclear if we really look for other events...
-            "run": "posted_introduction",
+            "run": posted_introduction,
             'run_params':[],
             'goto': ['','yak'] #if 0 stay in state (not the same as going again to justjoin, as we do not zero anything, otherwise go up a level
             }},
         {"on_tick":{ #called every tick. the first param is checked before we actually run the function (special for on_tick function)
-            "run": "reminder",
+            "run": reminder,
             'run_params':[48,"please post an introduction in the introduction channel"],#every 48 ticks post this message. lets assume ticks are in hours
             'goto':['']
             }},
         {"on_tick":{ #called every tick
-            "run": "null_func",
+            "run": null_func,
             'run_params':[7*24]
-            'goto':['yak']
+            'goto':['out']
             }}
         ]
     },
@@ -37,7 +37,7 @@ newyak={
     'onenter_params': ['thank you for posting an introduction. here are some more links to consider\n'],
     'transitions':[
         "on_tick":{ #called every tick
-                "run": "null_func",
+                "run": null_func,
                 'run_params':[48],#every 48 ticks post this message. lets assume ticks are in hours
                 'goto':['regular']
                 }
@@ -49,16 +49,12 @@ newyak={
     'id':2,
     'onenter': send_dm, 
     'onenter_params': ['if you ever need help, pls send me a dm "$help"'],
-    'timelimit': 0,
-    'aftertimelimit': 'regular',
     'transitions':[]
     },
 'out':{ #not much happening here, but we coudl track what is going on
     'id':3,
     'onenter': kick_out, 
     'onenter_params': ['you did not post an introduction withon the required timelimit. try again later'],
-    'timelimit': 0,
-    'aftertimelimit': 'out',
     'transitions':[]
     }
 }
