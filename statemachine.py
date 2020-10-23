@@ -4,7 +4,7 @@
 #for each type, we have an array for each state table. the array includes the states which care about that type. when running and the event occurs, if it is an on_tick event (not triggered by a user, i can imagine there are others) we see which states care about the event. then, for each state, we extract all the yaks in that state AND which do not say "exclude me". then, we call teh function, FOR THAT USER, with teh parameters and go to where result sends up.
 #if it is an event triggered by a user (like a message), we can simply check in db that he is not 'frozen" and run the function in the state table, accorindg to his state (taken form db), if relevant
 
-
+import discord
 
 
 
@@ -71,6 +71,12 @@ def reminder(id,x):
 
 def send_dm(id,x):
     print("here i send a DM to the current yak we are looking at, with text:",x)
+    target=client.get_user(id).dm_channel
+    if (not target): 
+        print("need to create dm channel",flush=True)
+        target=await client.get_user(id).create_dm()
+    print("target is:",target,flush=True)    
+    await target.send(x)
 
 def posted_introduction(id):
     print('check if this message is in introduction. if yes, return 1, otherwise 0')
