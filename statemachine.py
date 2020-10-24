@@ -82,4 +82,4 @@ newyak={
     }
 }
 
-machines=[(newyak,"newyak","justjoined")] #each touble is teh state machine dict, name of the state machine and starting state. mayeb we will move into dict itself. but that just complicates it
+machines=[(newyak,"newyak","justjoined")] #each tupple is (the state machine dict, name of the state machine and starting state). maybe we will move into dict itself. but that just complicates it

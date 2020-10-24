@@ -8,8 +8,8 @@ from dotenv import load_dotenv
 import sqlite3  #consider , "check_same_thread = False" on sqlite.connect()
 from statemachine import * # this includes "machines", a list of machine dicts
 
-conn=0 #the connection should be global. curso, etc, also, but not so much
-db_c=0 #cursor
+conn=sqlite3.connect('statedatabase.db') #the connection should be global. 
+db_c = conn.cursor()
 
 
 @tasks.loop(seconds=60.0) #change to 3600 as soon as we see this works. right now at 60, just so we see it happens multipel times
@@ -47,7 +47,7 @@ async def on_message(message):
     if message.author == client.user:
         return
     print("i would have checked this message:",message.content, message.channel, message.author.id)
-    db_c = conn.cursor() # too much of this consider wrapping up in a function, also teh commit part, add user, etc
+ 
     print(db_c.execute('select * from yakstates where discordid=(?)',(str(message.author.id),)))
     #here add a test facility as well as other stuff
     #most important - add ignore me function in db, so we skip eveything if person asked to be ignored/frozen
@@ -58,8 +58,7 @@ async def update_database():
     mem=[]
     g=client.guilds[0]
     lastread=int(time.time())
-    conn=sqlite3.connect('statedatabase.db')
-    db_c = conn.cursor()
+#    db_c = conn.cursor()
     db_c.execute('''SELECT count(name) FROM sqlite_master WHERE type='table' AND name='yakstates' ''')
     if db_c.fetchone()[0]!=1:
         db_c.execute('''CREATE TABLE yakstates
@@ -93,7 +92,7 @@ async def update_database():
 
 def update_db_new_member(member):
     x=member
-    db_c=conn.cursor()
+#    db_c=conn.cursor()
     db_c.execute('select * from yakstates where discordid=(?)',(str(x.id),))
     if not db_c.fetchone(): # is not in db yet
         print(member.id, " not in db yet")
