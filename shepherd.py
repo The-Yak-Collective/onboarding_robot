@@ -27,6 +27,7 @@ class MyCog(commands.Cog):
 @tasks.loop(seconds=13.0) #change to 3600 as soon as we see this works
 async def test_tick():
     print("does this tick work?",time.time())
+test_tick.start()
 
 
 load_dotenv('.env')
