@@ -2,6 +2,8 @@ from discord.ext import tasks, commands
 import discord
 import asyncio
 import os
+import time
+import datetime
 from dotenv import load_dotenv
 import sqlite3  #consider , "check_same_thread = False" on sqlite.connect()
 from statemachine import * # this includes "machines", a list of machine dicts
@@ -57,13 +59,38 @@ async def on_message(message):
 async def update_database(): 
     mem=[]
     g=client.guilds[0]
+    lastread=int(time.time())
     mem=await g.fetch_members().flatten()
     conn=sqlite3.connect('statedatabase.db')
     db_c = conn.cursor()
     db_c.execute(''' SELECT count(name) FROM sqlite_master WHERE type='table' AND name='students' ''')
     if db_c.fetchone()[0]!=1:
-        c.execute('''CREATE TABLE yakstates
+
+        db_c.execute('''CREATE TABLE yakstates
              (discordid text, machine text, state text, startedat int)''')
+        db_c.execute('''CREATE TABLE lastread
+             (timestamp int)''')
+        for m in machines:
+            db_c.executemany('''insert into yakstates values
+             (?, ?, ?, ?)''',[(x.id,m[1],"",0) for x in mem])
+        db_c.execute('''UPDATE lastread
+             (?)''',lastread)
+    else:
+        db_c.execute('''select * from lastread''')
+        prevread=db_c.fetchone()[0]
+        print("prevread=",prevread)
+        for m in machines:
+            db_c.execute('''UPDATE lastread
+             (?)''',lastread)
+            mem1=[x for x in mem if datetime.datetime.timestamp(x.joined_at)>prevread]
+            db_c.executemany('''insert into yakstates values
+             (?, ?, ?, ?)''',[(x.id,m[1],"",0) for x in mem1])
+
+    conn.commit()
+
+def update_db_new_member(member):
+    print('add new member to db, if not already in it')
+
     #read database
 
 def setup_sm():
