@@ -8,6 +8,29 @@ import discord
 
 
 
+#here be functions used in teh above state table. note they are called by predefined functions, like "on_message"
+def null_func(id):
+    return 0
+    
+def reminder(id,x):
+    send_dm("reminder: "+x)
+
+def kick_out(id,x):
+    print("kick out id with message (sent by dm):",id,x)
+
+async def send_dm(id,x):
+    print("here i send a DM to the current yak we are looking at, with text:",x)
+    target=client.get_user(id).dm_channel
+    if (not target): 
+        print("need to create dm channel",flush=True)
+        target=await client.get_user(id).create_dm()
+    print("target is:",target,flush=True)    
+    await target.send(x)
+
+def posted_introduction(id):
+    print('check if this message is in introduction. if yes, return 1, otherwise 0')
+
+
 newyak={
 'justjoined': {
     'id':0, #is this needed?
@@ -26,22 +49,22 @@ newyak={
             }},
         {"on_tick":{ #called every tick
             "run": null_func,
-            'run_params':[7*24]
+            'run_params':[7*24],
             'goto':['out']
             }}
         ]
     },
-'yak':{
+'yak': {
     'id':1,
     'onenter': send_dm, 
     'onenter_params': ['thank you for posting an introduction. here are some more links to consider\n'],
-    'transitions':[
-        "on_tick":{ #called every tick
+    'transitions': [
+        {"on_tick": { #called every tick
                 "run": null_func,
                 'run_params':[48],#every 48 ticks post this message. lets assume ticks are in hours
                 'goto':['regular']
                 }
-        ]
+        }]
     },
 # we could have more link suggestion states; 'stage1links':
 
@@ -58,23 +81,5 @@ newyak={
     'transitions':[]
     }
 }
-#here be functions used in teh above state table. note they are called by predefined functions, like "on_message"
-def null_func(id):
-    return 0
-    
-def reminder(id,x):
-    send_dm("reminder: "+x)
 
-def send_dm(id,x):
-    print("here i send a DM to the current yak we are looking at, with text:",x)
-    target=client.get_user(id).dm_channel
-    if (not target): 
-        print("need to create dm channel",flush=True)
-        target=await client.get_user(id).create_dm()
-    print("target is:",target,flush=True)    
-    await target.send(x)
-
-def posted_introduction(id):
-    print('check if this message is in introduction. if yes, return 1, otherwise 0')
-    
-machines=[newyak]
+machines=[(newyak,"newyak")]

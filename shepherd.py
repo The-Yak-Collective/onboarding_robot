@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 import sqlite3  #consider , "check_same_thread = False" on sqlite.connect()
 from statemachine import * # this includes "machines", a list of machine dicts
 
+conn=0 #the connection should be global. curso, etc, also, but not so much
+db_c=0 #cursor
+
 class MyCog(commands.Cog):
     def __init__(self):
         self.index = 0
@@ -52,14 +55,23 @@ async def on_message(message):
 
 
 async def update_database(): 
+    mem=[]
     g=client.guilds[0]
     mem=await g.fetch_members().flatten()
+    conn=sqlite3.connect('statedatabase.db')
+    db_c = conn.cursor()
+    db_c.execute(''' SELECT count(name) FROM sqlite_master WHERE type='table' AND name='students' ''')
+    if db_c.fetchone()[0]!=1:
+        c.execute('''CREATE TABLE yakstates
+             (discordid text, machine text, state text, startedat int)''')
+    #read database
 
 def setup_sm():
     pass
 
 discord_token=os.getenv('SHEPHERD_DISCORD_KEY')
 client.run(discord_token)
-loop = asyncio.get_event_loop() #need to make sure this doe snot clash with discord
-loop.run_until_complete(on_tick())
-loop.close()
+#loop = asyncio.get_event_loop() #need to make sure this doe snot clash with discord
+#loop.run_until_complete(on_tick())
+#loop.close()
+print("should i get here")
