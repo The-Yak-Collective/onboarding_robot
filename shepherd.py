@@ -73,7 +73,7 @@ async def update_database():
     else:
         db_c.execute('''select * from lastread''')
         prevread=db_c.fetchone()[0]
-        mem=await g.fetch_members(after=datetime.datetime.fromtimestamp(prevread-10000)).flatten()
+        mem=await g.fetch_members(after=datetime.datetime.fromtimestamp(prevread-(60*60*24*5)).flatten()
         print("fetched only:",len(mem))
         print("prevread=",prevread)
         for m in machines:
