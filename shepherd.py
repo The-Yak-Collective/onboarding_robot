@@ -19,7 +19,7 @@ class MyCog(commands.Cog):
     def cog_unload(self):
         self.printer.cancel()
 
-    @tasks.loop(seconds=3600.0)
+    @tasks.loop(seconds=30.0) #change to 3600 as soon as we see this works
     async def on_tick():
         #check that db loaded... if not it means bot is not ready yet
         print("check if any on_ticks need to be run, check first run_params for tick count to decide IF to run")
@@ -51,6 +51,7 @@ async def on_member_join(member):
 async def on_message(message):
     if message.author == client.user:
         return
+    print("i would have checked this message:",message.content, message.channel)
     #here add a test facility as well as other stuff
     #most important - add ignore me function in db, so we skip eveything if person asked to be ignored/frozen
     #also parse "$help"
@@ -82,7 +83,7 @@ async def update_database():
             db_c.execute('''UPDATE lastread
              set timestamp=(?)''',(lastread,))
             mem1=[x for x in mem if datetime.datetime.timestamp(x.joined_at)>prevread]
-            print("adding {} members to machine {}",len(mem1), m[1])
+            print("adding {} members to machine {}".format(len(mem1), m[1]))
             db_c.executemany('''insert into yakstates values
              (?, ?, ?, ?)''',[(x.id,m[1],m[2],lastread) for x in mem1])
     conn.commit()
@@ -92,7 +93,7 @@ def update_db_new_member(member):
 
     #read database
 
-def setup_sm():
+def setup_sm(x):
     pass
 
 discord_token=os.getenv('SHEPHERD_DISCORD_KEY')
