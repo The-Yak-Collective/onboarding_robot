@@ -17,12 +17,16 @@ class MyCog(commands.Cog):
         self.on_tick.start()
 
     def cog_unload(self):
-        self.printer.cancel()
+        self.on_tick.cancel()
 
     @tasks.loop(seconds=30.0) #change to 3600 as soon as we see this works
     async def on_tick():
         #check that db loaded... if not it means bot is not ready yet
-        print("check if any on_ticks need to be run, check first run_params for tick count to decide IF to run")
+        print("check if any on_ticks need to be run, check first run_params for tick count to decide IF to run", index)
+
+@tasks.loop(seconds=13.0) #change to 3600 as soon as we see this works
+async def test_tick():
+    print("does this tick work?",time.time())
 
 
 load_dotenv('.env')
