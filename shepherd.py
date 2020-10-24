@@ -63,7 +63,7 @@ async def update_database():
     mem=await g.fetch_members().flatten()
     conn=sqlite3.connect('statedatabase.db')
     db_c = conn.cursor()
-    db_c.execute(''' SELECT count(name) FROM sqlite_master WHERE type='table' AND name='students' ''')
+    db_c.execute('''SELECT count(name) FROM sqlite_master WHERE type='table' AND name='yakstates' ''')
     if db_c.fetchone()[0]!=1:
         db_c.execute('''CREATE TABLE yakstates
              (discordid text, machine text, state text, startedat int)''')
