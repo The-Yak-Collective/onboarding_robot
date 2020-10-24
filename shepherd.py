@@ -73,14 +73,14 @@ async def update_database():
             db_c.executemany('''insert into yakstates values
              (?, ?, ?, ?)''',[(x.id,m[1],m[2],lastread) for x in mem])# new yaks get benifit of doubt... as if they joined just now
         db_c.execute('''UPDATE lastread
-             (?)''',lastread)
+             set timestamp=(?)''',lastread)
     else:
         db_c.execute('''select * from lastread''')
         prevread=db_c.fetchone()[0]
         print("prevread=",prevread)
         for m in machines:
             db_c.execute('''UPDATE lastread
-             (?)''',lastread)
+             set timestamp=(?)''',lastread)
             mem1=[x for x in mem if datetime.datetime.timestamp(x.joined_at)>prevread]
             print("adding {} members to machine {}",len(mem1), m[1])
             db_c.executemany('''insert into yakstates values
