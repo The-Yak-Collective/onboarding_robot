@@ -48,7 +48,7 @@ async def on_message(message):
         return
     print("i would have checked this message:",message.content, message.channel, message.author.id)
  
-    print(db_c.execute('select * from yakstates where discordid=(?)',(str(message.author.id),)))
+    print(db_c.execute('select * from yakstates where discordid=(?)',(str(message.author.id),)).fetchone())
     #here add a test facility as well as other stuff
     #most important - add ignore me function in db, so we skip eveything if person asked to be ignored/frozen
     #also parse "$help"
