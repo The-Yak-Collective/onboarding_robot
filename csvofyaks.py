@@ -19,9 +19,9 @@ async def on_ready():
 
     print('We have logged in as {0.user}'.format(client),  client.guilds)#, client.guilds[0].text_channels)
     g=client.guilds[0]
-    mem=await g.fetch_members().flatten()
-    for u in mem:
-        pass #print(u,u.id)
+    #mem=await g.fetch_members().flatten() # no need to read until asked
+    #for u in mem:
+    #    pass #print(u,u.id)
         
 
 @client.event
