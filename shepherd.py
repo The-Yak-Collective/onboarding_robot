@@ -65,14 +65,13 @@ async def update_database():
     db_c = conn.cursor()
     db_c.execute(''' SELECT count(name) FROM sqlite_master WHERE type='table' AND name='students' ''')
     if db_c.fetchone()[0]!=1:
-
         db_c.execute('''CREATE TABLE yakstates
              (discordid text, machine text, state text, startedat int)''')
         db_c.execute('''CREATE TABLE lastread
              (timestamp int)''')
         for m in machines:
             db_c.executemany('''insert into yakstates values
-             (?, ?, ?, ?)''',[(x.id,m[1],m[2],lastread) # new yaks get benifit of doubt... as if they joined just now
+             (?, ?, ?, ?)''',[(x.id,m[1],m[2],lastread) for x in mem])# new yaks get benifit of doubt... as if they joined just now
         db_c.execute('''UPDATE lastread
              (?)''',lastread)
     else:
@@ -85,7 +84,7 @@ async def update_database():
             mem1=[x for x in mem if datetime.datetime.timestamp(x.joined_at)>prevread]
             print("adding {} members to machine {}",len(mem1), m[1])
             db_c.executemany('''insert into yakstates values
-             (?, ?, ?, ?)''',[(x.id,m[1],m[2],lastread)
+             (?, ?, ?, ?)''',[(x.id,m[1],m[2],lastread) for x in mem1])
     conn.commit()
 
 def update_db_new_member(member):
