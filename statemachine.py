@@ -8,41 +8,53 @@ import discord
 
 
 
-#here be functions used in teh above state table. note they are called by predefined functions, like "on_message"
-def null_func(id):
+#here be functions used in the above state table. note they are called by predefined functions, like "on_message"
+def null_func(x,y,z): #always two parameters and then array. that is  my format
     return 0
     
-def reminder(id,x):
-    send_dm("reminder: "+x)
+def reminder(yak,y,x):
+    send_dm(yak,"reminder: "+x[0]) # 3rd parameter is always an array
+    return 0
 
-def kick_out(id,x):
-    print("kick out id with message (sent by dm):",id,x)
+def has_role(yak,y,x):
+    if x[0] in yak.roles:
+        return 1
+    return 0
 
-async def send_dm(id,x):
-    print("here i send a DM to the current yak we are looking at, with text:",x)
-    target=client.get_user(id).dm_channel
+def kick_out(yak,y,x):
+    print("kick out id with message (sent by dm):",yak.discordid,x[0])
+    return 0
+
+async def send_dm(yak,y,x):
+    print("here i send a DM to the current yak we are looking at, with text:",x[0])
+    target=client.get_user(yak.discordid).dm_channel
     if (not target): 
         print("need to create dm channel",flush=True)
-        target=await client.get_user(id).create_dm()
+        target=await client.get_user(yak.discordid).create_dm()
     print("target is:",target,flush=True)    
-    await target.send(x)
+    await target.send(x[0])
+    return 0
 
-def posted_introduction(id):
-    print('check if this message is in introduction. if yes, return 1, otherwise 0')
+def posted_introduction(yak,m,x):
+    print('check if this message is in introduction channel. if yes, return 1, otherwise 0')
+    if m.channel.id==692826420191297556:
+        return 1
+    return 0
 
 
 newyak={
 'justjoined': {
     'id':0, #is this needed?
     'onenter': send_dm, #NOT run on staying within same state due toa  failed transition
-    'onenter_params': ['welcome to the yak collective.\n\nPlease post an introduction within 7 days.\n\nStart here (we use roam for data display): (some link to roam)'],
+    'onenter_params': ['welcome to the yak collective.\n\nPlease post an introduction within 7 days.\n\nStart here (we use roam for data display): (some link to roam)'],#also send 0 as teh 2nd parameter
     'transitions':[
         {"on_message":{#notclear if we really look for other events...
             "run": posted_introduction,
-            'run_params':[],
+            'run_params':[], #we always send theyak and teh message, followed by the list
             'goto': ['','yak'] #if 0 stay in state (not the same as going again to justjoin, as we do not zero anything, otherwise go up a level
             }},
         {"on_tick":{ #called every tick. the first param is checked before we actually run the function (special for on_tick function)
+        #for on_tick we always send theyak and the tick number before the param
             "run": reminder,
             'run_params':[48,"please post an introduction in the introduction channel"],#every 48 ticks post this message. lets assume ticks are in hours
             'goto':['']
@@ -82,4 +94,13 @@ newyak={
     }
 }
 
-machines=[(newyak,"newyak","justjoined")] #each tupple is (the state machine dict, name of the state machine and starting state). maybe we will move into dict itself. but that just complicates it
+machines=[
+    {
+    'states':newyak,
+    'name':"newyak",
+    'startat':"justjoined", #probbaly shoudl at a "starthere stae which checks a role"
+    'lut':{ #will add more when new functions are created
+        "on_tick":[],
+        "on_message":[]
+    }
+] 
