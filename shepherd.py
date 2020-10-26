@@ -104,15 +104,12 @@ async def update_database():
     lastread=int(time.time())
     db_c.execute('''SELECT count(name) FROM sqlite_master WHERE type='table' AND name='yakstates' ''')
     if db_c.fetchone()[0]!=1:
-        db_c.execute('''CREATE TABLE yakstates
-             (discordid text, machine text, state text, startedat int, ignoreme int, roles text)''')
-        db_c.execute('''CREATE TABLE lastread
-             (timestamp int)''')
-        db_c.execute('''insert into lastread values
-             (?)''',(0,))
+        db_c.execute('''CREATE TABLE yakstates (discordid text, machine text, state text, startedat int, ignoreme int, roles text)''')
+        db_c.execute('''CREATE TABLE lastread (timestamp int)''')
+        db_c.execute('''insert into lastread values (?)''',(0,))
     read_and_add()
 
-def read_and_add():
+async def read_and_add():
     db_c.execute('''select * from lastread''')
     prevread=db_c.fetchone()[0]
     mem=await g.fetch_members(after=datetime.datetime.fromtimestamp(prevread)).flatten() # reads only ones added since prevread
