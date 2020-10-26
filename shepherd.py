@@ -125,7 +125,7 @@ async def read_and_add():
     for m in machines:
         #mem1=[x for x in mem if datetime.datetime.timestamp(x.joined_at)>prevread]
         print(m)
-        print("adding {} members to machine {}".format(len(mem), m.name))
+        print("adding {} members to machine {}".format(len(mem), m['name']))
         db_c.executemany('''insert into yakstates values
          (?, ?, ?, ?, ?, ?)''',[(x.id,m.name,m.startat,lastread,0, roles(x)) for x in mem])
         for y in mem:
