@@ -15,6 +15,7 @@ tick=0
 
 @tasks.loop(seconds=60.0) #change to 3600 as soon as we see this works. right now at 60, just so we see it happens multipel times
 async def test_tick():
+    global tick
     tick=tick+1
     print("does this tick work?",time.time(), tick)
     for m in machines:

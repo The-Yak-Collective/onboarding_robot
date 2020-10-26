@@ -25,7 +25,7 @@ def kick_out(yak,y,x):
     print("kick out id with message (sent by dm):",yak.discordid,x[0])
     return 0
 
-async def send_dm(yak,y,x):
+def send_dm(yak,y,x):
     print("here i send a DM to the current yak we are looking at, with text:",yak['discordid'],x[0])
     target=client.get_user(yak['discordid']).dm_channel
     if (not target): 
