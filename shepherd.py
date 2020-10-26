@@ -92,7 +92,7 @@ def transition_on(yak,val,where,m):
     newstate=where[val]
     if newstate=='':
         return
-    db_c.execute('update yakstates set state=(?) where discordid=(?) and machine=(?)',(newstate,theyak.discordid,theyak.machine))
+    db_c.execute('update yakstates set state=(?), startedat=(?) where discordid=(?) and machine=(?)',(newstate,int(time.time()),theyak.discordid,theyak.machine))
     conn.commit()
     do_on_enter(m,theyak,newstate,m[newstate].onenter_params)
 
@@ -113,10 +113,13 @@ async def read_and_add():
     g=client.guilds[0]
     db_c.execute('''select * from lastread''')
     prevread=int(db_c.fetchone()[0])
-    print(prevread,datetime.datetime.fromtimestamp(prevread))
-    mem=await g.fetch_members(after=datetime.datetime.fromtimestamp(prevread)).flatten() # reads only ones added since prevread
-    print("fetched only:",len(mem))
-    print("prevread=",prevread)
+    print("prevread=",prevread,datetime.datetime.fromtimestamp(prevread))
+#    mem=await g.fetch_members(after=datetime.datetime.fromtimestamp(prevread)).flatten() # reads only ones added since prevread
+#    print("fetched only:",len(mem))
+    mem1=await g.fetch_members(after=datetime.datetime.fromtimestamp(prevread)).flatten() # reads only ones added since prevread
+    mem=[x for x in mem1 if x.joined_at.timestamp>prevread]
+    print("fetched:",len(mem1), "filtered to:",len(mem))
+
     db_c.execute('''UPDATE lastread
     set timestamp=(?)''',(lastread,)) 
     for m in machines:

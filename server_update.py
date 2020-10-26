@@ -8,13 +8,17 @@ import time
 import hmac
 import hashlib
 
-app = Flask(__name__) #run using "nohup flask run --host 0.0.0.0 #and note fals_app is an enriromen varabe and you need kill -9 to kill flask server.  nohup is needed
+app = Flask(__name__) #run using "nohup flask run --host 0.0.0.0 #and note flask_app is an environment variable and you need kill -9 to kill flask server.  nohup is needed
 #Talisman(app) 
 SERVER_UPDATE=os.getenv("SERVER_UPDATE")
 
 @app.route('/update_robot/<repname>', methods=['POST'])
 def webhook(repname='onboarding_robot'):
     print("got update request")
+    if(os.getenv("DEPLOY_"+repname,'17')=='17'):
+        os.environ["DEPLOY_"+repname]=1 #default setting is to deploy
+    if(os.getenv("DEPLOY_"+repname)!='1'):
+        return 'ok, but no deploy of: '+repname, 200
     if request.method == 'POST':
         x_hub_signature = request.headers.get('X-Hub-Signature')
         if not is_valid_signature(x_hub_signature, request.data, SERVER_UPDATE):
@@ -34,7 +38,17 @@ def webhook(repname='onboarding_robot'):
 
 @app.route('/version/<repname>', methods=['GET'])
 def whatisversion(repname='onboarding_robot'):
-    return jsonify(os.getenv("TIMEVERSION_"+repname))
+    return jsonify(os.getenv("TIMEVERSION_"+repname)+':'+os.getenv("DEPLOY_"+repname))
+    
+@app.route('/deploy/<repname>', methods=['GET'])
+def deploy(repname='onboarding_robot'):
+    os.environ["DEPLOY_"+repname]='1'
+    return 'ok', 200
+
+@app.route('/nodeploy/<repname>', methods=['GET'])
+def nodeploy(repname='onboarding_robot'):
+    os.environ["DEPLOY_"+repname]='0'
+    return 'ok', 200
 
 def is_valid_signature(x_hub_signature, data, private_key):
     # x_hub_signature and data are from the webhook payload
