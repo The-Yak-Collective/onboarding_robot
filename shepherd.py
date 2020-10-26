@@ -176,8 +176,9 @@ def r2yak(r):
 def setup_sm():
     for m in machines: #make sit easier if machines are a global
         for state in m['states']:
-            print('state:',state,state['transitions'])
-            for trans in state['transitions']:
+            print('state:',state,m['states'][state]['transitions'])
+            for trans in m['states'][state]['transitions']:
+                print('and trans:',trans)
                 m['lut'][trans].append((trans['run'],trans['run_params']))
 
 
