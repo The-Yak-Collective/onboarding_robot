@@ -96,11 +96,12 @@ newyak={
 
 machines=[
     {
-    'states':newyak,
-    'name':"newyak",
-    'startat':"justjoined", #probbaly shoudl at a "starthere stae which checks a role"
-    'lut':{ #will add more when new functions are created
-        "on_tick":[],
-        "on_message":[]
+        'states':newyak,
+        'name':"newyak",
+        'startat':"justjoined", #probbaly shoudl at a "starthere stae which checks a role"
+        'lut':{ #will add more when new functions are created
+            "on_tick":[],
+            "on_message":[]
+        }
     }
 ] 
