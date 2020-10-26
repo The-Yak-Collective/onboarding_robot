@@ -118,7 +118,7 @@ async def read_and_add():
     print("fetched only:",len(mem))
     print("prevread=",prevread)
     db_c.execute('''UPDATE lastread
-    set timestamp=(?)''',(lastread,))
+    set timestamp=(?)''',(lastread,)) 
     for m in machines:
         #mem1=[x for x in mem if datetime.datetime.timestamp(x.joined_at)>prevread]
         print(m)
