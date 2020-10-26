@@ -46,8 +46,8 @@ client = discord.Client(intents=intents)
 async def on_ready(): 
 
     print('We have logged in as {0.user}'.format(client),  client.guilds)
+    setup_sm() # needs to be first, as update_database calls on_enter
     await update_database()
-    setup_sm()
     test_tick.start() #makes sure we have DB
 
 
@@ -64,15 +64,15 @@ async def on_message(message): # a logical problem since the freeze cannot know 
         return
     print("i would have checked this message:",message.content, message.channel, message.author.id)
     if message.contents.startswith("$help"):
-        send_dm({'discordid':message.author.id},"help is near. or not, as help feature not implemented yet")
+        send_dm({'discordid':message.author.id},0,"help is near. or not, as help feature not implemented yet")
         return
     if message.contents.startswith("$freezeme"):
-        send_dm({'discordid':message.author.id},"no more messages from this bot for you. dm $unfreezeme to restart")
+        send_dm({'discordid':message.author.id},0,"no more messages from this bot for you. dm $unfreezeme to restart")
         db_c.execute('update yakstates set ignoreme=1 where discordid=(?)',(message.author.id,))
         conn.commit()
         return
     if message.contents.startswith("$unfreezeme"):
-        send_dm({'discordid':message.author.id},"know more messages from this bot for you. dm $freezeme to freeze again")
+        send_dm({'discordid':message.author.id},0,"know more messages from this bot for you. dm $freezeme to freeze again")
         db_c.execute('update yakstates set ignoreme=0 where discordid=(?)',(message.author.id,))
         conn.commit()
         return
@@ -116,7 +116,7 @@ async def read_and_add():
     print("prevread=",prevread,datetime.datetime.fromtimestamp(prevread))
 #    mem=await g.fetch_members(after=datetime.datetime.fromtimestamp(prevread)).flatten() # reads only ones added since prevread
 #    print("fetched only:",len(mem))
-    mem1=await g.fetch_members().flatten() # reads only ones added since prevread
+    mem1=await g.fetch_members(limit=10).flatten() # reads only ones added since prevread. for now, limiting to just 10 (to reduce size of potential catastrophe)
     mem=[x for x in mem1 if x.joined_at.timestamp()>prevread]
     print("fetched:",len(mem1), "filtered to:",len(mem))
 
@@ -153,7 +153,7 @@ def update_db_new_member(member):
             do_on_enter(m,yak,m['startat'])
     print('add new member to db, if not already in it', member.name, member.id)
 
-def do_on_enter(m,x,state): # run when entering any new state, especially first one...
+def obs_do_on_enter(m,x,state): # run when entering any new state, especially first one...
     print("here we run the on_enter function")
     print(m['name'], state, m['states'][state]['onenter'].__name__, m['states'][state]['onenter_params'])
 

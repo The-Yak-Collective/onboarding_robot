@@ -13,7 +13,7 @@ def null_func(x,y,z): #always two parameters and then array. that is  my format
     return 0
     
 def reminder(yak,y,x):
-    send_dm(yak,"reminder: "+x[0]) # 3rd parameter is always an array
+    send_dm(yak,y,["reminder: "+x[0]]) # 3rd parameter is always an array
     return 0
 
 def has_role(yak,y,x):
@@ -26,13 +26,13 @@ def kick_out(yak,y,x):
     return 0
 
 async def send_dm(yak,y,x):
-    print("here i send a DM to the current yak we are looking at, with text:",x[0])
-    target=client.get_user(yak.discordid).dm_channel
+    print("here i send a DM to the current yak we are looking at, with text:",yak['discordid'],x[0])
+    target=client.get_user(yak['discordid']).dm_channel
     if (not target): 
         print("need to create dm channel",flush=True)
-        target=await client.get_user(yak.discordid).create_dm()
+        target=await client.get_user(yak['discordid']).create_dm()
     print("target is:",target,flush=True)    
-    await target.send(x[0])
+    #await target.send(x[0])# do not want to actually send yet
     return 0
 
 def posted_introduction(yak,m,x):
