@@ -29,8 +29,8 @@ async def test_tick():
                 for trans in m['states'][state]:
                     if "on_tick" in trans:
                         if (trans['run_params'][0]==0) or (tick % trans['run_params'][0]==0):#really, should not be zero...
-                            val=trans.run(theyak,tick,trans['run_params'][1:])
-                            transition_on(theyak, val, trans['goto'],m)
+                            val=await trans.run(theyak,tick,trans['run_params'][1:])
+                            await transition_on(theyak, val, trans['goto'],m)
 
 
 
@@ -54,7 +54,7 @@ async def on_ready():
 
 @client.event
 async def on_member_join(member):
-    update_db_new_member(member)
+    await update_db_new_member(member)
     #and now also apply state machine on him? or wait for events? after all, he did just join a state
     
 
@@ -65,15 +65,15 @@ async def on_message(message): # a logical problem since the freeze cannot know 
         return
     print("i would have checked this message:",message.content, message.channel, message.author.id)
     if message.contents.startswith("$help"):
-        send_dm({'discordid':message.author.id},0,"help is near. or not, as help feature not implemented yet")
+        await send_dm({'discordid':message.author.id},0,"help is near. or not, as help feature not implemented yet")
         return
     if message.contents.startswith("$freezeme"):
-        send_dm({'discordid':message.author.id},0,"no more messages from this bot for you. dm $unfreezeme to restart")
+        await send_dm({'discordid':message.author.id},0,"no more messages from this bot for you. dm $unfreezeme to restart")
         db_c.execute('update yakstates set ignoreme=1 where discordid=(?)',(message.author.id,))
         conn.commit()
         return
     if message.contents.startswith("$unfreezeme"):
-        send_dm({'discordid':message.author.id},0,"know more messages from this bot for you. dm $freezeme to freeze again")
+        await send_dm({'discordid':message.author.id},0,"know more messages from this bot for you. dm $freezeme to freeze again")
         db_c.execute('update yakstates set ignoreme=0 where discordid=(?)',(message.author.id,))
         conn.commit()
         return
@@ -86,16 +86,16 @@ async def on_message(message): # a logical problem since the freeze cannot know 
         if theyak['state'] in m['lut']['on_message']:
             for trans in m['states']['transitions']:
                 if "on_message" in trans:
-                    val=trans.run(theyak,message,trans['run_params'])
-                    transition_on(theyak, val, trans['goto'],m)
+                    val=await trans.run(theyak,message,trans['run_params'])
+                    await transition_on(theyak, val, trans['goto'],m)
     
-def transition_on(yak,val,where,m):
+async def transition_on(yak,val,where,m):
     newstate=where[val]
     if newstate=='':
         return
     db_c.execute('update yakstates set state=(?), startedat=(?) where discordid=(?) and machine=(?)',(newstate,int(time.time()),theyak['discordid'],theyak['machine']))
     conn.commit()
-    do_on_enter(m,theyak,newstate,m[newstate]['onenter_params'])
+    await do_on_enter(m,theyak,newstate,m[newstate]['onenter_params'])
 
 
 
@@ -134,10 +134,10 @@ async def read_and_add():
             do_on_enter(m,yak,m['startat']) #maybe move out of loop into its own "do enter", but actually thsi is teh only thing done when entering a state
     conn.commit()
     
-def do_on_enter(mac,yak,state):
-    mac['states'][state]['onenter'](yak,0,mac['states'][state]['onenter_params']) #for now, we ignore any return value here. note the '0', as we have nothing special to say, but want compatibility with on_message (send message) and on_tick (sends the tick parameter
+async def do_on_enter(mac,yak,state):
+    await mac['states'][state]['onenter'](yak,0,mac['states'][state]['onenter_params']) #for now, we ignore any return value here. note the '0', as we have nothing special to say, but want compatibility with on_message (send message) and on_tick (sends the tick parameter
 
-def update_db_new_member(member):
+async def update_db_new_member(member):
     x=member
     db_c.execute('select * from yakstates where discordid=(?)',(str(x.id),))
     if not db_c.fetchone(): # is not in db yet
@@ -151,7 +151,7 @@ def update_db_new_member(member):
         conn.commit()
         for m in machines:
             yak=get_yak_mac(x.id,m)
-            do_on_enter(m,yak,m['startat'])
+            await do_on_enter(m,yak,m['startat'])
     print('add new member to db, if not already in it', member.name, member.id)
 
 def obs_do_on_enter(m,x,state): # run when entering any new state, especially first one...

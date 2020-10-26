@@ -9,23 +9,24 @@ import discord
 
 
 #here be functions used in the above state table. note they are called by predefined functions, like "on_message"
-def null_func(x,y,z): #always two parameters and then array. that is  my format
+#all are async because some are async and no way of knowing which is which. but they can probbaly all run in parallel, any order
+async def null_func(x,y,z): #always two parameters and then array. that is  my format
     return 0
     
-def reminder(yak,y,x):
-    send_dm(yak,y,["reminder: "+x[0]]) # 3rd parameter is always an array
+async def reminder(yak,y,x):
+    await send_dm(yak,y,["reminder: "+x[0]]) # 3rd parameter is always an array
     return 0
 
-def has_role(yak,y,x):
+async def has_role(yak,y,x):
     if x[0] in yak.roles:
         return 1
     return 0
 
-def kick_out(yak,y,x):
+async def kick_out(yak,y,x):
     print("kick out id with message (sent by dm):",yak.discordid,x[0])
     return 0
 
-def send_dm(yak,y,x):
+async def send_dm(yak,y,x):
     print("here i send a DM to the current yak we are looking at, with text:",yak['discordid'],x[0])
     target=client.get_user(yak['discordid']).dm_channel
     if (not target): 
@@ -35,7 +36,7 @@ def send_dm(yak,y,x):
     #await target.send(x[0])# do not want to actually send yet
     return 0
 
-def posted_introduction(yak,m,x):
+async def posted_introduction(yak,m,x):
     print('check if this message is in introduction channel. if yes, return 1, otherwise 0')
     if m.channel.id==692826420191297556:
         return 1
