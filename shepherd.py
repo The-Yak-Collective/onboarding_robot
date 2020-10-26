@@ -133,7 +133,7 @@ async def read_and_add():
          (?, ?, ?, ?, ?, ?)''',[(x.id,m['name'],m['startat'],lastread,0, roles(x)) for x in mem])
         for y in mem:
             yak=get_yak_mac(y.id,m)
-            do_on_enter(m,yak,m['startat']) #maybe move out of loop into its own "do enter", but actually thsi is teh only thing done when entering a state
+            await do_on_enter(m,yak,m['startat']) #maybe move out of loop into its own "do enter", but actually thsi is teh only thing done when entering a state
     conn.commit()
     
 async def do_on_enter(mac,yak,state):
