@@ -99,8 +99,6 @@ def transition_on(yak,val,where,m):
 
 
 async def update_database(): 
-    mem=[]
-    g=client.guilds[0]
     lastread=int(time.time())
     db_c.execute('''SELECT count(name) FROM sqlite_master WHERE type='table' AND name='yakstates' ''')
     if db_c.fetchone()[0]!=1:
@@ -110,6 +108,8 @@ async def update_database():
     await read_and_add()
 
 async def read_and_add():
+    mem=[]
+    g=client.guilds[0]
     db_c.execute('''select * from lastread''')
     prevread=db_c.fetchone()[0]
     mem=await g.fetch_members(after=datetime.datetime.fromtimestamp(prevread)).flatten() # reads only ones added since prevread
