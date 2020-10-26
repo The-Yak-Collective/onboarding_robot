@@ -116,8 +116,8 @@ async def read_and_add():
     print("prevread=",prevread,datetime.datetime.fromtimestamp(prevread))
 #    mem=await g.fetch_members(after=datetime.datetime.fromtimestamp(prevread)).flatten() # reads only ones added since prevread
 #    print("fetched only:",len(mem))
-    mem1=await g.fetch_members(after=datetime.datetime.fromtimestamp(prevread)).flatten() # reads only ones added since prevread
-    mem=[x for x in mem1 if x.joined_at.timestamp>prevread]
+    mem1=await g.fetch_members().flatten() # reads only ones added since prevread
+    mem=[x for x in mem1 if x.joined_at.timestamp()>prevread]
     print("fetched:",len(mem1), "filtered to:",len(mem))
 
     db_c.execute('''UPDATE lastread
