@@ -8,7 +8,7 @@ import time
 import hmac
 import hashlib
 
-app = Flask(__name__) #run using "flask run --host 0.0.0.0:5000 #and note fals_app is an enriromen varabe and you need kill -9 to kill flask server. maybe nohup is needed
+app = Flask(__name__) #run using "nohup flask run --host 0.0.0.0 #and note fals_app is an enriromen varabe and you need kill -9 to kill flask server.  nohup is needed
 #Talisman(app) 
 SERVER_UPDATE=os.getenv("SERVER_UPDATE")
 
@@ -27,7 +27,7 @@ def webhook(repname='onboarding_robot'):
         print("pulling:",origin.pull()) #not supposed to affect local files we changed that are not changed on parent
         print("... with secret") 
         os.environ["TIMEVERSION_"+repname]=str(int(time.time())) #
-        os.system('bash '+'~/robot/'+repname+'/'+aftergit) #seems we are doing a fast forward so post-merge is not called as there is no merge. so execute manually
+        os.system('bash '+'~/robot/'+repname+'/'+aftergit) #for post merge to work, it need to be an execuatble. but this way it is easier to manage the post activities
         return 'Updated robot successfully', 200
     else:
         return 'Wrong event type', 400
