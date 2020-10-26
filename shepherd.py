@@ -19,7 +19,9 @@ async def test_tick():
     tick=tick+1
     print("does this tick work?",time.time(), tick)
     for m in machines:
-        for state in m['lut']['on_tick']:
+        for item in m['lut']['on_tick']:
+            state=item[0]
+            print('state in tick:',state, item)
             yaks_it=db_c.execute('select * from yakstates where state=(?) and machine=(?)',(state,m['name']))
             yak_list=[r2yak(x) for x in yaks_it]
             for theyak in yak_list:
@@ -182,7 +184,7 @@ def setup_sm():
                 print('and trans:',trans)
                 for t in trans:
                     print('and t is:',t)
-                    m['lut'][t].append((trans[t]['run'],trans[t]['run_params']))
+                    m['lut'][t].append((state,trans[t]['run'],trans[t]['run_params'])) #not clear why we need all three
 
 
 discord_token=os.getenv('SHEPHERD_DISCORD_KEY')
