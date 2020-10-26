@@ -99,7 +99,7 @@ def transition_on(yak,val,where,m):
 
 
 async def update_database(): 
-    lastread=int(time.time())
+
     db_c.execute('''SELECT count(name) FROM sqlite_master WHERE type='table' AND name='yakstates' ''')
     if db_c.fetchone()[0]!=1:
         db_c.execute('''CREATE TABLE yakstates (discordid text, machine text, state text, startedat int, ignoreme int, roles text)''')
@@ -108,6 +108,7 @@ async def update_database():
     await read_and_add()
 
 async def read_and_add():
+    lastread=int(time.time())
     mem=[]
     g=client.guilds[0]
     db_c.execute('''select * from lastread''')
