@@ -18,18 +18,18 @@ async def test_tick():
     tick=tick+1
     print("does this tick work?",time.time(), tick)
     for m in machines:
-        for state in m.lut.on_tick:
-            yaks_it=db_c.execute('select * from yakstates where state=(?) and machine=(?)',(state,m.name))
+        for state in m['lut']['on_tick']:
+            yaks_it=db_c.execute('select * from yakstates where state=(?) and machine=(?)',(state,m['name']))
             yak_list=[r2yak(x) for x in yaks_it]
             for theyak in yak_list:
-                if theyak.ignoreme!=0:
+                if theyak['ignoreme']!=0:
                     continue;
                 print(theyak)
-                for trans in m.states[state]:
+                for trans in m['states'][state]:
                     if "on_tick" in trans:
-                        if (trans.run_params[0]==0) or (tick % trans.run_params[0]==0):#really, should not be zero...
-                            val=trans.run(theyak,tick,trans.run_params[1:])
-                            transition_on(theyak, val, trans.goto,m)
+                        if (trans['run_params'][0]==0) or (tick % trans['run_params'][0]==0):#really, should not be zero...
+                            val=trans.run(theyak,tick,trans['run_params'][1:])
+                            transition_on(theyak, val, trans['goto'],m)
 
 
 
@@ -79,22 +79,22 @@ async def on_message(message): # a logical problem since the freeze cannot know 
 
     for m in machines:
         theyak=get_yak_mac(message.author.id,m) #for now we only look at who sent, not who got. 
-        if theyak.ignoreme!=0:
+        if theyak['ignoreme']!=0:
             continue;
         print(theyak)
-        if theyak.state in m.lut.on_message:
-            for trans in m.states[theyak.state]:
+        if theyak['state'] in m['lut']['on_message']:
+            for trans in m['states']['transitions']:
                 if "on_message" in trans:
-                    val=trans.run(theyak,message,trans.run_params)
-                    transition_on(theyak, val, trans.goto,m)
+                    val=trans.run(theyak,message,trans['run_params'])
+                    transition_on(theyak, val, trans['goto'],m)
     
 def transition_on(yak,val,where,m):
     newstate=where[val]
     if newstate=='':
         return
-    db_c.execute('update yakstates set state=(?), startedat=(?) where discordid=(?) and machine=(?)',(newstate,int(time.time()),theyak.discordid,theyak.machine))
+    db_c.execute('update yakstates set state=(?), startedat=(?) where discordid=(?) and machine=(?)',(newstate,int(time.time()),theyak['discordid'],theyak['machine']))
     conn.commit()
-    do_on_enter(m,theyak,newstate,m[newstate].onenter_params)
+    do_on_enter(m,theyak,newstate,m[newstate]['onenter_params'])
 
 
 
@@ -127,14 +127,14 @@ async def read_and_add():
         print(m)
         print("adding {} members to machine {}".format(len(mem), m['name']))
         db_c.executemany('''insert into yakstates values
-         (?, ?, ?, ?, ?, ?)''',[(x.id,m.name,m.startat,lastread,0, roles(x)) for x in mem])
+         (?, ?, ?, ?, ?, ?)''',[(x.id,m['name'],m['startat'],lastread,0, roles(x)) for x in mem])
         for y in mem:
             yak=get_yak_mac(y.id,m)
-            do_on_enter(m,yak,m.startat) #maybe move out of loop into its own "do enter", but actually thsi is teh only thing done when entering a state
+            do_on_enter(m,yak,m['startat']) #maybe move out of loop into its own "do enter", but actually thsi is teh only thing done when entering a state
     conn.commit()
     
 def do_on_enter(mac,yak,state):
-    mac.states[state].onenter(yak,0,mac.states[state].onenter_params) #for now, we ignore any return value here. note the '0', as we have nothing special to say, but want compatibility with on_message (send message) and on_tick (sends the tick parameter
+    mac['states'][state]['onenter'](yak,0,mac['states'][state]['onenter_params']) #for now, we ignore any return value here. note the '0', as we have nothing special to say, but want compatibility with on_message (send message) and on_tick (sends the tick parameter
 
 def update_db_new_member(member):
     x=member
@@ -144,18 +144,18 @@ def update_db_new_member(member):
         lastread=int(time.time()) #could not be exectly correct. so one solution is to run fetchall again. another is to check. which we did
         for m in machines:
             db_c.execute('''insert into yakstates values
-             (?, ?, ?, ?, ?)''',(x.id,m.name,mstartat,lastread, 0, roles(x)))# new yaks get benifit of doubt... as if they joined just now
+             (?, ?, ?, ?, ?)''',(x.id,m['name'],m['startat'],lastread, 0, roles(x)))# new yaks get benifit of doubt... as if they joined just now
         db_c.execute('''UPDATE lastread
              set timestamp=(?)''',(lastread,))
         conn.commit()
         for m in machines:
             yak=get_yak_mac(x.id,m)
-            do_on_enter(m,yak,m.startat)
+            do_on_enter(m,yak,m['startat'])
     print('add new member to db, if not already in it', member.name, member.id)
 
 def do_on_enter(m,x,state): # run when entering any new state, especially first one...
     print("here we run the on_enter function")
-    print(m.name, state, m.states[state].onenter.__name__, m.states[state].onenter_params)
+    print(m['name'], state, m['states'][state]['onenter'].__name__, m['states'][state]['onenter_params'])
 
 def roles(x):
     return ",".join([y.name for y in x.roles])
@@ -165,7 +165,7 @@ def get_yak(id):
     return r2yak(r)
 
 def get_yak_mac(id,mac):
-    r=db_c.execute('select * from yakstates where discordid=(?) and machine=(?)',(str(id),mac.name)).fetchone()
+    r=db_c.execute('select * from yakstates where discordid=(?) and machine=(?)',(str(id),mac['name'])).fetchone()
     return r2yak(r)
     
 def r2yak(r):
@@ -175,9 +175,9 @@ def r2yak(r):
 
 def setup_sm():
     for m in machines: #make sit easier if machines are a global
-        for state in m.states:
-            for trans in state.transitions:
-                m.lut[trans].append((trans.run,trans.run_params))
+        for state in m['states']:
+            for trans in state['transitions']:
+                m['lut'][trans].append((trans['run'],trans['run_params']))
 
 
 discord_token=os.getenv('SHEPHERD_DISCORD_KEY')
