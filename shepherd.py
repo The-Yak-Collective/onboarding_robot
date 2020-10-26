@@ -46,7 +46,7 @@ client = discord.Client(intents=intents)
 async def on_ready(): 
 
     print('We have logged in as {0.user}'.format(client),  client.guilds)
-    setup_sm() # needs to be first, as update_database calls on_enter
+    setup_sm() # needs to be first, (or maybe not) as update_database calls on_enter
     await update_database()
     test_tick.start() #makes sure we have DB
 
@@ -176,6 +176,7 @@ def r2yak(r):
 def setup_sm():
     for m in machines: #make sit easier if machines are a global
         for state in m['states']:
+            print('state:',state,state['transitions'])
             for trans in state['transitions']:
                 m['lut'][trans].append((trans['run'],trans['run_params']))
 
