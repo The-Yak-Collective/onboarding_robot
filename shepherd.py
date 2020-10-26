@@ -107,7 +107,7 @@ async def update_database():
         db_c.execute('''CREATE TABLE yakstates (discordid text, machine text, state text, startedat int, ignoreme int, roles text)''')
         db_c.execute('''CREATE TABLE lastread (timestamp int)''')
         db_c.execute('''insert into lastread values (?)''',(0,))
-    read_and_add()
+    await read_and_add()
 
 async def read_and_add():
     db_c.execute('''select * from lastread''')
