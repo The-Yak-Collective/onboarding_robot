@@ -159,7 +159,7 @@ def get_yak(id):
     return r2yak(r)
 
 def get_yak_mac(id,mac):
-    r=db_c.execute('select * from yakstates where discordid=(?) and machine=(?),(str(id),mac.name)).fetchone()
+    r=db_c.execute('select * from yakstates where discordid=(?) and machine=(?)',(str(id),mac.name)).fetchone()
     return r2yak(r)
     
 def r2yak(r):
