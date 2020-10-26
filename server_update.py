@@ -27,7 +27,7 @@ def webhook(repname='onboarding_robot'):
         print("pulling:",origin.pull()) #not supposed to affect local files we changed that are not changed on parent
         print("... with secret") 
         os.environ["TIMEVERSION_"+repname]=str(int(time.time())) #
-        os.system('bash '+'~/robot/'+repname+'/'+aftergit) #for post merge to work, it need to be an execuatble. but this way it is easier to manage the post activities
+        os.system('bash '+'~/robot/'+repname+'/'+'aftergit') #for post merge to work, it need to be an execuatble. but this way it is easier to manage the post activities
         return 'Updated robot successfully', 200
     else:
         return 'Wrong event type', 400
