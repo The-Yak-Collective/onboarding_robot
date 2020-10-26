@@ -104,7 +104,7 @@ async def update_database():
     if db_c.fetchone()[0]!=1:
         db_c.execute('''CREATE TABLE yakstates (discordid text, machine text, state text, startedat int, ignoreme int, roles text)''')
         db_c.execute('''CREATE TABLE lastread (timestamp int)''')
-        db_c.execute('''insert into lastread values (?)''',(1572048000,)) # last year - before yc and after discord
+        db_c.execute('''insert into lastread values (?)''',(0,))#(1572048000,)) # last year - before yc and after discord
     await read_and_add()
 
 async def read_and_add():
@@ -121,6 +121,7 @@ async def read_and_add():
     set timestamp=(?)''',(lastread,))
     for m in machines:
         #mem1=[x for x in mem if datetime.datetime.timestamp(x.joined_at)>prevread]
+        print(m)
         print("adding {} members to machine {}".format(len(mem), m.name))
         db_c.executemany('''insert into yakstates values
          (?, ?, ?, ?, ?, ?)''',[(x.id,m.name,m.startat,lastread,0, roles(x)) for x in mem])
