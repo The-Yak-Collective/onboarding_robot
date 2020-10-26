@@ -181,7 +181,7 @@ def setup_sm():
                 print('and trans:',trans)
                 for t in trans:
                     print('and t is:',t)
-                    m['lut'][t].append((trans['run'],trans['run_params']))
+                    m['lut'][t].append((trans[t]['run'],trans[t]['run_params']))
 
 
 discord_token=os.getenv('SHEPHERD_DISCORD_KEY')
