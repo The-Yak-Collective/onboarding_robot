@@ -10,34 +10,31 @@ import hashlib
 
 app = Flask(__name__) #run using "flask run --host 0.0.0.0:5000 #and note fals_app is an enriromen varabe and you need kill -9 to kill flask server. maybe nohup is needed
 #Talisman(app) 
-#GIT_USER=os.getenv("GIT_USER")
-#GIT_PASS=os.getenv("GIT_PASS")
 SERVER_UPDATE=os.getenv("SERVER_UPDATE")
 
-@app.route('/update_robot', methods=['POST'])
-def webhook():
+@app.route('/update_robot/<repname>', methods=['POST'])
+def webhook(repname='onboarding_robot'):
     print("got update request")
     if request.method == 'POST':
         x_hub_signature = request.headers.get('X-Hub-Signature')
         if not is_valid_signature(x_hub_signature, request.data, SERVER_UPDATE):
             print("missing correct token/secret for server_update")
             return 'missing password', 400
-        repo = git.Repo('.')
+        repo = git.Repo('~/robot/'+repname)
         print("repo:",repo) 
         origin = repo.remotes.origin
         print("origin:",origin)
         print("pulling:",origin.pull()) #not supposed to affect local files we changed that are not changed on parent
         print("... with secret") 
-        os.environ["TIMEVERSION"]=str(int(time.time()))
-        os.system('bash .git/hooks/post-merge') #seems we are doing a fast forward so post-merge is not called as there is no merge. so execute manually
+        os.environ["TIMEVERSION_"+repname]=str(int(time.time())) #
+        os.system('bash '+'~/robot/'+repname+'/'+aftergit) #seems we are doing a fast forward so post-merge is not called as there is no merge. so execute manually
         return 'Updated robot successfully', 200
     else:
         return 'Wrong event type', 400
 
-@app.route('/version', methods=['GET'])
-def whatisversion():
-    print("with Talisman?")
-    return jsonify(os.getenv("TIMEVERSION"))
+@app.route('/version/<repname>', methods=['GET'])
+def whatisversion(repname='onboarding_robot'):
+    return jsonify(os.getenv("TIMEVERSION_"+repname))
 
 def is_valid_signature(x_hub_signature, data, private_key):
     # x_hub_signature and data are from the webhook payload
