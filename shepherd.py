@@ -104,14 +104,15 @@ async def update_database():
     if db_c.fetchone()[0]!=1:
         db_c.execute('''CREATE TABLE yakstates (discordid text, machine text, state text, startedat int, ignoreme int, roles text)''')
         db_c.execute('''CREATE TABLE lastread (timestamp int)''')
-        db_c.execute('''insert into lastread values (?)''',(0,))
+        db_c.execute('''insert into lastread values (?)''',(1572048000,)) # last year - before yc and after discord
     await read_and_add()
 
 async def read_and_add():
     mem=[]
     g=client.guilds[0]
     db_c.execute('''select * from lastread''')
-    prevread=db_c.fetchone()[0]
+    prevread=int(db_c.fetchone()[0])
+    print(prevread,datetime.datetime.fromtimestamp(prevread))
     mem=await g.fetch_members(after=datetime.datetime.fromtimestamp(prevread)).flatten() # reads only ones added since prevread
     print("fetched only:",len(mem))
     print("prevread=",prevread)
