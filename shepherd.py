@@ -68,7 +68,7 @@ async def on_message(message): # a logical problem since the freeze cannot know 
         return
     if message.contents.startswith("$freezeme"):
         send_dm({'discordid':message.author.id},"no more messages from this bot for you. dm $unfreezeme to restart")
-        db_c.execute('update yakstates set ignoreme=1 where discordid=(?)',(message.author.id,)
+        db_c.execute('update yakstates set ignoreme=1 where discordid=(?)',(message.author.id,))
         conn.commit()
         return
     if message.contents.startswith("$unfreezeme"):
