@@ -56,6 +56,7 @@ async def on_ready():
 
 @client.event
 async def on_member_join(member):
+    print("i think somebody joined:",member.id)
     await update_db_new_member(member)
     #and now also apply state machine on him? or wait for events? after all, he did just join a state
     
@@ -66,15 +67,15 @@ async def on_message(message): # a logical problem since the freeze cannot know 
     if message.author == client.user:
         return
     print("i would have checked this message:",message.content, message.channel, message.author.id)
-    if message.contents.startswith("$help"):
+    if message.content.startswith("$help"):
         await send_dm({'discordid':message.author.id},0,"help is near. or not, as help feature not implemented yet")
         return
-    if message.contents.startswith("$freezeme"):
+    if message.content.startswith("$freezeme"):
         await send_dm({'discordid':message.author.id},0,"no more messages from this bot for you. dm $unfreezeme to restart")
         db_c.execute('update yakstates set ignoreme=1 where discordid=(?)',(message.author.id,))
         conn.commit()
         return
-    if message.contents.startswith("$unfreezeme"):
+    if message.content.startswith("$unfreezeme"):
         await send_dm({'discordid':message.author.id},0,"know more messages from this bot for you. dm $freezeme to freeze again")
         db_c.execute('update yakstates set ignoreme=0 where discordid=(?)',(message.author.id,))
         conn.commit()

@@ -44,6 +44,18 @@ async def posted_introduction(yak,m,x):
 
 
 newyak={
+'starthere': {
+    'id':17, 
+    'onenter': null_func, 
+    'onenter_params': [],
+    'transitions':[
+        {"on_tick":{
+            "run": has_role,
+            'run_params':[1, 'yak'], 
+            'goto': ['justjoined','yak'] 
+            }},
+        ]
+    },
 'justjoined': {
     'id':0, #is this needed?
     'onenter': send_dm, #NOT run on staying within same state due toa  failed transition
@@ -99,7 +111,7 @@ machines=[
     {
         'states':newyak,
         'name':"newyak",
-        'startat':"justjoined", #probbaly shoudl at a "starthere stae which checks a role"
+        'startat':"starthere", 
         'lut':{ #will add more when new functions are created
             "on_tick":[],
             "on_message":[]
