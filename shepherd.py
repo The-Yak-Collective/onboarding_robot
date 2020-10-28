@@ -28,7 +28,7 @@ async def test_tick():
                 if theyak['ignoreme']!=0:
                     continue;
                 print(theyak)
-                for trans in m['states'][state]:
+                for trans in m['states'][state]['transitions']:
                     print("trans:",trans)
                     if "on_tick" in trans:
                         print("found on_tick",trans.run.__name__)
