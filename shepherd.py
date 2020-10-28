@@ -32,9 +32,9 @@ async def test_tick():
                     print("trans:",trans)
                     if "on_tick" in trans:
                         print("found on_tick")
-                        if (trans['run_params'][0]==0) or (tick % trans['run_params'][0]==0):#really, should not be zero...
-                            val=await trans.run(theyak,tick,trans['run_params'][1:])
-                            await transition_on(theyak, val, trans['goto'],m)
+                        if (trans['on_tick']['run_params'][0]==0) or (tick % trans['on_tick']['run_params'][0]==0):#really, should not be zero...
+                            val=await trans['on_tick']['run'](theyak,tick,trans['on_tick']['run_params'][1:])
+                            await transition_on(theyak, val, trans['on_tick']['goto'],m)
 
 
 
@@ -91,8 +91,8 @@ async def on_message(message): # a logical problem since the freeze cannot know 
         if theyak['state'] in m['lut']['on_message']:
             for trans in m['states']['transitions']:
                 if "on_message" in trans:
-                    val=await trans.run(theyak,message,trans['run_params'])
-                    await transition_on(theyak, val, trans['goto'],m)
+                    val=await trans['on_message']['run'](theyak,message,trans['on_message']['run_params'])
+                    await transition_on(theyak, val, trans['on_message']['goto'],m)
     
 async def transition_on(yak,val,where,m):
     print("transition of {} who is at {} using vector {} with val {} to {}".format(yak.discordid,yak.state,where,val, where[val]))
