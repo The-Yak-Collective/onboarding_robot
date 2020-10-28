@@ -95,7 +95,7 @@ async def on_message(message): # a logical problem since the freeze cannot know 
                     await transition_on(theyak, val, trans['on_message']['goto'],m)
     
 async def transition_on(yak,val,where,m):
-    print("transition of {} who is at {} using vector {} with val {} to {}".format(yak.discordid,yak.state,where,val, where[val]))
+    print("transition of {} who is at {} using vector {} with val {} to {}".format(yak['discordid'],yak['state'],where,val, where[val]))
     newstate=where[val]
     if newstate=='':
         return
