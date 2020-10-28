@@ -101,7 +101,7 @@ async def transition_on(yak,val,where,m):
         return
     db_c.execute('update yakstates set state=(?), startedat=(?) where discordid=(?) and machine=(?)',(newstate,int(time.time()),yak['discordid'],yak['machine']))
     conn.commit()
-    await do_on_enter(m,yak,newstate,m['states'][newstate]['onenter_params'])
+    await do_on_enter(m,yak,newstate)
 
 
 
@@ -161,9 +161,6 @@ async def update_db_new_member(member):
             await do_on_enter(m,yak,m['startat'])
     print('add new member to db, if not already in it', member.name, member.id)
 
-def obs_do_on_enter(m,x,state): # run when entering any new state, especially first one...
-    print("here we run the on_enter function")
-    print(m['name'], state, m['states'][state]['onenter'].__name__, m['states'][state]['onenter_params'])
 
 def roles(x):
     return ",".join([y.name for y in x.roles])
