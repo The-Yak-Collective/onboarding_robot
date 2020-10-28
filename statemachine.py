@@ -18,7 +18,8 @@ async def reminder(yak,y,x):
     return 0
 
 async def has_role(yak,y,x):
-    if x[0] in yak.roles:
+    #print("has role:",yak,x)
+    if x[0] in yak['roles']:
         return 1
     return 0
 
