@@ -17,7 +17,7 @@ tick=0
 async def test_tick():
     global tick
     tick=tick+1
-    print("does this tick work?",time.time(), tick)
+    #print("does this tick work?",time.time(), tick)
     for m in machines:
         for item in m['lut']['on_tick']:
             state=item[0]
@@ -29,7 +29,9 @@ async def test_tick():
                     continue;
                 print(theyak)
                 for trans in m['states'][state]:
+                    print("trans:",trans)
                     if "on_tick" in trans:
+                        print("found on_tick",trans.run.__name__)
                         if (trans['run_params'][0]==0) or (tick % trans['run_params'][0]==0):#really, should not be zero...
                             val=await trans.run(theyak,tick,trans['run_params'][1:])
                             await transition_on(theyak, val, trans['goto'],m)
@@ -85,7 +87,7 @@ async def on_message(message): # a logical problem since the freeze cannot know 
         theyak=get_yak_mac(message.author.id,m) #for now we only look at who sent, not who got. 
         if theyak['ignoreme']!=0:
             continue;
-        print(theyak)
+        print(theyak, m['lut']['on_message'])
         if theyak['state'] in m['lut']['on_message']:
             for trans in m['states']['transitions']:
                 if "on_message" in trans:
