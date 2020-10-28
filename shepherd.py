@@ -81,7 +81,7 @@ async def on_message(message): # a logical problem since the freeze cannot know 
 
     for m in machines:
         theyak=get_yak_mac(message.author.id,m) #for now we only look at who sent, not who got. 
-        if !theyak:
+        if  not theyak:
             print("message from somebody not in db:",message.author.id)
             return 
         if theyak['ignoreme']!=0:
