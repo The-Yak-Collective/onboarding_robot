@@ -99,7 +99,7 @@ async def transition_on(yak,val,where,m):
     newstate=where[val]
     if newstate=='':
         return
-    db_c.execute('update yakstates set state=(?), startedat=(?) where discordid=(?) and machine=(?)',(newstate,int(time.time()),theyak['discordid'],theyak['machine']))
+    db_c.execute('update yakstates set state=(?), startedat=(?) where discordid=(?) and machine=(?)',(newstate,int(time.time()),yak['discordid'],yak['machine']))
     conn.commit()
     await do_on_enter(m,theyak,newstate,m[newstate]['onenter_params'])
 
