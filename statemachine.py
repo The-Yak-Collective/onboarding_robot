@@ -4,7 +4,7 @@
 #for each type, we have an array for each state table. the array includes the states which care about that type. when running and the event occurs, if it is an on_tick event (not triggered by a user, i can imagine there are others) we see which states care about the event. then, for each state, we extract all the yaks in that state AND which do not say "exclude me". then, we call teh function, FOR THAT USER, with teh parameters and go to where result sends up.
 #if it is an event triggered by a user (like a message), we can simply check in db that he is not 'frozen" and run the function in the state table, accorindg to his state (taken form db), if relevant
 
-import discord
+from shepherd_discord import *
 
 
 

@@ -7,6 +7,7 @@ import datetime
 from dotenv import load_dotenv
 import sqlite3  #consider , "check_same_thread = False" on sqlite.connect()
 from statemachine import * # this includes "machines", a list of machine dicts
+from discord_shepherd import *
 
 conn=sqlite3.connect('statedatabase.db') #the connection should be global. 
 db_c = conn.cursor()
@@ -41,11 +42,6 @@ async def test_tick():
 
 load_dotenv('.env')
 
-intents = discord.Intents.default()
-intents.members = True
-
-
-client = discord.Client(intents=intents)
 
 @client.event
 async def on_ready(): 
