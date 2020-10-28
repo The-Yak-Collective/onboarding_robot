@@ -31,7 +31,7 @@ async def test_tick():
                 for trans in m['states'][state]['transitions']:
                     print("trans:",trans)
                     if "on_tick" in trans:
-                        print("found on_tick",trans.run.__name__)
+                        print("found on_tick")
                         if (trans['run_params'][0]==0) or (tick % trans['run_params'][0]==0):#really, should not be zero...
                             val=await trans.run(theyak,tick,trans['run_params'][1:])
                             await transition_on(theyak, val, trans['goto'],m)
