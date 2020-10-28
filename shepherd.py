@@ -179,7 +179,7 @@ def get_yak_mac(id,mac):
 def r2yak(r):
     if not r:
         return r
-    return {'id':r[0], 'machine':r[1],'state':r[2], 'startedat':int(r[3]),'ignoreme':int(r[4]),'roles':r[5].split(',')} 
+    return {'discordid':r[0], 'machine':r[1],'state':r[2], 'startedat':int(r[3]),'ignoreme':int(r[4]),'roles':r[5].split(',')} 
 
 def setup_sm():
     for m in machines: #make sit easier if machines are a global
