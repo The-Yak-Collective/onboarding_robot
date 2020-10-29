@@ -155,7 +155,8 @@ async def update_db_new_member(member):
         for m in machines:
             print("before insert")
             db_c.execute('''insert into yakstates values
-             (?, ?, ?, ?, ?)''',(x.id,m['name'],m['startat'],lastread, 0, roles(x)))# new yaks get benifit of doubt... as if they joined just now
+             (?, ?, ?, ?, ?, ?)''',(x.id,m['name'],m['startat'],lastread, 0, roles(x)))# new yaks get benifit of doubt... as if they joined just now
+
             print("after insert")
         db_c.execute('''UPDATE lastread set timestamp=(?)''',(lastread,))
         print("after update timestamp")
