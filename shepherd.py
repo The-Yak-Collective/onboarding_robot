@@ -65,6 +65,9 @@ async def on_message(message): # a logical problem since the freeze cannot know 
     if message.author == client.user:
         return
     print("i would have checked this message:",message.content, message.channel, message.author.id)
+    if message.content.startswith("$maierme"):
+        x=await client.guilds[0].get_member(765463520389103638)
+        await update_db_new_member(x)
     if message.content.startswith("$help"):
         await send_dm({'discordid':message.author.id},0,"help is near. or not, as help feature not implemented yet")
         return
