@@ -45,7 +45,7 @@ def deploy(repname='onboarding_robot'):
     os.environ["DEPLOY_"+repname]='1'
     return 'ok', 200
 
-@app.route('/nodeploy/<repname>', methods=['GET']) 
+@app.route('/nodeploy/<repname>', methods=['GET'])
 def nodeploy(repname='onboarding_robot'):
     os.environ["DEPLOY_"+repname]='0'
     return 'ok', 200
