@@ -40,7 +40,7 @@ def webhook(repname='onboarding_robot'):
 def whatisversion(repname='onboarding_robot'):
     return jsonify(os.getenv("TIMEVERSION_"+repname)+':'+os.getenv("DEPLOY_"+repname))
     
-@app.route('/deploy/<repname>', methods=['GET'])
+@app.route('/deploy/<repname>', methods=['GET']) 
 def deploy(repname='onboarding_robot'):
     os.environ["DEPLOY_"+repname]='1'
     return 'ok', 200
