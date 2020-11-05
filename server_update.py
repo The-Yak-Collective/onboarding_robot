@@ -58,6 +58,7 @@ def gmailhooked():
 @app.route('/.well-known/<fileaskedfor>', methods=['POST','GET'])
 def https_stuff(fileaskedfor):
     print('they asked for',fileaskedfor)
+    return 'lets not serve these yet', 200
     return send_from_directory('/etc/letsencrypt/live/robots.yakcollective.org',fileaskedfor, as_attachment=True)
 
 
