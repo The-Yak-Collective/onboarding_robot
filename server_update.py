@@ -50,6 +50,16 @@ def nodeploy(repname='onboarding_robot'):
     os.environ["DEPLOY_"+repname]='0'
     return 'ok', 200
 
+@app.route('/gmail', methods=['POST'])
+def gmailhooked():
+    os.system('bash '+'~/robot/'+'gmail_hook'+'/'+'readit')
+    return 'ok called the prog', 200
+
+@app.route('/.well-known/<fileaskedfor>', methods=['POST','GET'])
+def https_stuff(fileaskedfor):
+    return send_from_directory('/etc/letsencrypt/live/robots.yakcollective.org',fileaskedfor)
+
+
 def is_valid_signature(x_hub_signature, data, private_key):
     # x_hub_signature and data are from the webhook payload
     # private key is your webhook secret
