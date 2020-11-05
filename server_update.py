@@ -7,9 +7,11 @@ import time
 
 import hmac
 import hashlib
+#from waitress import serve #newly added. but also waitress does not provide ssl native
 
 app = Flask(__name__) #run using "nohup flask run --host 0.0.0.0 #and note flask_app is an environment variable and you need kill -9 to kill flask server.  nohup is needed
-#Talisman(app) 
+#actually not.  flask run does not use the ssl certificates.
+Talisman(app) 
 SERVER_UPDATE=os.getenv("SERVER_UPDATE")
 
 @app.route('/update_robot/<repname>', methods=['POST'])
@@ -75,3 +77,4 @@ def is_valid_signature(x_hub_signature, data, private_key):
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0',ssl_context=('/etc/letsencrypt/live/robots.yakcollective.org/fullchain.pem', '/etc/letsencrypt/live/robots.yakcollective.org/privkey.pem'))
+    #serve(app,host='0.0.0.0',port=5000, url_scheme='https')
