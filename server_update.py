@@ -16,7 +16,7 @@ SERVER_UPDATE=os.getenv("SERVER_UPDATE")
 def webhook(repname='onboarding_robot'):
     print("got update request")
     if(os.getenv("DEPLOY_"+repname,'17')=='17'):
-        os.environ["DEPLOY_"+repname]=1 #default setting is to deploy
+        os.environ["DEPLOY_"+repname]='1' #default setting is to deploy
     if(os.getenv("DEPLOY_"+repname)!='1'):
         return 'ok, but no deploy of: '+repname, 200
     if request.method == 'POST':
