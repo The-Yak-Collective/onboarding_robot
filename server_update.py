@@ -11,6 +11,7 @@ import hashlib
 
 app = Flask(__name__) #run using "nohup flask run --host 0.0.0.0 #and note flask_app is an environment variable and you need kill -9 to kill flask server.  nohup is needed
 #actually not.  flask run does not use the ssl certificates.
+#so run 'nohup python3 server_update.py &
 Talisman(app) 
 SERVER_UPDATE=os.getenv("SERVER_UPDATE")
 
@@ -54,6 +55,7 @@ def nodeploy(repname='onboarding_robot'):
 
 @app.route('/gmail', methods=['POST'])
 def gmailhooked():
+    print('got a gmail call')
     os.system('bash '+'~/robot/'+'gmail_hook'+'/'+'readit')
     return 'ok called the prog', 200
 

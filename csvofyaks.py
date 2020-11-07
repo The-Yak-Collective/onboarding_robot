@@ -2,6 +2,8 @@ import discord
 import base64
 import os
 from dotenv import load_dotenv
+from icalevents.icalevents import events
+from datetime import datetime
 
 load_dotenv('.env')
 
@@ -61,6 +63,18 @@ async def on_message(message):
             target=await client.get_user(t).create_dm()
         print("target is:",target,flush=True)    
         await target.send('Hello! i was told by '+message.author.name+' to contact you')
+    if message.content.startswith('$upcoming'):
+        icalurl='https://calendar.google.com/calendar/ical/o995m43173bpslmhh49nmrp5i4%40group.calendar.google.com/public/basic.ics'
+        es=events(icalurl)
+        s="Upcoming in next week:\n"
+        for y in es:
+            tl=y.time_left()
+            days, hours, minutes = tl.days, tl.seconds // 3600, tl.seconds // 60 % 60
+            ts=str(tl.days) + ' days '
+            ts=ts+ ' and '+ str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes'
+            s=s+y.summary+ ' starts in: '+ ts+'\n'
+        await message.channel.send(s)
+
 
 async def makecsvfile(): 
     g=client.guilds[0]
