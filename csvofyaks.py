@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from icalevents.icalevents import events
 from datetime import datetime
 
-load_dotenv('.env')
+load_dotenv('~/.env')
 
 intents = discord.Intents.default()
 intents.members = True
