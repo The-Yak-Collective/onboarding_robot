@@ -108,10 +108,12 @@ async def on_message(message):
             start = parse(event['start'].get('dateTime', event['start'].get('date')))
             #print(start, datetime.utcnow(),datetime.now().astimezone())
             seconds2go=(start-datetime.utcnow().astimezone()).total_seconds()
-            days, hours, minutes = seconds2go //(3600*24), seconds2go // 3600, seconds2go // 60 % 60
+            days, hours, minutes = int(seconds2go //(3600*24)), int(seconds2go // 3600), int(seconds2go // 60 % 60)
 
-            ts=str(days) + ' days '
-            ts=ts+ ' and '+ str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes'
+            ts=str(days) + ' days and '
+            ts=ts+ str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes '
+            if days==0
+                ts=ts + '**Today**'
             s=s+event['summary']+ ' **Starts in:** '+ ts+'\n'
         print('s:',s)
         await message.channel.send(s)
