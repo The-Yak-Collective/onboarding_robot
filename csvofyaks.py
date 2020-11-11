@@ -111,7 +111,7 @@ async def on_message(message):
 
             ts=str(days) + ' days '
             ts=ts+ ' and '+ str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes'
-            s=s+event.summary+ ' starts in: '+ ts+'\n'
+            s=s+event.summary+ ' **Starts in:** '+ ts+'\n'
         await message.channel.send(s)
 
 
