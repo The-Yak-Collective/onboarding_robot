@@ -112,7 +112,7 @@ async def on_message(message):
 
             ts=str(days) + ' days and '
             ts=ts+ str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes '
-            if days==0
+            if days==0:
                 ts=ts + '**Today**'
             s=s+event['summary']+ ' **Starts in:** '+ ts+'\n'
         print('s:',s)
