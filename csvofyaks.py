@@ -98,10 +98,11 @@ async def on_message(message):
                                             singleEvents=True,
                                             orderBy='startTime').execute()
         events = events_result.get('items', [])
+        print('events len:', len(events))
         s="Upcoming in next week (beta version):\n"
         if not events:
             s=s+'No upcoming events found.'
-         
+        
 
         for event in events:
             start = parse(event['start'].get('dateTime', event['start'].get('date')))
@@ -112,6 +113,7 @@ async def on_message(message):
             ts=str(days) + ' days '
             ts=ts+ ' and '+ str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes'
             s=s+event.summary+ ' **Starts in:** '+ ts+'\n'
+        print('s:',s)
         await message.channel.send(s)
 
 
