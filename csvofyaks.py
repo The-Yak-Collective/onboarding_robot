@@ -141,7 +141,7 @@ async def on_message(message):
                     for i in range(howfarback //7+1):
                         ws=ws+'(**{}**,{}) '.format(str(cnt[idx][i][0]),str(cnt[idx][i][1]))
                 except:
-                    mess_data=None
+                    mess_data=''
                     ws='unavailable'
                     print('cannot access channel: ',ch.name)
                 tot=len(mess_data)
