@@ -126,21 +126,22 @@ async def on_message(message):
         cnt=[[(0,0)]*(howfarback//7+1)]*len(client.guilds[0].text_channels)
         now=datetime.utcnow()
         wh=now-timedelta(days=howfarback)
-        op="activity in the various channels in last {} days:\n".format(howfarback)
+        op="activity in the various channels in last {} days:\n shows total and per week (messages, number of mentions)".format(howfarback)
         for idx,ch in enumerate(client.guilds[0].text_channels):
                 #print(ch.name)
                 try:
                     mess_data=await ch.history(after=wh).flatten()
                     for m in mess_data:
-                        theweek=(now-m.created_at).days //7 #last week si always full. first week...
+                        theweek=(now-m.created_at).days //7 #last week is always full. first week...
                         cnt[idx][theweek]=(cnt[idx][theweek][0]+1,cnt[idx][theweek][1]+len(m.mentions))
                     ws=""
-                    for i in range(howfarback //7+1):
+                    for i in reversed(range(howfarback //7+1)):
                         ws=ws+str(cnt[idx][i])+' '
                 except:
                     ws='unavailable'
                     print('cannot access channel: ',ch.name)
-                op=op+ch.name+": total:"+str(len(mess_data))+'weekly: '+ws+'\n'
+                op=op+ch.name+": **total messages**: "+str(len(mess_data))+' weekly: '+ws+'\n'
+                print(idx,ch.name, cnt[:10])
         await splitsend(message.channel,op)
 
 async def splitsend(ch,st):
