@@ -140,8 +140,8 @@ async def on_message(message):
                 except:
                     ws='unavailable'
                     print('cannot access channel: ',ch.name)
-                op=op+ch.name+": **total messages**: "+str(len(mess_data))+' weekly: '+ws+'\n'
-                print(idx,ch.name, cnt[:10])
+                op=op+ch.name+":    total messages: "+'**'+str(len(mess_data))+'**+'    _weekly_: '+ws+'\n'
+                #print(idx,ch.name, cnt[:10])
         await splitsend(message.channel,op)
 
 async def splitsend(ch,st):
