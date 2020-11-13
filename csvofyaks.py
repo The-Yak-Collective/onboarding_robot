@@ -121,7 +121,7 @@ async def on_message(message):
         wh=datetime.utcnow()-timedelta(days=10)
         op=""
         for ch in client.guilds[0].text_channels:
-                mess_data=await ch.history(after=wn).flatten()
+                mess_data=await ch.history(after=wh).flatten()
                 op=op+ch.name+": "+str(len(mess_data))+'\n'
         await message.channel.send(op)
 
