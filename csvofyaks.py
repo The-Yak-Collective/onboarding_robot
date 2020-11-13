@@ -130,7 +130,7 @@ async def on_message(message):
         for idx,ch in enumerate(client.guilds[0].text_channels):
                 #print(ch.name)
                 try:
-                    mess_data=await ch.history(after=wh, limit=none).flatten()
+                    mess_data=await ch.history(after=wh, limit=None).flatten()
                     for m in mess_data:
                         theweek=(now-m.created_at).days // 7 #last week is always full. first week...
                         print('the week: ',ch.name, theweek, m.created_at)
@@ -139,6 +139,7 @@ async def on_message(message):
                     for i in range(howfarback //7+1):
                         ws=ws+'(**{}**,{}) '.format(str(cnt[idx][i][0]),str(cnt[idx][i][1]))
                 except:
+                    mess_data=None
                     ws='unavailable'
                     print('cannot access channel: ',ch.name)
                 op=op+ch.name+":    total messages: "+'**'+str(len(mess_data))+'**'+'    _weekly_: '+ws+'\n'
