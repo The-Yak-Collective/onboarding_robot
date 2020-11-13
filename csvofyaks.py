@@ -124,6 +124,9 @@ async def on_message(message):
         howfarback=10
         if len(cmd)>1:
             howfarback=int(cmd[1])
+        codeformat=False
+        if len(cmd)>2 and cmd[2]=="code":
+            codeformat=True
         cnt=[[(0,0) for i in range(howfarback//7+1)] for j in range(len(client.guilds[0].text_channels))]
         now=datetime.utcnow()
         wh=now-timedelta(days=howfarback)
@@ -151,15 +154,22 @@ async def on_message(message):
                 od.append(tmp)
                 #print(idx,ch.name, cnt[:10])
         od.sort(reverse=True,key=lambda x: x[1])
+        
         op=op+"\n".join([x[0] for x in od])
-        await splitsend(message.channel,op)
+        await splitsend(message.channel,op,codeformat)
 
-async def splitsend(ch,st):
-    if len(st)<2000: #discord limit)
-        await ch.send(st)
+async def splitsend(ch,st,codeformat):
+    if len(st)<1900: #discord limit is 2k and we want some play)
+        if codeformat:
+            await ch.send('```'+st.replace('**','')+'```')
+        else:
+            await ch.send(st)
     else:
         x=st.rfind('\n',0,2000)
-        await ch.send(st[0:x])
+        if codeformat:
+            await ch.send('```'+st[0:x].replace('**','')+'```')
+        else:
+            await ch.send(st[0:x])
         await splitsend(ch,st[x+1:])
     
 
