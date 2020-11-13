@@ -129,12 +129,11 @@ async def on_message(message):
         wh=now-timedelta(days=howfarback)
         op="activity in the various channels in last {} days:\nshows total and per week reversed (messages, number of mentions) \n".format(howfarback)
         od=[]
-        maxlen=0
+        maxlen=max(client.guilds[0].text_channels,key=lambda x:len(x.name))
         for idx,ch in enumerate(client.guilds[0].text_channels):
                 #print(ch.name)
                 try:
                     mess_data=await ch.history(after=wh, limit=None).flatten()
-                    maxlen=max(mess_data,key=lambda x:len(x))
                     for m in mess_data:
                         theweek=(now-m.created_at).days // 7 #last week is always full. first week...
                         #print('the week: ',ch.name, theweek, m.created_at)
@@ -143,7 +142,7 @@ async def on_message(message):
                     for i in range(howfarback //7+1):
                         ws=ws+'(**{}**,{}) '.format(str(cnt[idx][i][0]),str(cnt[idx][i][1]))
                 except:
-                    print(sys.exc_info())
+                    print(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2])
                     mess_data=''
                     ws='unavailable'
                     print('cannot access channel: ',ch.name)
