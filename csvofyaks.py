@@ -121,7 +121,7 @@ async def on_message(message):
     if message.content.startswith('$activity'):
         cmd=message.content.split()
         howfarback=10
-        if len(cmd>1):
+        if len(cmd)>1:
             howfarback=cmd[1]
         cnt=[[(0,0)]*(howfarback//7+1)]*len(client.guilds[0].text_channels)
         now=datetime.utcnow()
