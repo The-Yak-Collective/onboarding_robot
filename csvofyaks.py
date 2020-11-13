@@ -136,7 +136,7 @@ async def on_message(message):
                         cnt[idx][theweek]=(cnt[idx][theweek][0]+1,cnt[idx][theweek][1]+len(m.mentions))
                     ws=""
                     for i in range(howfarback //7+1):
-                        ws=ws+str(cnt[idx][i)+' '
+                        ws=ws+str(cnt[idx][i])+' '
                 except:
                     ws='unavailable'
                     print('cannot access channel: ',ch.name)
