@@ -122,7 +122,7 @@ async def on_message(message):
         cmd=message.content.split()
         howfarback=10
         if len(cmd)>1:
-            howfarback=cmd[1]
+            howfarback=int(cmd[1])
         cnt=[[(0,0) for i in range(howfarback//7+1)] for j in range(len(client.guilds[0].text_channels))]
         now=datetime.utcnow()
         wh=now-timedelta(days=howfarback)
