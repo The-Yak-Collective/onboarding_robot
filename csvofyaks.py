@@ -134,7 +134,7 @@ async def on_message(message):
                     mess_data=await ch.history(after=wh, limit=None).flatten()
                     for m in mess_data:
                         theweek=(now-m.created_at).days // 7 #last week is always full. first week...
-                        print('the week: ',ch.name, theweek, m.created_at)
+                        #print('the week: ',ch.name, theweek, m.created_at)
                         cnt[idx][theweek]=(cnt[idx][theweek][0]+1,cnt[idx][theweek][1]+len(m.mentions))
                     ws=""
                     for i in range(howfarback //7+1):
@@ -144,7 +144,7 @@ async def on_message(message):
                     ws='unavailable'
                     print('cannot access channel: ',ch.name)
                 tot=len(mess_data)
-                tmp=(ch.name+":    total messages: "+'**'+str(tot)+'**'+'    _weekly_: '+ws+'\n', tot)
+                tmp=(ch.name+":    total messages: "+'**'+str(tot)+'**'+'    _weekly_: '+ws, tot)
                 od.append(tmp)
                 #print(idx,ch.name, cnt[:10])
         od.sort(reverse=True,key=lambda x: x[1])
