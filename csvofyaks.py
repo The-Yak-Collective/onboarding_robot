@@ -161,16 +161,16 @@ async def on_message(message):
 async def splitsend(ch,st,codeformat):
     if len(st)<1900: #discord limit is 2k and we want some play)
         if codeformat:
-            await ch.send('```'+st.replace('**','')+'```')
+            await ch.send('```'+st.replace('**','').replace('_','')+'```')
         else:
             await ch.send(st)
     else:
         x=st.rfind('\n',0,2000)
         if codeformat:
-            await ch.send('```'+st[0:x].replace('**','')+'```')
+            await ch.send('```'+st[0:x].replace('**','').replace('_','')+'```')
         else:
             await ch.send(st[0:x])
-        await splitsend(ch,st[x+1:])
+        await splitsend(ch,st[x+1:],codeformat)
     
 
 async def makecsvfile(): 
