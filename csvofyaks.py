@@ -130,10 +130,10 @@ async def on_message(message):
         for idx,ch in enumerate(client.guilds[0].text_channels):
                 #print(ch.name)
                 try:
-                    mess_data=await ch.history(after=wh).flatten()
+                    mess_data=await ch.history(after=wh, limit=none).flatten()
                     for m in mess_data:
                         theweek=(now-m.created_at).days // 7 #last week is always full. first week...
-                        print('the week: ',idx, theweek)
+                        print('the week: ',ch.name, theweek, m.created_at)
                         cnt[idx][theweek]=(cnt[idx][theweek][0]+1,cnt[idx][theweek][1]+len(m.mentions))
                     ws=""
                     for i in range(howfarback //7+1):
