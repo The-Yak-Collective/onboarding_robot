@@ -117,7 +117,14 @@ async def on_message(message):
             s=s+event['summary']+ ' **Starts in:** '+ ts+'\n'
         print('s:',s)
         await message.channel.send(s)
-
+    if message.content.startswith('$activity'):
+        wh=datetime.utcnow()-timedelta(days=10)
+        op=""
+        for chan in guild[0].text_channels
+            for ch in chan
+                mess_data=await ch.history(after=wn).flatten()
+                op=op+ch.name+": "+str(len(mess_data))+'\n'
+        await message.channel.send(op)
 
 async def makecsvfile(): 
     g=client.guilds[0]
