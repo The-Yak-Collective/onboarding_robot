@@ -141,7 +141,16 @@ async def on_message(message):
                     ws='unavailable'
                     print('cannot access channel: ',ch.name)
                 op=op+ch.name+": total:"+str(len(mess_data))+'weekly: '+ws+'\n'
-        await message.channel.send(op)
+        await splitsend(message.channel,op)
+
+async def splitsend(ch,st):
+    if len(st)<2000: #discord limit)
+        await ch.send(st)
+    else:
+        x=st.rfind('\n',0,2000)
+        await ch.send(st[0:x])
+        await splitsend(ch,st[x+1:])
+    
 
 async def makecsvfile(): 
     g=client.guilds[0]
