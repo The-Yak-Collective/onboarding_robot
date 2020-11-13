@@ -123,7 +123,7 @@ async def on_message(message):
         howfarback=10
         if len(cmd)>1:
             howfarback=cmd[1]
-        cnt=[[(0,0)]*(howfarback//7+1)]*len(client.guilds[0].text_channels)
+        cnt=[[(0,0) for i in range(howfarback//7+1)] for j in range(len(client.guilds[0].text_channels))]
         now=datetime.utcnow()
         wh=now-timedelta(days=howfarback)
         op="activity in the various channels in last {} days:\n shows total and per week (messages, number of mentions)".format(howfarback)
