@@ -143,14 +143,20 @@ async def on_message(message):
                         cnt[idx][theweek]=(cnt[idx][theweek][0]+1,cnt[idx][theweek][1]+len(m.mentions))
                     ws=""
                     for i in range(howfarback //7+1):
-                        ws=ws+'(**{}**,{}) '.format(str(cnt[idx][i][0]),str(cnt[idx][i][1]))
+                        if codeformat:
+                            ws=ws+'({},{}) '.format(str(cnt[idx][i][0]),str(cnt[idx][i][1]))
+                        else:
+                            ws=ws+'(**{}**,{}) '.format(str(cnt[idx][i][0]),str(cnt[idx][i][1]))
                 except:
                     print(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2])
                     mess_data=''
                     ws='unavailable'
                     print('cannot access channel: ',ch.name)
                 tot=len(mess_data)
-                tmp=((ch.name+':').ljust(maxlen)+"   total messages: "+'**'+str(tot).ljust(5)+'**'+'    _weekly_: '+ws, tot)
+                if not codeformat:
+                    tmp=((ch.name+':').ljust(maxlen)+"   total messages: "+'**'+str(tot).ljust(5)+'**'+'    _weekly_: '+ws, tot)
+                else:
+                    tmp=((ch.name+':').ljust(maxlen+1)+"   total messages: "+''+str(tot).ljust(5)+''+'    weekly: '+ws, tot)
                 od.append(tmp)
                 #print(idx,ch.name, cnt[:10])
         od.sort(reverse=True,key=lambda x: x[1])
@@ -161,13 +167,13 @@ async def on_message(message):
 async def splitsend(ch,st,codeformat):
     if len(st)<1900: #discord limit is 2k and we want some play)
         if codeformat:
-            await ch.send('```'+st.replace('**','').replace('_','')+'```')
+            await ch.send('```'+st+'```')
         else:
             await ch.send(st)
     else:
         x=st.rfind('\n',0,2000)
         if codeformat:
-            await ch.send('```'+st[0:x].replace('**','').replace('_','')+'```')
+            await ch.send('```'+st[0:x]+'```')
         else:
             await ch.send(st[0:x])
         await splitsend(ch,st[x+1:],codeformat)
