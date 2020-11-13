@@ -128,6 +128,7 @@ async def on_message(message):
         wh=now-timedelta(days=howfarback)
         op="activity in the various channels in last {} days:\nshows total and per week reversed (messages, number of mentions) \n".format(howfarback)
         od=[]
+        maxlen=0
         for idx,ch in enumerate(client.guilds[0].text_channels):
                 #print(ch.name)
                 try:
