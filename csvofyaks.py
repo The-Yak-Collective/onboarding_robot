@@ -1,6 +1,7 @@
 import discord
 import base64
 
+import sys
 
 import pickle
 import requests
@@ -142,6 +143,7 @@ async def on_message(message):
                     for i in range(howfarback //7+1):
                         ws=ws+'(**{}**,{}) '.format(str(cnt[idx][i][0]),str(cnt[idx][i][1]))
                 except:
+                    print(sys.exc_info())
                     mess_data=''
                     ws='unavailable'
                     print('cannot access channel: ',ch.name)
