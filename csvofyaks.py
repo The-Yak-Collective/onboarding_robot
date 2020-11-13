@@ -121,8 +121,11 @@ async def on_message(message):
         wh=datetime.utcnow()-timedelta(days=10)
         op=""
         for ch in client.guilds[0].text_channels:
-                print(ch.name)
-                mess_data=await ch.history(after=wh).flatten()
+                #print(ch.name)
+                try:
+                    mess_data=await ch.history(after=wh).flatten()
+                except:
+                    print('cannot access channel: ',ch.name)
                 op=op+ch.name+": "+str(len(mess_data))+'\n'
         await message.channel.send(op)
 
