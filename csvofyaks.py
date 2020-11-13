@@ -120,7 +120,7 @@ async def on_message(message):
     if message.content.startswith('$activity'):
         wh=datetime.utcnow()-timedelta(days=10)
         op=""
-        for chan in guild[0].text_channels:
+        for chan in client.guilds[0].text_channels:
             for ch in chan:
                 mess_data=await ch.history(after=wn).flatten()
                 op=op+ch.name+": "+str(len(mess_data))+'\n'
