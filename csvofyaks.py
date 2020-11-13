@@ -6,6 +6,7 @@ import pickle
 import requests
 import os.path
 import os
+from array import *
 
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -118,15 +119,28 @@ async def on_message(message):
         print('s:',s)
         await message.channel.send(s)
     if message.content.startswith('$activity'):
-        wh=datetime.utcnow()-timedelta(days=10)
-        op=""
-        for ch in client.guilds[0].text_channels:
+        cmd=message.content.split()
+        howfarback=10
+        iflen(cmd>1):
+            howfarback=cmd[1]
+        cnt=[[(0,0)]*(howfarback//7+1)]*len(client.guilds[0].text_channels)
+        now=datetime.utcnow()
+        wh=now-timedelta(days=howfarback)
+        op="activity in the various channels in last {} days:\n".format(howfarback)
+        for idx,ch in enumerate(client.guilds[0].text_channels):
                 #print(ch.name)
                 try:
                     mess_data=await ch.history(after=wh).flatten()
+                    for m in mess_data:
+                        theweek=(now-m.created_at).days //7 #last week si always full. first week...
+                        cnt[idx][theweek]=(cnt[idx][theweek][0]+1,cnt[idx][theweek][1]+len(m.mentions))
+                    ws=""
+                    for i in range(howfarback //7+1):
+                        ws=ws+str(cnt[idx][i)+' '
                 except:
+                    ws='unavailable'
                     print('cannot access channel: ',ch.name)
-                op=op+ch.name+": "+str(len(mess_data))+'\n'
+                op=op+ch.name+": total:"+str(len(mess_data))+'weekly: '+ws+'\n'
         await message.channel.send(op)
 
 async def makecsvfile(): 
