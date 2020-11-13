@@ -148,7 +148,7 @@ async def on_message(message):
                 od.append(tmp)
                 #print(idx,ch.name, cnt[:10])
         od.sort(reverse=True,key=lambda x: x[1])
-        op="\n".join([x[1] for x in od])
+        op="\n".join([x[0] for x in od])
         await splitsend(message.channel,op)
 
 async def splitsend(ch,st):
