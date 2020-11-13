@@ -126,16 +126,16 @@ async def on_message(message):
         cnt=[[(0,0) for i in range(howfarback//7+1)] for j in range(len(client.guilds[0].text_channels))]
         now=datetime.utcnow()
         wh=now-timedelta(days=howfarback)
-        op="activity in the various channels in last {} days:\n shows total and per week (messages, number of mentions) \n".format(howfarback)
+        op="activity in the various channels in last {} days:\n shows total and per week reversed (messages, number of mentions) \n".format(howfarback)
         for idx,ch in enumerate(client.guilds[0].text_channels):
                 #print(ch.name)
                 try:
                     mess_data=await ch.history(after=wh).flatten()
                     for m in mess_data:
-                        theweek=(now-m.created_at).days //7 #last week is always full. first week...
+                        theweek=(now-m.created_at).days // 7 #last week is always full. first week...
                         cnt[idx][theweek]=(cnt[idx][theweek][0]+1,cnt[idx][theweek][1]+len(m.mentions))
                     ws=""
-                    for i in reversed(range(howfarback //7+1)):
+                    for i in range(howfarback //7+1):
                         ws=ws+'(**{}**,{}) '.format(str(cnt[idx][i][0]),str(cnt[idx][i][1]))
                 except:
                     ws='unavailable'
