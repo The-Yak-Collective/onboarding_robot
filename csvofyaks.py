@@ -68,6 +68,7 @@ async def on_message(message):
         await message.channel.send("a csv file of all yaks")
         await message.channel.send("actual file:", file=discord.File("memberlist.csv"))
     if message.content.startswith('$test'):
+        await message.channel.trigger_typing()
         await message.channel.send("this is a test")#: "+str([(x.name,x.created_at) for x in message.author.roles]))
     if (message.content.startswith('$die!') and message.author.id==710573356759384075):
         exit(0)
@@ -81,6 +82,7 @@ async def on_message(message):
         print("target is:",target,flush=True)    
         await target.send('Hello! i was told by '+message.author.name+' to contact you')
     if message.content.startswith('$upcoming'):
+        await message.channel.trigger_typing()
         creds = None
         if os.path.exists('/home/yak/token.pickle'):
             with open('/home/yak/token.pickle', 'rb') as token:
@@ -120,6 +122,7 @@ async def on_message(message):
         print('s:',s)
         await message.channel.send(s)
     if message.content.startswith('$activity'):
+        await message.channel.trigger_typing()
         cmd=message.content.split()
         howfarback=10
         if len(cmd)>1:
