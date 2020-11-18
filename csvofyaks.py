@@ -166,6 +166,19 @@ async def on_message(message):
         
         op=op+"\n".join([x[0] for x in od])
         await splitsend(message.channel,op,codeformat)
+    if message.content.startswith('$intro'):
+        last_mess=await message.channel.history(limit=1).flatten
+        target=message.author.dm_channel
+        if (not target): 
+            target=await client.get_user(message.author.id).create_dm()
+        intro_chan=client.get_channel(692826420191297556)
+        intros=await intro.history(limit=None).flatten
+        intro_mess="no intro found"
+        for i in intros:
+            if i.author==last_mess.author:
+                intro_mess=i.content
+                break
+        await target.send('here is the intro you wanted\n'+s)
 
 async def splitsend(ch,st,codeformat):
     if len(st)<1900: #discord limit is 2k and we want some play)
