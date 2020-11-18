@@ -172,7 +172,7 @@ async def on_message(message):
         if (not target): 
             target=await client.get_user(message.author.id).create_dm()
         intro_chan=client.get_channel(692826420191297556)
-        intros=await intro_chan.history(limit=None).flatten
+        intros=await intro_chan.history(limit=None).flatten()
         intro_mess="no intro found"
         for i in intros:
             if i.author==last_mess.author:
