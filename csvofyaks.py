@@ -77,7 +77,7 @@ async def on_message(message):
         await message.channel.send("actual file:", file=discord.File("memberlist.csv"))
     if message.content.startswith('$test'):
         await message.channel.trigger_typing()
-        await message.channel.send("this is a test")#: "+str([(x.name,x.created_at) for x in message.author.roles]))
+        await message.channel.send("this is a test...")#: "+str([(x.name,x.created_at) for x in message.author.roles]))
     if (message.content.startswith('$die!') and message.author.id==710573356759384075):
         exit(0)
     if message.content.startswith('$dm'):
