@@ -166,8 +166,9 @@ async def on_message(message):
         
         op=op+"\n".join([x[0] for x in od])
         await splitsend(message.channel,op,codeformat)
-    if message.content.startswith('$intro'):
-        last_mess=await message.channel.history(limit=1).flatten()
+    if message.content.startswith('$intro'):#of course intros should be in a local db...
+        await message.channel.trigger_typing()
+        last_mess=await message.channel.history(limit=1).flatten()[0]
         target=message.author.dm_channel
         if (not target): 
             target=await client.get_user(message.author.id).create_dm()
