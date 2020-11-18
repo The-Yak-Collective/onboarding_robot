@@ -61,7 +61,7 @@ async def on_message(message):
     if message.author == client.user:
         return
     mid=client.guilds[0].get_member(message.author.id)
-    r=mid.roles
+    r=[x.name for x in mid.roles]
     if message.content.startswith('$hello'):
         await message.channel.send('Hello!')
         print("hello mess from "+message.author.name,flush=True);
@@ -83,10 +83,7 @@ async def on_message(message):
     if message.content.startswith('$dm'):
         print("dm",flush=True);
         t=int(message.content[3:])
-        target=client.get_user(t).dm_channel
-        if (not target): 
-            print("need to create dm channel",flush=True)
-            target=await client.get_user(t).create_dm()
+        target=await dmchan(t)
         print("target is:",target,flush=True)    
         await target.send('Hello! i was told by '+message.author.name+' to contact you')
     if message.content.startswith('$upcoming'):
@@ -181,9 +178,7 @@ async def on_message(message):
         await message.channel.trigger_typing()
         last_mess=await message.channel.history(limit=1).flatten()
         last_mess=last_mess[0]
-        target=message.author.dm_channel
-        if (not target): 
-            target=await client.get_user(message.author.id).create_dm()
+        target=await dmchan(message.author.id).dm_channel
         intro_chan=client.get_channel(692826420191297556)
         intros=await intro_chan.history(limit=None).flatten()
         intro_mess="no intro found"
@@ -201,10 +196,15 @@ async def on_message(message):
         await servefiles(sp[0][1:]+'file',sp[0][1:]+'_files',sp[1],message)
         return
         
-async def servefiles(hf,hd,ow,m):
-    target=m.author.dm_channel
+async def dmchan(t):
+    target=client.get_user(t).dm_channel
     if (not target): 
-        target=await client.get_user(m.author.id).create_dm()
+        print("need to create dm channel",flush=True)
+        target=await client.get_user(t).create_dm()
+    return target
+        
+async def servefiles(hf,hd,ow,m):
+    target=await dmchan(m.author.id)
     if ow=='':
         with open(LOCALDIR+hf) as f:
             s=f.read()
