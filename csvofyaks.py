@@ -22,7 +22,11 @@ from dotenv import load_dotenv
 
 from datetime import datetime
 
-load_dotenv('/home/yak/.env')
+HOMEDIR='/home/yak/'
+LOCALDIR=HOMEDIR+'robot/onboarding_robot/'
+
+
+load_dotenv(HOMEDIR+'.env')
 
 intents = discord.Intents.default()
 intents.members = True
@@ -63,6 +67,9 @@ async def on_message(message):
     if message.content.startswith('$whosenew'):
         await message.channel.send(str(newones))
     if message.content.startswith('$givemecsv'):
+        r=message.author.roles
+        if 'yakshaver' not in r and 'yakherder' not in r:
+            return
         print("working on memberlist")
         await makecsvfile()
         await message.channel.send("a csv file of all yaks")
@@ -84,8 +91,8 @@ async def on_message(message):
     if message.content.startswith('$upcoming'):
         await message.channel.trigger_typing()
         creds = None
-        if os.path.exists('/home/yak/token.pickle'):
-            with open('/home/yak/token.pickle', 'rb') as token:
+        if os.path.exists(HOMEDIR+'token.pickle'):
+            with open(HOMEDIR+'token.pickle', 'rb') as token:
                 creds = pickle.load(token)
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
@@ -93,7 +100,7 @@ async def on_message(message):
             else:
                 flow = InstalledAppFlow.from_client_secrets_file('yc-credentials.json', SCOPES)
                 creds = flow.run_local_server(port=9000)
-            with open('/home/yak/token.pickle', 'wb') as token:
+            with open(HOMEDIR+'token.pickle', 'wb') as token:
                 pickle.dump(creds, token)
         cal = build('calendar', 'v3', credentials=creds)
 
@@ -122,6 +129,8 @@ async def on_message(message):
         print('s:',s)
         await message.channel.send(s)
     if message.content.startswith('$activity'):
+        if 'yakshaver' not in r and 'yakherder' not in r:
+            return
         await message.channel.trigger_typing()
         cmd=message.content.split()
         howfarback=10
@@ -182,6 +191,29 @@ async def on_message(message):
                 break
         s=intro_mess
         await target.send('here is the intro you wanted\n'+s)
+        return
+    if message.content.startswith('$help') or message.content.startswith('$howto'):
+        sp=message.content.split()
+        await servefiles(sp[0][1:]+'file',sp[0][1:]+'_files',sp[1],message)
+        return
+        
+async def servefiles(hf,hd,ow,m):
+    target=m.author.dm_channel
+    if (not target): 
+        target=await client.get_user(m.author.id).create_dm()
+    if ow=='':
+        with open(LOCALDIR+hf) as f:
+            s=f.read()
+        await splitsend(target,s,False)
+    else:
+        fname=LOCALDIR+'/'+hd+'/'+ow
+        if os.path.exists(fname):
+            with open(fname) as f:
+                s=f.read()
+            await splitsend(target,s,False)
+        else:
+            s="no help exists for: "+ow
+            await splitsend(target,s,False)
 
 async def splitsend(ch,st,codeformat):
     if len(st)<1900: #discord limit is 2k and we want some play)
