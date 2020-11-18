@@ -180,6 +180,7 @@ async def on_message(message):
             if i.author==last_mess.author:
                 intro_mess=i.content
                 break
+        s=intro_mess
         await target.send('here is the intro you wanted\n'+s)
 
 async def splitsend(ch,st,codeformat):
