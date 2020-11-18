@@ -61,14 +61,15 @@ async def on_message(message):
     if message.author == client.user:
         return
     mid=client.guilds[0].get_member(message.author.id)
+    r=mid.roles
     if message.content.startswith('$hello'):
         await message.channel.send('Hello!')
         print("hello mess from "+message.author.name,flush=True);
     if message.content.startswith('$whosenew'):
         await message.channel.send(str(newones))
     if message.content.startswith('$givemecsv'):
-        r=mid.roles
         if 'yakshaver' not in r and 'yakherder' not in r:
+            await message.channel.send('you have roles {}'.format(r))
             return
         print("working on memberlist")
         await makecsvfile()
@@ -130,6 +131,7 @@ async def on_message(message):
         await message.channel.send(s)
     if message.content.startswith('$activity'):
         if 'yakshaver' not in r and 'yakherder' not in r:
+            await message.channel.send('you have roles {}'.format(r))
             return
         await message.channel.trigger_typing()
         cmd=message.content.split()
@@ -195,7 +197,7 @@ async def on_message(message):
     if message.content.startswith('$help') or message.content.startswith('$howto'):
         sp=message.content.split()
         if len(sp)==1:
-            sp[1]=''
+            sp.append('')
         await servefiles(sp[0][1:]+'file',sp[0][1:]+'_files',sp[1],message)
         return
         
