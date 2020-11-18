@@ -60,14 +60,14 @@ async def on_member_join(member):
 async def on_message(message):
     if message.author == client.user:
         return
-
+    mid=client.guilds[0].get_member(message.author.id)
     if message.content.startswith('$hello'):
         await message.channel.send('Hello!')
         print("hello mess from "+message.author.name,flush=True);
     if message.content.startswith('$whosenew'):
         await message.channel.send(str(newones))
     if message.content.startswith('$givemecsv'):
-        r=message.author.roles
+        r=mid.roles
         if 'yakshaver' not in r and 'yakherder' not in r:
             return
         print("working on memberlist")
@@ -194,6 +194,8 @@ async def on_message(message):
         return
     if message.content.startswith('$help') or message.content.startswith('$howto'):
         sp=message.content.split()
+        if len(sp)==1:
+            sp[1]=''
         await servefiles(sp[0][1:]+'file',sp[0][1:]+'_files',sp[1],message)
         return
         
