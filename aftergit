@@ -1,6 +1,7 @@
 exec >~/robot/onboarding_robot/logfileofpostmerge
 exec 2>&1
 set -x
+ps ax | grep 'csvofyaks'
 kill -9 $(ps ax | grep 'csvofyaks.py' | awk '{print $1;exit}')
 nohup python3 ~/robot/onboarding_robot/csvofyaks.py 2>&1 &
 exit
