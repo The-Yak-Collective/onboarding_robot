@@ -236,8 +236,11 @@ async def do_noise(message,r):
         for m in mess_data:
             idx=m.author.id
             theweek=(now-m.created_at).days // 7 
-            cnt[idx]['weekly'][theweek]+=1
-            cnt[idx]['tot']+=1
+            try:
+                cnt[idx]['weekly'][theweek]+=1
+                cnt[idx]['tot']+=1
+            except:
+                print('failed for ',idx)
     for k in cnt:
         ws=""
         for i in range(howfarback //7+1):
