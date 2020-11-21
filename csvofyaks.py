@@ -55,13 +55,15 @@ async def on_member_join(member):
     await me2.send("new member: "+str(member.name)+"id: "+str(member.id))
     
 
+def getroles(x):
+    mid=client.guilds[0].get_member(message.author.id)
+    return [x.name for x in mid.roles]
 
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
-    mid=client.guilds[0].get_member(message.author.id)
-    r=[x.name for x in mid.roles]
+    r=getroles(message.author.id)
     if message.content.startswith('$hello'):
         await message.channel.send('Hello!')
         print("hello mess from "+message.author.name,flush=True);
@@ -127,53 +129,11 @@ async def on_message(message):
         print('s:',s)
         await message.channel.send(s)
     if message.content.startswith('$activity'):
-        if 'yakshaver' not in r and 'yakherder' not in r:
-            await message.channel.send('you have roles {}'.format(r))
-            return
-        await message.channel.trigger_typing()
-        cmd=message.content.split()
-        howfarback=10
-        if len(cmd)>1:
-            howfarback=int(cmd[1])
-        codeformat=False
-        if len(cmd)>2 and cmd[2]=="code":
-            codeformat=True
-        cnt=[[(0,0) for i in range(howfarback//7+1)] for j in range(len(client.guilds[0].text_channels))]
-        now=datetime.utcnow()
-        wh=now-timedelta(days=howfarback)
-        op="activity in the various channels in last {} days:\nshows total and per week reversed (messages, number of mentions) \n".format(howfarback)
-        od=[]
-        maxlen=len(max(client.guilds[0].text_channels,key=lambda x:len(x.name)).name)
-        for idx,ch in enumerate(client.guilds[0].text_channels):
-                #print(ch.name)
-                try:
-                    mess_data=await ch.history(after=wh, limit=None).flatten()
-                    for m in mess_data:
-                        theweek=(now-m.created_at).days // 7 #last week is always full. first week...
-                        #print('the week: ',ch.name, theweek, m.created_at)
-                        cnt[idx][theweek]=(cnt[idx][theweek][0]+1,cnt[idx][theweek][1]+len(m.mentions))
-                    ws=""
-                    for i in range(howfarback //7+1):
-                        if codeformat:
-                            ws=ws+'({},{}) '.format(str(cnt[idx][i][0]),str(cnt[idx][i][1]))
-                        else:
-                            ws=ws+'(**{}**,{}) '.format(str(cnt[idx][i][0]),str(cnt[idx][i][1]))
-                except:
-                    print(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2])
-                    mess_data=''
-                    ws='unavailable'
-                    print('cannot access channel: ',ch.name)
-                tot=len(mess_data)
-                if not codeformat:
-                    tmp=((ch.name+':').ljust(maxlen)+"   total messages: "+'**'+str(tot).ljust(5)+'**'+'    _weekly_: '+ws, tot)
-                else:
-                    tmp=((ch.name+':').ljust(maxlen+1)+"   total messages: "+''+str(tot).ljust(5)+''+'    weekly: '+ws, tot)
-                od.append(tmp)
-                #print(idx,ch.name, cnt[:10])
-        od.sort(reverse=True,key=lambda x: x[1])
-        
-        op=op+"\n".join([x[0] for x in od])
-        await splitsend(message.channel,op,codeformat)
+        await do_activity(message,r)
+        return
+    if message.content.startswith('$noise'):
+        await do_noise(message,r)
+        return
     if message.content.startswith('$intro'):#of course intros should be in a local db...
         await message.channel.trigger_typing()
         last_mess=await message.channel.history(limit=1).flatten()
@@ -195,7 +155,104 @@ async def on_message(message):
             sp.append('')
         await servefiles(sp[0][1:]+'file',sp[0][1:]+'_files',sp[1],message)
         return
-        
+
+async def do_activity(message,r):
+    if 'yakshaver' not in r and 'yakherder' not in r:
+        await message.channel.send('you have roles {}'.format(r))
+        return
+    await message.channel.trigger_typing()
+    cmd=message.content.split()
+    howfarback=10
+    if len(cmd)>1:
+        howfarback=int(cmd[1])
+    codeformat=False
+    if len(cmd)>2 and cmd[2]=="code":
+        codeformat=True
+    cnt=[[(0,0) for i in range(howfarback//7+1)] for j in range(len(client.guilds[0].text_channels))]
+    now=datetime.utcnow()
+    wh=now-timedelta(days=howfarback)
+    op="activity in the various channels in last {} days:\nshows total and per week reversed (messages, number of mentions) \n".format(howfarback)
+    od=[]
+    maxlen=len(max(client.guilds[0].text_channels,key=lambda x:len(x.name)).name)
+    for idx,ch in enumerate(client.guilds[0].text_channels):
+            #print(ch.name)
+            try:
+                mess_data=await ch.history(after=wh, limit=None).flatten()
+                for m in mess_data:
+                    theweek=(now-m.created_at).days // 7 #last week is always full. first week...
+                    #print('the week: ',ch.name, theweek, m.created_at)
+                    cnt[idx][theweek]=(cnt[idx][theweek][0]+1,cnt[idx][theweek][1]+len(m.mentions))
+                ws=""
+                for i in range(howfarback //7+1):
+                    if codeformat:
+                        ws=ws+'({},{}) '.format(str(cnt[idx][i][0]),str(cnt[idx][i][1]))
+                    else:
+                        ws=ws+'(**{}**,{}) '.format(str(cnt[idx][i][0]),str(cnt[idx][i][1]))
+            except:
+                print(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2])
+                mess_data=''
+                ws='unavailable'
+                print('cannot access channel: ',ch.name)
+            tot=len(mess_data)
+            if not codeformat:
+                tmp=((ch.name+':').ljust(maxlen)+"   total messages: "+'**'+str(tot).ljust(5)+'**'+'    _weekly_: '+ws, tot)
+            else:
+                tmp=((ch.name+':').ljust(maxlen+1)+"   total messages: "+''+str(tot).ljust(5)+''+'    weekly: '+ws, tot)
+            od.append(tmp)
+            #print(idx,ch.name, cnt[:10])
+    od.sort(reverse=True,key=lambda x: x[1])
+    
+    op=op+"\n".join([x[0] for x in od])
+    await splitsend(message.channel,op,codeformat)
+
+async def do_noise(message,r): 
+    if 'yakshaver' not in r and 'yakherder' not in r:
+        await message.channel.send('you have roles {}'.format(r))
+        return
+    await message.channel.trigger_typing()
+    
+    cmd=message.content.split()
+    howfarback=10
+    howmany= -20 #twenty least active
+    codeformat=True #always code mode, so it looks nice
+
+    if len(cmd)>1:
+        howfarback=int(cmd[1])
+    if len(cmd)>2:
+        howmany= int(cmd[2])
+
+    ml=client.guilds[0].members
+    cnt={k.id:{'name':k.name, 'tot':0, 'weekly':[0 for i in range(howfarback//7+1)], 'roles': getroles(k.id)} for k in ml}
+
+    now=datetime.utcnow()
+    wh=now-timedelta(days=howfarback)
+    op="activity of members last {} days:\n shows total and per week reversed for {} \n".format(howfarback, str(abs(howmany)) + ' top' if howmany>0 else ' bottom')
+    
+    od=[]
+    maxlen=len(max(client.guilds[0].members,key=lambda x:len(x.name)).name)
+    
+    for ch in client.guilds[0].text_channels:
+            try:
+                mess_data=await ch.history(after=wh, limit=None).flatten()
+                for m in mess_data:
+                    idx=m.author.id
+                    theweek=(now-m.created_at).days // 7 
+                    cnt[idx]['weekly'][theweek]+=1
+                    cnt[idx]['tot']+=1
+
+    for k in cnt:
+        ws=""
+        for i in range(howfarback //7+1):
+            ws=ws+'({}) '.format(str(cnt[k]['weekly'][i]))
+        tmp=((cnt[k]['name']+':').ljust(maxlen+1)+"   tot: "+''+str(cnt[k]['tot']).ljust(5)+''+'    weekly: '+ws+ 'roles:'+str(cnt[k]['roles']), cnt[k]['tot'])
+        od.append(tmp)
+    od.sort(reverse=True,key=lambda x: x[1])
+    od_filtered=(od[0:howmany] if howmany>0 else od[howmany:])
+    op=op+"\n".join([x[0] for x in od_filtered])
+    await splitsend(message.channel,op,codeformat)
+
+
+
 async def dmchan(t):
     target=client.get_user(t).dm_channel
     if (not target): 
