@@ -55,8 +55,8 @@ async def on_member_join(member):
     await me2.send("new member: "+str(member.name)+"id: "+str(member.id))
     
 
-def getroles(x):
-    mid=client.guilds[0].get_member(message.author.id)
+def getroles(y):
+    mid=client.guilds[0].get_member(y)
     return [x.name for x in mid.roles]
 
 @client.event
