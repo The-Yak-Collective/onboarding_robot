@@ -232,14 +232,12 @@ async def do_noise(message,r):
     maxlen=len(max(client.guilds[0].members,key=lambda x:len(x.name)).name)
     
     for ch in client.guilds[0].text_channels:
-            try:
-                mess_data=await ch.history(after=wh, limit=None).flatten()
-                for m in mess_data:
-                    idx=m.author.id
-                    theweek=(now-m.created_at).days // 7 
-                    cnt[idx]['weekly'][theweek]+=1
-                    cnt[idx]['tot']+=1
-
+        mess_data=await ch.history(after=wh, limit=None).flatten()
+        for m in mess_data:
+            idx=m.author.id
+            theweek=(now-m.created_at).days // 7 
+            cnt[idx]['weekly'][theweek]+=1
+            cnt[idx]['tot']+=1
     for k in cnt:
         ws=""
         for i in range(howfarback //7+1):
