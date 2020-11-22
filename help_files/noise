@@ -1,0 +1,1 @@
+$noise HOWFAR HOWMANY   scans all channels and counts user messages. HOWFAR is how many days to look into the past and HOWMANY is teh number of results to show. a positive number gives the top message senders and a negative number gives the minimal message senders. both are optional. 
