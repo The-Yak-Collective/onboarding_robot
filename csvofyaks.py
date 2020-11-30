@@ -71,7 +71,7 @@ async def on_message(message):
         await message.channel.send(str(newones))
     if message.content.startswith('$givemecsv'):
         if 'yakshaver' not in r and 'yakherder' not in r:
-            await message.channel.send('you have roles {}'.format(r))
+            await message.channel.send('You must be either a yakshaver or yakherder to use this command. Your current roles are: {}'.format(r))
             return
         print("working on memberlist")
         await makecsvfile()
@@ -158,7 +158,7 @@ async def on_message(message):
 
 async def do_activity(message,r):
     if 'yakshaver' not in r and 'yakherder' not in r:
-        await message.channel.send('you have roles {}'.format(r))
+        await message.channel.send('You must be either a yakshaver or yakherder to use this command. Your current roles are: {}'.format(r))
         return
     await message.channel.trigger_typing()
     cmd=message.content.split()
@@ -207,7 +207,7 @@ async def do_activity(message,r):
 
 async def do_noise(message,r): 
     if 'yakshaver' not in r and 'yakherder' not in r:
-        await message.channel.send('you have roles {}'.format(r))
+        await message.channel.send('You must be either a yakshaver or yakherder to use this command. Your current roles are: {}'.format(r))
         return
     await message.channel.trigger_typing()
     
@@ -264,11 +264,11 @@ async def dmchan(t):
 async def servefiles(hf,hd,ow,m):
     target=await dmchan(m.author.id)
     if ow=='':
-        with open(LOCALDIR+hf) as f:
+        with open((LOCALDIR+hf).replace(".","_haha_")) as f:
             s=f.read()
         await splitsend(target,s,False)
     else:
-        fname=LOCALDIR+'/'+hd+'/'+ow
+        fname=(LOCALDIR+'/'+hd+'/'+ow).replace(".","_haha_")
         if os.path.exists(fname):
             with open(fname) as f:
                 s=f.read()
@@ -284,7 +284,7 @@ async def splitsend(ch,st,codeformat):
         else:
             await ch.send(st)
     else:
-        x=st.rfind('\n',0,2000)
+        x=st.rfind('\n',0,1900)
         if codeformat:
             await ch.send('```'+st[0:x]+'```')
         else:

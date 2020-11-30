@@ -40,7 +40,7 @@ async def test_tick():
 
 
 
-load_dotenv('/home/yak.env')
+load_dotenv('/home/yak/.env')
 
 
 @client.event

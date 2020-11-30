@@ -40,7 +40,7 @@ async def send_dm(yak,y,x):
 
 async def posted_introduction(yak,m,x):
     print('check if this message is in introduction channel. if yes, return 1, otherwise 0')
-    if m.channel.id==692826420191297556:
+    if m.channel.id==INTRODUCTIONCHANNELID:
         return 1
     return 0
 

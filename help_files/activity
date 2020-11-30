@@ -1,4 +1,4 @@
 $activity N {code} collects all the messages form all the channels and extracts statistics
 N (default 10) is the number of days to go back
-{code} is an optional keyword which shows the data in codeblock format, which uses  a non-proportional font; good for tabular data.
+{code} is an optional keyword which shows the data in codeblock format, which uses a fixed-width font; good for tabular data.
  
