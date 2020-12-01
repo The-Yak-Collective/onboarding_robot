@@ -264,17 +264,17 @@ async def dmchan(t):
 async def servefiles(hf,hd,ow,m):
     target=await dmchan(m.author.id)
     if ow=='':
-        with open((LOCALDIR+hf).replace(".","_haha_")) as f:
+        with open(LOCALDIR+re.sub('^.*[^\w]', '', hf)) as f:
             s=f.read()
         await splitsend(target,s,False)
     else:
-        fname=(LOCALDIR+'/'+hd+'/'+ow).replace(".","_haha_")
+        fname=LOCALDIR+'/'+hd+'/'+re.sub('^.*[^\w]', '', ow)
         if os.path.exists(fname):
             with open(fname) as f:
                 s=f.read()
             await splitsend(target,s,False)
         else:
-            s="no help exists for: "+ow
+            s="Sorry, no help exists for that"
             await splitsend(target,s,False)
 
 async def splitsend(ch,st,codeformat):
