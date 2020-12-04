@@ -8,4 +8,4 @@ $noise          shows activity of yaks. more: $help noise
 $intro          (beta) tries to extract the #introduction message written  by author of last message in channel. TBD function of intro based on @mention & sent by dm
 $test           shows test message
 $whosenew       list of yaks that joined since bot restarted
-see also $gighelp & $projhelp & $ agendahelp
+see also $gighelp & $projhelp & $agendahelp & $wantedhelp
