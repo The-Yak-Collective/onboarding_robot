@@ -1,6 +1,9 @@
 import discord
 import base64
 
+
+import re
+
 import sys
 
 import pickle
