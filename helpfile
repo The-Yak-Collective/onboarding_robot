@@ -1,11 +1,12 @@
 $help           this message
 $upcoming       lists upcoming events for next 7 days
-$howto          howto instructions for some yak activities on discord
-$givemecsv      generates a csv file member data. TBD:  limited to yakshavers 
+$howto          (BETA) howto instructions for some yak activities on discord
 $hello          says hello back
-$activity       shows activity summary. more: $help activity
-$noise          shows activity of yaks. more: $help noise
-$intro          (beta) tries to extract the #introduction message written  by author of last message in channel. TBD function of intro based on @mention & sent by dm
 $test           shows test message
-$whosenew       list of yaks that joined since bot restarted
-see also $gighelp & $projhelp & $agendahelp & $wantedhelp & $newsitemhelp
+
+see also (gigayak bot):
+$gighelp        bot for gig listing
+$projhelp       bot for project voting
+$agendahelp     bot for agendas per channel
+$wantedhelp     bot for internal help wantedhelp
+$newsitemhelp   bot for suggesting items for newsletter
