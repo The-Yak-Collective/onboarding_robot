@@ -27,7 +27,8 @@ from datetime import datetime
 
 HOMEDIR='/home/yak/'
 LOCALDIR=HOMEDIR+'robot/onboarding_robot/'
-
+DISCORD_KEY='DISCORD_KEY'
+INTRO_CHAN=692826420191297556
 
 load_dotenv(HOMEDIR+'.env')
 
@@ -142,7 +143,7 @@ async def on_message(message):
         last_mess=await message.channel.history(limit=1).flatten()
         last_mess=last_mess[0]
         target=await dmchan(message.author.id).dm_channel
-        intro_chan=client.get_channel(692826420191297556)
+        intro_chan=client.get_channel(INTRO_CHAN)
         intros=await intro_chan.history(limit=None).flatten()
         intro_mess="no intro found"
         for i in intros:
@@ -156,7 +157,7 @@ async def on_message(message):
         sp=message.content.split()
         if len(sp)==1:
             sp.append('')
-        await servefiles(sp[0][1:]+'file',sp[0][1:]+'_files',sp[1],message)
+        await servefiles(sp[0][1:]+'file',sp[0][1:]+'_files',sp[1],message,'.txt')
         return
 
 async def do_activity(message,r):
@@ -264,14 +265,14 @@ async def dmchan(t):
         target=await client.get_user(t).create_dm()
     return target
         
-async def servefiles(hf,hd,ow,m):
+async def servefiles(hf,hd,ow,m, ext):
     target=await dmchan(m.author.id)
     if ow=='':
-        with open(LOCALDIR+re.sub('^.*[^\w]', '', hf)) as f:
+        with open(LOCALDIR+re.sub('^.*[^\w]', '', hf)+'ext') as f:
             s=f.read()
         await splitsend(target,s,False)
     else:
-        fname=LOCALDIR+'/'+hd+'/'+re.sub('^.*[^\w]', '', ow)
+        fname=LOCALDIR+'/'+hd+'/'+re.sub('^.*[^\w]', '', ow)+ext
         if os.path.exists(fname):
             with open(fname) as f:
                 s=f.read()
@@ -302,5 +303,5 @@ async def makecsvfile():
         for u in mem:
             f.write('"{0}", "{1}", "{2}", "{3}", "{4}"\n'.format(u.display_name,u.id, u.joined_at, ";".join([x.name for x in u.roles]),u.name))
 
-discord_token=os.getenv('DISCORD_KEY')
+discord_token=os.getenv(DISCORD_KEY)
 client.run(discord_token)
