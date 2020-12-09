@@ -181,7 +181,7 @@ async def on_message(message):
         await message.channel.trigger_typing() #say you are busy
         last_mess=await message.channel.history(limit=1).flatten() #get last message
         last_mess=last_mess[0]
-        target=await dmchan(message.author.id).dm_channel #answer by DM
+        target=await dmchan(message.author.id) #answer by DM
 #scan intro channel
         intro_chan=client.get_channel(INTRO_CHAN)
         intros=await intro_chan.history(limit=None).flatten()
