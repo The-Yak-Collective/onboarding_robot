@@ -322,7 +322,7 @@ async def servefiles(hf,hd,ow,m, ext):
 #hf=file, hd=directory, ow= toplevel or detailed level directory, m=message data, ext = what file extension to use
     target=await dmchan(m.author.id)
     if ow=='':
-        with open(LOCALDIR+re.sub('^.*[^\w]', '', hf)+'ext') as f:
+        with open(LOCALDIR+re.sub('^.*[^\w]', '', hf)+ext) as f:
             s=f.read()
         await splitsend(target,s,False)
     else:
