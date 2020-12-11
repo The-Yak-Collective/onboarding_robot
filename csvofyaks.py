@@ -204,12 +204,13 @@ async def on_message(message):
         wh=now-timedelta(days=howfarback)
         print(wh,howfarback)
         await message.channel.trigger_typing() #say you are busy
-        last_mess=await message.channel.history(limit=1).flatten() #get last message author
-        last_author=last_mess[0].author
-        print(last_mess[0].content)
+        last_mess=await message.channel.history(limit=2).flatten() #get last message author
+        last_author=last_mess[1].author
+        print(last_mess[1].content)
         target=await dmchan(message.author.id) #answer by DM
 #scan author's history
-        messes=await last_author.history(limit=None, after=wh).flatten()
+        who=client.get_user(MAIERSNOWFLAKE)#last_author
+        messes=await who.history(limit=100, after=wh).flatten()
         answer="no activity found"
         counts={}
         print(len(messes))
@@ -225,7 +226,7 @@ async def on_message(message):
         for x in counts:
             s=s+"channel {}: count:{}\n".format(x,counts[x])
         s=answer
-        await target.send('here is the activity of {}:\n'.format(last_mess.author.name)+s)
+        await target.send('here is the activity of {}:\n'.format(last_author.name)+s)
         return
 #show help message
     if message.content.startswith('$help') or message.content.startswith('$howto'):
