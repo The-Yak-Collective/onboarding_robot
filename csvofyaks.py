@@ -261,7 +261,8 @@ async def on_message(message):
         s=""
         od=[]
         for x in counts:
-            od.append("channel {}: count:{}\n".format(x,counts[x]),counts[x])
+            tmp=("channel {}: count:{}\n".format(x,counts[x]),counts[x])
+            od.append(tmp)
         od.sort(reverse=True,key=lambda x: x[1])
         od_filtered=(od[0:howmany] if howmany>0 else od[howmany:]) #head or tail
         op=op+"\n".join([x[0] for x in od_filtered])
