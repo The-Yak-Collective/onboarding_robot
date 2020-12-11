@@ -263,6 +263,7 @@ async def on_message(message):
                     counts[y]=counts.get(y,0)+1
         s=""
         od=[]
+        op=""
         for x in counts:
             tmp=("channel {}: count:{}\n".format(x,counts[x]),counts[x])
             od.append(tmp)
