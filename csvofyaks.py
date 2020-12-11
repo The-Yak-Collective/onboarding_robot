@@ -259,11 +259,14 @@ async def on_message(message):
                         y="unable"
                     counts[y]=counts.get(y,0)+1
         s=""
+        od=[]
         for x in counts:
-            s=s+"channel {}: count:{}\n".format(x,counts[x])
-        if len(s)==0:
-            s="no activity found"
-        await target.send('here is the activity of {}:\n'.format(last_author.name)+s)
+            od.append("channel {}: count:{}\n".format(x,counts[x]),counts[x])
+        od.sort(reverse=True,key=lambda x: x[1])
+        od_filtered=(od[0:howmany] if howmany>0 else od[howmany:]) #head or tail
+        op=op+"\n".join([x[0] for x in od_filtered])
+        await splitsend(message.channel,op,codeformat)
+
         return
 #show help message
     if message.content.startswith('$help') or message.content.startswith('$howto'):
@@ -282,8 +285,11 @@ async def do_activity(message,r):
 #parse message + defaults. consider making this into a helper function
     cmd=message.content.split()
     howfarback=10
+    howmany=5
     if len(cmd)>1:
         howfarback=int(cmd[1])
+    if len(cmd)>2:
+        howmany= int(cmd[2])
     codeformat=False
     if len(cmd)>2 and cmd[2]=="code":
         codeformat=True
