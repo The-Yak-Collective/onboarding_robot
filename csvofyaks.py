@@ -249,12 +249,12 @@ async def on_message(message):
         counts={}
         for ch in client.guilds[0].text_channels:
             mess_data=await ch.history(after=wh, limit=None).flatten()
-            print(len(mess_data))
+            #print(len(mess_data))
             for m in mess_data:
                 #print(m,m.channel,m.author)
                 #print(m.author.id,last_author.id)
                 if m.author.id==last_author.id:
-                    print("made it in!")
+                    #print("made it in!")
                     x=m.channel
                     try:
                         y=x.name
@@ -265,11 +265,11 @@ async def on_message(message):
         od=[]
         op=""
         for x in counts:
-            tmp=("channel {}:        count:{}\n".format(x,counts[x]),counts[x])
+            tmp=("channel {}:        count:{} \n".format(x,counts[x]),counts[x])
             od.append(tmp)
         od.sort(reverse=True,key=lambda x: x[1])
         od_filtered=(od[0:howmany] if howmany>0 else od[howmany:]) #head or tail
-        op=op+"\n".join([x[0] for x in od_filtered])
+        op=op+" \n".join([x[0] for x in od_filtered])
         await splitsend(target,op,True)
 
         return
@@ -419,6 +419,7 @@ async def servefiles(hf,hd,ow,m, ext):
 
 async def splitsend(ch,st,codeformat):
 #send data in chunks smaller than 2k
+#might it have a bug of dropping last space and last line?
     if len(st)<1900: #discord limit is 2k and we want some play)
         if codeformat:
             await ch.send('```'+st+'```')
