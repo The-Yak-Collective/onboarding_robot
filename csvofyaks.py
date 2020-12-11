@@ -193,6 +193,33 @@ async def on_message(message):
         s=intro_mess
         await target.send('here is the intro you wanted\n'+s)
         return
+#vinay idea - per user history
+#beta feature - help yaks learn about other yaks. for now show message history of a single user.  and only of last message. later show data from knack and of all people in last message. consider deleting the message itself OR working on message ID in a private channel, so yak can be circumspect
+    if message.content.startswith('$pintro'):
+        cmd=message.content.split()
+        howfarback=10
+        if len(cmd)>1:
+            howfarback=int(cmd[1])
+        now=datetime.utcnow()
+        wh=now-timedelta(days=howfarback)
+        await message.channel.trigger_typing() #say you are busy
+        last_mess=await message.channel.history(limit=1).flatten() #get last message
+        last_mess=last_mess[0]
+        target=await dmchan(message.author.id) #answer by DM
+#scan intro channel
+        messes=await last_mess.author.history(limit=None, oldest_first=True, after=wh).flatten()
+        answer="no activity found"
+        counts={}
+        for m in messes:
+            x=m.channel
+            y=x.name
+            counts[y]=counts.get(y,0)+1
+        s=""
+        for x in counts:
+            s=s+"channel {}: count:{}\n".format(x,counts[x])
+        s=answer
+        await target.send('here is the activity of {}:\n'.format(last_mess.author.name)+s)
+        return
 #show help message
     if message.content.startswith('$help') or message.content.startswith('$howto'):
         sp=message.content.split()
