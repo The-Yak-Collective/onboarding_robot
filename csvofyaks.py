@@ -250,12 +250,12 @@ async def on_message(message):
             mess_data=await ch.history(after=wh, limit=None).flatten()
             for m in mess_data:
                 if m.author.id==last_author:
-                x=m.channel
-                try:
-                    y=x.name
-                except:
-                    y="unable"
-                counts[y]=counts.get(y,0)+1
+                    x=m.channel
+                    try:
+                        y=x.name
+                    except:
+                        y="unable"
+                    counts[y]=counts.get(y,0)+1
         s=""
         for x in counts:
             s=s+"channel {}: count:{}\n".format(x,counts[x])
