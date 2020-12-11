@@ -210,7 +210,7 @@ async def on_message(message):
         target=await dmchan(message.author.id) #answer by DM
 #scan author's history
         who=client.get_user(MAIERSNOWFLAKE)#last_author
-        messes=await who.history(limit=100, after=wh).flatten()
+        messes=await who.history(limit=None, after=wh).flatten()
         answer="no activity found"
         counts={}
         print(len(messes))
@@ -222,6 +222,40 @@ async def on_message(message):
             except:
                 y="unable"
             counts[y]=counts.get(y,0)+1
+        s=""
+        for x in counts:
+            s=s+"channel {}: count:{}\n".format(x,counts[x])
+        s=answer
+        await target.send('here is the activity of {}:\n'.format(last_author.name)+s)
+        return
+#try 2
+    if message.content.startswith('$qintro'):
+        cmd=message.content.split()
+        howfarback=10
+        if len(cmd)>1:
+            howfarback=int(cmd[1])
+        now=datetime.utcnow()
+        wh=now-timedelta(days=howfarback)
+        print(wh,howfarback)
+        await message.channel.trigger_typing() #say you are busy
+        last_mess=await message.channel.history(limit=2).flatten() #get last message author
+        last_author=last_mess[1].author
+        print(last_mess[1].content)
+        target=await dmchan(message.author.id) #answer by DM
+#scan author's history
+        answer="no activity found"
+        counts={}
+        print(len(messes))
+        for ch in client.guilds[0].text_channels:
+            mess_data=await ch.history(after=wh, limit=None).flatten()
+            for m in mess_data:
+                if m.author.id=last_author:
+                x=m.channel
+                try:
+                    y=x.name
+                except:
+                    y="unable"
+                counts[y]=counts.get(y,0)+1
         s=""
         for x in counts:
             s=s+"channel {}: count:{}\n".format(x,counts[x])
