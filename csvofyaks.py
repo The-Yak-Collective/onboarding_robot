@@ -248,7 +248,7 @@ async def on_message(message):
         for ch in client.guilds[0].text_channels:
             mess_data=await ch.history(after=wh, limit=None).flatten()
             for m in mess_data:
-                if m.author.id==last_author:
+                if m.author.id==last_author.id:
                     x=m.channel
                     try:
                         y=x.name
