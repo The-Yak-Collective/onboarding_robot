@@ -204,11 +204,12 @@ async def on_message(message):
         wh=now-timedelta(days=howfarback)
         print(wh,howfarback)
         await message.channel.trigger_typing() #say you are busy
-        last_mess=await message.channel.history(limit=1).flatten() #get last message
-        last_mess=last_mess[0]
+        last_mess=await message.channel.history(limit=1).flatten() #get last message author
+        last_author=last_mess[0].author
+        print(last_mess[0].content)
         target=await dmchan(message.author.id) #answer by DM
-#scan intro channel
-        messes=await last_mess.author.history(limit=None, after=wh).flatten()
+#scan author's history
+        messes=await last_author.history(limit=None, after=wh).flatten()
         answer="no activity found"
         counts={}
         print(len(messes))
