@@ -236,7 +236,8 @@ async def on_message(message):
         if len(cmd)>1:
             howfarback=int(cmd[1])
         if len(cmd)>2:
-            howmany= int(cmd[2])        now=datetime.utcnow()
+            howmany= int(cmd[2])
+        now=datetime.utcnow()
         wh=now-timedelta(days=howfarback)
         print(wh,howfarback)
         await message.channel.trigger_typing() #say you are busy
