@@ -212,7 +212,10 @@ async def on_message(message):
         counts={}
         for m in messes:
             x=m.channel
-            y=x.name
+            try:
+                y=x.name
+            except:
+                y="unable"
             counts[y]=counts.get(y,0)+1
         s=""
         for x in counts:
