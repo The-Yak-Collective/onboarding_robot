@@ -245,7 +245,6 @@ async def on_message(message):
 #scan author's history
         answer="no activity found"
         counts={}
-        print(len(messes))
         for ch in client.guilds[0].text_channels:
             mess_data=await ch.history(after=wh, limit=None).flatten()
             for m in mess_data:
