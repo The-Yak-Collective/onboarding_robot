@@ -270,7 +270,7 @@ async def on_message(message):
         od.sort(reverse=True,key=lambda x: x[1])
         od_filtered=(od[0:howmany] if howmany>0 else od[howmany:]) #head or tail
         op=op+"\n".join([x[0] for x in od_filtered])
-        await splitsend(message.channel,op,True)
+        await splitsend(target,op,True)
 
         return
 #show help message
