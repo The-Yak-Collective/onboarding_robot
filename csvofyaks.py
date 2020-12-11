@@ -211,7 +211,6 @@ async def on_message(message):
 #scan author's history
         who=client.get_user(MAIERSNOWFLAKE)#last_author
         messes=await who.history(limit=None, after=wh).flatten()
-        answer="no activity found"
         counts={}
         print(len(messes))
         for m in messes:
@@ -225,7 +224,8 @@ async def on_message(message):
         s=""
         for x in counts:
             s=s+"channel {}: count:{}\n".format(x,counts[x])
-        s=answer
+        if len(s)==0:
+            s="no activity found"
         await target.send('here is the activity of {}:\n'.format(last_author.name)+s)
         return
 #try 2
@@ -240,17 +240,18 @@ async def on_message(message):
         await message.channel.trigger_typing() #say you are busy
         last_mess=await message.channel.history(limit=2).flatten() #get last message author
         last_author=last_mess[1].author
-        print(last_mess[1].content)
+        print(last_mess[1].content,last_author,last_author.id)
         target=await dmchan(message.author.id) #answer by DM
 #scan author's history
-        answer="no activity found"
         counts={}
         for ch in client.guilds[0].text_channels:
             mess_data=await ch.history(after=wh, limit=None).flatten()
             print(len(mess_data))
             for m in mess_data:
-                print(m,m.channel,m.author)
+                #print(m,m.channel,m.author)
+                print(m.author.id,last_author.id)
                 if m.author.id==last_author.id:
+                    print("made it in!")
                     x=m.channel
                     try:
                         y=x.name
@@ -260,7 +261,8 @@ async def on_message(message):
         s=""
         for x in counts:
             s=s+"channel {}: count:{}\n".format(x,counts[x])
-        s=answer
+        if len(s)==0:
+            s="no activity found"
         await target.send('here is the activity of {}:\n'.format(last_author.name)+s)
         return
 #show help message
