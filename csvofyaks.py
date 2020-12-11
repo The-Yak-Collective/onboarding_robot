@@ -232,9 +232,11 @@ async def on_message(message):
     if message.content.startswith('$qintro'):
         cmd=message.content.split()
         howfarback=10
+        howmany=5
         if len(cmd)>1:
             howfarback=int(cmd[1])
-        now=datetime.utcnow()
+        if len(cmd)>2:
+            howmany= int(cmd[2])        now=datetime.utcnow()
         wh=now-timedelta(days=howfarback)
         print(wh,howfarback)
         await message.channel.trigger_typing() #say you are busy
@@ -249,7 +251,7 @@ async def on_message(message):
             print(len(mess_data))
             for m in mess_data:
                 #print(m,m.channel,m.author)
-                print(m.author.id,last_author.id)
+                #print(m.author.id,last_author.id)
                 if m.author.id==last_author.id:
                     print("made it in!")
                     x=m.channel
@@ -286,11 +288,10 @@ async def do_activity(message,r):
 #parse message + defaults. consider making this into a helper function
     cmd=message.content.split()
     howfarback=10
-    howmany=5
+
     if len(cmd)>1:
         howfarback=int(cmd[1])
-    if len(cmd)>2:
-        howmany= int(cmd[2])
+
     codeformat=False
     if len(cmd)>2 and cmd[2]=="code":
         codeformat=True
