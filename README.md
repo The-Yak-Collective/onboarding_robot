@@ -12,3 +12,4 @@ shepherd.py is a robot which tracks yaks on their development
 statemachine.py includes the actual state machines used by shepherd
 
 **important** this repository auto-deploys on commit, restarting the robot
+https certificate for robots.yakcollectve.org is provided by certbot. nce renewed, we execute ~/restartflask to restart the https server
