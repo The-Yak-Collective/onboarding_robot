@@ -61,7 +61,7 @@ def gmailhooked():
 
 @app.route('/.well-known/<fileaskedfor>', methods=['POST','GET'])
 def https_stuff(fileaskedfor):
-    print('they asked for',fileaskedfor)
+    print('they asked for',fileaskedfor) #if we want webroot renewal. but it is actually a subdirectory - acme-challenge. soc hange to "standalone" mode
     return 'lets not serve these yet', 200
     return send_from_directory('/etc/letsencrypt/live/robots.yakcollective.org',fileaskedfor, as_attachment=True)
 
