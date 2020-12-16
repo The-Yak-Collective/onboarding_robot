@@ -1,4 +1,4 @@
-#issue of ssl, renewal of certificates, probbaly still open, as is issue of hijacking of server_update to install bad stuff
+
 from flask import request, jsonify, Flask
 import git
 import os 
