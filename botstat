@@ -1,0 +1,8 @@
+#! /bin/bash
+echo '{"content": "' >botstat.info
+df / >>botstat.info
+ps ax | grep '\.py' | grep 'python3' >>botstat.info
+echo '"}' >>botstat.info
+sed -i 's/$/\\n/' botstat.info
+sed -i '$s/..$//' botstat.info
+curl -d "@botstat.info" -H "Content-Type: application/json" -X POST $TWEAKS_HOOK 
