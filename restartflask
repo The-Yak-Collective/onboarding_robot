@@ -1,0 +1,3 @@
+#!/bin/bash
+kill -9 $(ps ax | grep 'server_update.py' | awk '{printf $1 " "}')
+nohup python3 ~/robot/onboarding_robot/server_update.py &
