@@ -4,4 +4,5 @@ set -x
 ps ax | grep 'csvofyaks'
 kill -9 $(ps ax | grep 'csvofyaks.py' | awk '{printf $1 " "}')
 nohup python3 ~/robot/onboarding_robot/csvofyaks.py 2>&1 &
+cat ~/robot/onboarding_robot/restartflask > ~/restartflask
 exit
