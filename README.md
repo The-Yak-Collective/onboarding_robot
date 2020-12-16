@@ -13,3 +13,4 @@ statemachine.py includes the actual state machines used by shepherd
 
 **important** this repository auto-deploys on commit, restarting the robot
 https certificate for robots.yakcollectve.org is provided by certbot. once renewed, we execute ~/restartflask to restart the https server. make sure certbot conf file uses standalone renewal mode. renew_hook= /home/yakrestartflask is added to the .conf file of the domain to make sure flask is restarted
+botstat is run by cron once a day
