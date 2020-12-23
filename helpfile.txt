@@ -8,5 +8,6 @@ see also (gigayak bot):
 $gighelp        bot for gig listing
 $projhelp       bot for project voting
 $agendahelp     bot for agendas per channel
+$readinghelp    bot for reading list per channel
 $wantedhelp     bot for internal help wantedhelp
 $newsitemhelp   bot for suggesting items for newsletter
