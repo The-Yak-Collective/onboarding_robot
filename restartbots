@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+sleep 60
+nohup python3 ~/robot/onboarding_robot/server_update.py &
+nohup python3 ~/robot/onboarding_robot/csvofyaks.py 2>&1 &
+nohup python3 ~/robot/onboarding_robot/shepherd.py 2>&1 &
+nohup python3 ~/robot/gigayak/gigayak.py 2>&1 &
