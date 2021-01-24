@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 sleep 60
 nohup python3 ~/robot/onboarding_robot/server_update.py &
 nohup python3 ~/robot/onboarding_robot/csvofyaks.py 2>&1 &
