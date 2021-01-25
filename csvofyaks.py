@@ -41,6 +41,7 @@ CALID='o995m43173bpslmhh49nmrp5i4@group.calendar.google.com' #yakcollective goog
 DISCORD_KEY='DISCORD_KEY'
 INTRO_CHAN=692826420191297556 #channel id where new yaks are supposed to post an introduction about themselves
 MAIERSNOWFLAKE=710573356759384075 #so maier can get dm
+TWITTER_CHAN= 803272779558420551 #where we put tweets
 
 load_dotenv(HOMEDIR+'.env')
 
@@ -50,6 +51,19 @@ intents.members = True #if you want memebr data you need to say so in advance
 
 client = discord.Client(intents=intents)
 
+#dotenv_path = os.join(dirname(__file__), '.env')
+#load_dotenv(dotenv_path)
+
+CK = os.environ.get("CK")
+CS = os.environ.get("CS")
+ATK = os.environ.get("ATK")
+ATS = os.environ.get("ATS")
+
+import twitter
+twitterapi = twitter.Api(consumer_key=CK,
+                  consumer_secret=CS,
+                  access_token_key=ATK,
+                  access_token_secret=ATS)
 
 newones=[] #we keep track of recently added members. obsolete and should be removed
 mem=[]
@@ -169,13 +183,29 @@ async def on_message(message):
         print('s:',s)
         await message.channel.send(s)
         
-#shwo activity in channels
+#show activity in channels
     if message.content.startswith('$activity'):
         await do_activity(message,r)
         return
 #show activity of yaks
     if message.content.startswith('$noise'):
         await do_noise(message,r)
+        return
+#send tweet 
+    if message.content.startswith('$yaktweet'):
+        if 'madeyak' in r:
+            #send tweet
+            conts=message.content.split(maxsplit=1)[1]
+            txt=('#yakborg '+conts)[:280]
+            ###here we will actually tweet
+            #status = twitterapi.PostUpdate(txt)
+            #post the tweet and sender in tweeter channel
+            ch=client.get_channel(TWITTER_CHAN)
+            await ch.send('<@{0}> wanted to send a tweet: {1}'.format(message.author.id, txt))
+            await message.channel.send('tweet tweeted')
+            
+        else:
+            await message.channel.send('sorry, you need to be a "madeyak" to tweet.')
         return
 
 #beta feature - help yaks learn about other yaks. for now show info in introduction chan.  and only of last message. later show data from knack and of all people in last message. consider deleting the message itself OR working on message ID in a private channel, so yak can be circumspect
