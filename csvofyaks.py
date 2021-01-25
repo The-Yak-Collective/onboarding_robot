@@ -153,6 +153,8 @@ async def on_message(message):
         
 
         for event in events:
+            if (event['status']=="canceled" or event['summary'].startswith("Canceled:")):
+                continue
 #for each event figure out how long until it starts and generate a nice (?) format of it
             start = parse(event['start'].get('dateTime', event['start'].get('date')))
             #print(start, datetime.utcnow(),datetime.now().astimezone())
