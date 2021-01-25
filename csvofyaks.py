@@ -201,6 +201,7 @@ async def on_message(message):
             txt=('#yakborg '+conts)[:280]
             ###here we will actually tweet
             status = twitterapi.PostUpdate(txt)
+            print(status.text)
             #post the tweet and sender in tweeter channel
             ch=client.get_channel(TWITTER_CHAN)
             await ch.send('<@{0}> sent a tweet: {1}'.format(message.author.id, txt))
