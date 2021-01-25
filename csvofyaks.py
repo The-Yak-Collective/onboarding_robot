@@ -165,7 +165,7 @@ async def on_message(message):
             ts=ts+ str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes '
             if days==0:
                 ts=ts + '**Today**'
-            s=s+event['summary']+ ' **Starts in:** '+ ts+'\n'
+            s=s+event['summary'].replace("and Yak Collective","")+ ' **Starts in:** '+ ts+'\n'
         print('s:',s)
         await message.channel.send(s)
         
