@@ -206,7 +206,7 @@ async def on_message(message):
                 print('has attachment')
                 fp=tempfile.NamedTemporaryFile()
                 print('opened file {}'.format(fp.name))
-                await message.attachment[0].save(fp)
+                await message.attachments[0].save(fp)
 
                 status = twitterapi.PostUpdate(txt,media=fp)
                 fp.close()
