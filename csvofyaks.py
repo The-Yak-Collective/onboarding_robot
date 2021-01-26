@@ -193,6 +193,7 @@ async def on_message(message):
         return
 #send tweet 
     if message.content.startswith('$yaktweet'):
+        dm_chan=await dmchan(message.author.id) #report by DM
         print('tweet '+message.content)
         if 'madeyak' in r:
             print('madeyak')
@@ -205,11 +206,11 @@ async def on_message(message):
             #post the tweet and sender in tweeter channel
             ch=client.get_channel(TWITTER_CHAN)
             await ch.send('<@{0}> sent a tweet: {1}'.format(message.author.id, txt))
-            await message.channel.send('tweet tweeted')
+            await dm_chan.send('tweet tweeted:'+txt)
             
         else:
-            await message.channel.send('sorry, you need to be a "madeyak" to tweet.')
-            print('not madeyak:',r)
+            await dm_chan.send('sorry, you need to be a "madeyak" to tweet.')
+            print(str(message.author.id)+' is not a madeyak:',r)
         return
 
 #beta feature - help yaks learn about other yaks. for now show info in introduction chan.  and only of last message. later show data from knack and of all people in last message. consider deleting the message itself OR working on message ID in a private channel, so yak can be circumspect
