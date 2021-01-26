@@ -10,6 +10,7 @@ import re
 
 import sys
 
+import tempfile
 import pickle
 import requests
 import os.path
@@ -200,8 +201,18 @@ async def on_message(message):
             #send tweet
             conts=message.content.split(maxsplit=1)[1]
             txt=('#yakborg '+conts)[:280]
-            ###here we will actually tweet
-            status = twitterapi.PostUpdate(txt)
+            ##check if ONE attachment. if yes, save it and then post it
+            if (len(message.attachments)>0):
+                print('has attachment')
+                fp=tempfile.NamedTemporaryFile()
+                print('opened file {}'.format(fp.name))
+                await message.attachment[0].save(fp)
+
+                status = twitterapi.PostUpdate(txt,media=fp)
+                fp.close()
+            else:
+            ###here we tweet just text
+                status = twitterapi.PostUpdate(txt)
             print(status.text)
             #post the tweet and sender in tweeter channel
             ch=client.get_channel(TWITTER_CHAN)
