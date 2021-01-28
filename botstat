@@ -1,4 +1,7 @@
 #! /bin/bash
+echo "starting botstat"
+pwd
+source /home/yak/.env
 echo '{"content": "' >botstat.info
 df / >>botstat.info
 ps ax | grep '\.py' | grep 'python3' >>botstat.info
