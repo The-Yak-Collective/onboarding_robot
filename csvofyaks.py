@@ -138,7 +138,7 @@ async def on_message(message):
     if message.content.startswith('$upcoming'):
         await message.channel.trigger_typing() #show that robot is busy
 #this part copied form google quickstart. basically, use credentials and ask for new ones if they expired or are missing
-        nice = (message.content.split(maxsplit=1))>1
+        nice = len(message.content.split(maxsplit=1))>1
         creds = None
         if os.path.exists(HOMEDIR+'token.pickle'):
             with open(HOMEDIR+'token.pickle', 'rb') as token:
