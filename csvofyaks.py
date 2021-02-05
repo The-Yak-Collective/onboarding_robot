@@ -138,7 +138,7 @@ async def on_message(message):
     if message.content.startswith('$upcoming'):
         await message.channel.trigger_typing() #show that robot is busy
 #this part copied form google quickstart. basically, use credentials and ask for new ones if they expired or are missing
-
+        nice = (message.contents.split(maxsplit=1))>1
         creds = None
         if os.path.exists(HOMEDIR+'token.pickle'):
             with open(HOMEDIR+'token.pickle', 'rb') as token:
@@ -162,25 +162,65 @@ async def on_message(message):
         print('events len:', len(events))
         
 #generate a message string
-        s="Upcoming in next week (beta version):\n"
-        if not events:
-            s=s+'No upcoming events found.'
-        
+        if not nice:
+            s="Upcoming in next week (beta version):\n"
+            if not events:
+                s=s+'No upcoming events found.'
+            
 
-        for event in events:
-            if (event['status']=="canceled" or event['summary'].startswith("Canceled:")):
-                continue
-#for each event figure out how long until it starts and generate a nice (?) format of it
-            start = parse(event['start'].get('dateTime', event['start'].get('date')))
-            #print(start, datetime.utcnow(),datetime.now().astimezone())
-            seconds2go=(start-datetime.utcnow().astimezone()).total_seconds()
-            days, hours, minutes = int(seconds2go //(3600*24)), int((seconds2go // 3600) % 24), int(seconds2go // 60 % 60)
+            for event in events:
+                if (event['status']=="canceled" or event['summary'].startswith("Canceled:")):
+                    continue
+    #for each event figure out how long until it starts and generate a nice (?) format of it
+                start = parse(event['start'].get('dateTime', event['start'].get('date')))
+                #print(start, datetime.utcnow(),datetime.now().astimezone())
+                seconds2go=(start-datetime.utcnow().astimezone()).total_seconds()
+                days, hours, minutes = int(seconds2go //(3600*24)), int((seconds2go // 3600) % 24), int(seconds2go // 60 % 60)
 
-            ts=str(days) + ' days and '
-            ts=ts+ str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes '
-            if days==0:
-                ts=ts + '**Today**'
-            s=s+event['summary'].replace("and Yak Collective","")+ ' **Starts in:** '+ ts+'\n'
+                ts=str(days) + ' days and '
+                ts=ts+ str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes '
+                if days==0:
+                    ts=ts + '**Today**'
+                s=s+event['summary'].replace("and Yak Collective","")+ ' **Starts in:** '+ ts+'\n'
+        else:
+            print("yes nice")
+            s="Upcoming in next week:\n"
+            if not events:
+                s=s+'No upcoming events found.'
+            tod=""
+            tom=""
+            too=""
+
+            for event in events:
+                if (event['status']=="canceled" or event['summary'].startswith("Canceled:")):
+                    continue
+    #for each event figure out how long until it starts and generate a nice format of it, base don nathan ack's suggestion
+                start = parse(event['start'].get('dateTime', event['start'].get('date')))
+                seconds2go=(start-datetime.utcnow().astimezone()).total_seconds()
+                days, hours, minutes = int(seconds2go //(3600*24)), int((seconds2go // 3600) % 24), int(seconds2go // 60 % 60)
+                if (days==0):
+                    ts=str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes '
+                    if(tod!=""):
+                        tod=tod+"\n"
+                    tod=tod+"> **"+event['summary'].replace("and Yak Collective","")+ '**\n> Starts in '+ ts+'\n'
+                if (days==1):
+                    if(tom!=""):
+                        tom=tom+"\n"
+                    ts=str(days) + ' days and '+str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes '
+                    tom=tom+"> **"+event['summary'].replace("and Yak Collective","")+ '**\n> Starts in '+ ts+'\n'
+                if(days>1):
+                    if(too!=""):
+                        too=too+"\n"
+                    ts=str(days) + ' days and '+str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes '
+                    too=too+"> **"+event['summary'].replace("and Yak Collective","")+ '**\n> Starts in '+ ts+'\n'
+            if (tod==""):
+                tod="No upcoming events in next 24 hours"
+            if (tom==""):
+                tom="No upcoming events tomorrow"
+            if (too==""):
+                too="No other upcoming events"
+            s=s+"\n__**Today**__ (next 24 hours)\n"+tod+"\n__**Tomorrow**__\n"+tom+"\n__**Later this week**__ \n"+too
+
         print('s:',s)
         await message.channel.send(s)
         
