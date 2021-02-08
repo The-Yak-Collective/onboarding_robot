@@ -41,11 +41,11 @@ events_result = cal.events().list(calendarId=CALID, timeMin=now,timeMax=(datetim
                                     singleEvents=True,
                                     orderBy='startTime').execute()
 events = events_result.get('items', [])
-print('events len:', len(events))
+#print('events len:', len(events))
 
 #generate a message string
 
-print("yes nice")
+#print("yes nice")
 s="Upcoming in next week:\n"
 if not events:
     s=s+'No upcoming events found.'
@@ -83,4 +83,4 @@ if (too==""):
     too="No other upcoming events"
 s=s+"\n__**Today**__ (next 24 hours)\n"+tod+"\n__**Tomorrow**__\n"+tom+"\n__**Later this week**__ \n"+too
 
-print('s:',s)
+print(s)
