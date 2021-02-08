@@ -206,7 +206,7 @@ async def on_message(message):
                 if (days==1):
                     if(tom!=""):
                         tom=tom+"\n"
-                    ts=str(days) + ' days and '+str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes '
+                    ts=str(days) + ' day and '+str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes '
                     tom=tom+"> **"+event['summary'].replace("and Yak Collective","")+ '**\n> Starts in '+ ts+'\n'
                 if(days>1):
                     if(too!=""):
