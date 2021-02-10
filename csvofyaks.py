@@ -111,10 +111,12 @@ async def on_message(message):
 #unfurl
     if message.content.startswith('$unfurl'):
         url=message.content.split(maxsplit=1)
+        print("1",url)
         if len(url)<2:
             await message.channel.send("usage $unfurl discord_URL")
         else:
             url=url[1].split("/").reverse()
+            print("2",url)
             c=client.guilds[0].get_channel(int(url[1]))
             m=await c.fetch_message(int(url[0]))
             txt=m.content
