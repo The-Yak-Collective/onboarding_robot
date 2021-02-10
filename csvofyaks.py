@@ -117,7 +117,7 @@ async def on_message(message):
         else:
             url=url[1].split("/")
             print("2",url)
-            url=url.reverse()
+            url=list(reversed(url))
             print("3",url)
             c=client.guilds[0].get_channel(int(url[1]))
             m=await c.fetch_message(int(url[0]))
