@@ -115,8 +115,10 @@ async def on_message(message):
         if len(url)<2:
             await message.channel.send("usage $unfurl discord_URL")
         else:
-            url=url[1].split("/").reverse()
+            url=url[1].split("/")
             print("2",url)
+            url=url.reverse()
+            print("3",url)
             c=client.guilds[0].get_channel(int(url[1]))
             m=await c.fetch_message(int(url[0]))
             txt=m.content
