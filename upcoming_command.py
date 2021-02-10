@@ -76,9 +76,9 @@ for event in events:
         ts=str(days) + ' days and '+str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes '
         too=too+"> **"+event['summary'].replace("and Yak Collective","")+ '**\n> Starts in '+ ts+'\n'
 if (tod==""):
-    tod="No upcoming events in next 24 hours"
+    tod="No upcoming events in next 24 hours\n"
 if (tom==""):
-    tom="No upcoming events tomorrow"
+    tom="No upcoming events tomorrow\n"
 if (too==""):
     too="No other upcoming events"
 s=s+"\n__**Today**__ (next 24 hours)\n"+tod+"\n__**Tomorrow**__\n"+tom+"\n__**Later this week**__ \n"+too
