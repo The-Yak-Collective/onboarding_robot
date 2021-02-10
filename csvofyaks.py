@@ -108,6 +108,20 @@ async def on_message(message):
     if message.content.startswith('$whosenew'):
         await message.channel.send(str(newones))
         
+#unfurl
+    if message.content.startswith('$unfurl'):
+        url=message.content.split(maxsplit=1)
+        if len(url)<2:
+            await message.channel.send("usage $unfurl discord_URL")
+        else:
+            url=url[1].split("/").reverse()
+            c=client.guilds[0].get_channel(int(url[1]))
+            m=await c.fetch_message(int(url[0]))
+            txt=m.content
+            await message.channel.send("@"+m.author.name+"\n"+txt)
+        return
+
+        
 #generates a CSV of all the discord users
     if message.content.startswith('$givemecsv'):
         if 'yakshaver' not in r and 'yakherder' not in r:
