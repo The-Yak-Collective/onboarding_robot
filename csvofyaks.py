@@ -115,7 +115,7 @@ async def on_message(message):
         if len(url)<2:
             await message.channel.send("usage $unfurl discord_URL")
         else:
-            #try:
+            try:
                 url=url[1].split("/")
                 #print("2",url)
                 url=list(reversed(url))
@@ -123,8 +123,8 @@ async def on_message(message):
                 c=client.guilds[0].get_channel(int(url[1]))
                 m=await c.fetch_message(int(url[0]))
                 txt=m.content
-                await message.channel.send("<@"+m.author.id+"> in <#"+url[1]+">:\n"+txt)
-            #except:
+                await message.channel.send("<@"+str(m.author.id)+"> in <#"+url[1]+">:\n"+txt)
+            except:
                 await message.channel.send("some bug. are you sure that is a link to a discord message?")
         return
 
