@@ -3,6 +3,7 @@ $upcoming       lists upcoming events for next 7 days
 $howto          (BETA) howto instructions for some yak activities on discord
 $hello          says hello back
 $test           shows test message
+$unfurl URL     shows teh contenst of a discord url message link
 
 see also (gigayak bot):
 $gighelp        bot for gig listing
