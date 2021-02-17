@@ -284,7 +284,37 @@ async def on_message(message):
             await dm_chan.send('sorry, you need to be a "madeyak" to tweet.')
             print(str(message.author.id)+' is not a madeyak:',r)
         return
-
+#from here tweet TEST
+    if message.content.startswith('$yaktwit'):
+        dm_chan=await dmchan(message.author.id) #report by DM
+        print('tweet '+message.content)
+        if 'madeyak' in r:
+            print('madeyak')
+            #send tweet
+            conts=message.content.split(maxsplit=1)[1]
+            txt=('#yakborg '+conts)[:280]
+            ##check if ONE attachment. if yes, save it and then post it
+            if (len(message.attachments)>0):
+                print('has attachment')
+                fp=tempfile.NamedTemporaryFile()
+                print('opened file {}'.format(fp.name))
+                await message.attachments[0].save(fp)
+                await ch.send('<@{0}> not sent a tweet: {1}'.format(message.author.id, txt))
+                #status = twitterapi.PostUpdate(txt,media=fp)
+                fp.close()
+            else:
+            ###here we tweet just text
+                status = twitterapi.PostUpdate(txt)
+            print(status.text)
+            #post the tweet and sender in tweeter channel
+            ch=client.get_channel(TWITTER_CHAN)
+            await ch.send('<@{0}> sent a tweet: {1}'.format(message.author.id, txt))
+            await dm_chan.send('tweet tweeted:'+txt)
+            
+        else:
+            await dm_chan.send('sorry, you need to be a "madeyak" to tweet.')
+            print(str(message.author.id)+' is not a madeyak:',r)
+        return
 #beta feature - help yaks learn about other yaks. for now show info in introduction chan.  and only of last message. later show data from knack and of all people in last message. consider deleting the message itself OR working on message ID in a private channel, so yak can be circumspect
     if message.content.startswith('$intro'):#of course intros should be in a local db...
         await message.channel.trigger_typing() #say you are busy
