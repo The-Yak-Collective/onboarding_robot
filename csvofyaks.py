@@ -307,11 +307,13 @@ async def on_message(message):
             ##check if ONE attachment. if yes, save it and then post it
             if (len(message.attachments)>0):
                 print('has attachment')
-                fp=tempfile.NamedTemporaryFile()
+                fp=tempfile.NamedTemporaryFile(delete=False)
                 print('opened file {}'.format(fp.name))
+                n=fp.name
                 await message.attachments[0].save(fp.file)
-                status = twitterapi2.PostUpdate(txt,media=fp.name)
                 fp.close()
+                status = twitterapi2.PostUpdate(txt,media=n)
+                #fp.close()
             else:
             ###here we tweet just text
                 status = twitterapi2.PostUpdate(txt)
