@@ -304,7 +304,8 @@ async def on_message(message):
                 fp.close()
             else:
             ###here we tweet just text
-                status = twitterapi.PostUpdate(txt)
+                #status = twitterapi.PostUpdate(txt)
+                pass
             print(status.text)
             #post the tweet and sender in tweeter channel
             ch=client.get_channel(TWITTER_CHAN)
