@@ -60,11 +60,22 @@ CS = os.environ.get("CS")
 ATK = os.environ.get("ATK")
 ATS = os.environ.get("ATS")
 
+#same for yakrover for testing
+CK2 = os.environ.get("CK2")
+CS2 = os.environ.get("CS2")
+ATK2 = os.environ.get("ATK2")
+ATS2 = os.environ.get("ATS2")
+
 import twitter
 twitterapi = twitter.Api(consumer_key=CK,
                   consumer_secret=CS,
                   access_token_key=ATK,
                   access_token_secret=ATS)
+twitterapi2 = twitter.Api(consumer_key=CK2,
+                  consumer_secret=CS2,
+                  access_token_key=ATK2,
+                  access_token_secret=ATS2)
+                  
 
 newones=[] #we keep track of recently added members. obsolete and should be removed
 mem=[]
@@ -299,18 +310,17 @@ async def on_message(message):
                 fp=tempfile.NamedTemporaryFile()
                 print('opened file {}'.format(fp.name))
                 await message.attachments[0].save(fp.name)
-                await ch.send('<@{0}> not sent a tweet: {1}'.format(message.author.id, txt))
-                #status = twitterapi.PostUpdate(txt,media=fp)
+                status = twitterapi2.PostUpdate(txt,media=fp)
                 fp.close()
             else:
             ###here we tweet just text
-                #status = twitterapi.PostUpdate(txt)
+                status = twitterapi2.PostUpdate(txt)
                 pass
             print(status.text)
             #post the tweet and sender in tweeter channel
             ch=client.get_channel(TWITTER_CHAN)
-            await ch.send('<@{0}> sent a tweet: {1}'.format(message.author.id, txt))
-            await dm_chan.send('tweet tweeted:'+txt)
+            await ch.send('<@{0}> sent a twit: {1}'.format(message.author.id, txt))
+            await dm_chan.send('twit tweeted:'+txt)
             
         else:
             await dm_chan.send('sorry, you need to be a "madeyak" to tweet.')
