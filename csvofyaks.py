@@ -298,7 +298,7 @@ async def on_message(message):
                 print('has attachment')
                 fp=tempfile.NamedTemporaryFile()
                 print('opened file {}'.format(fp.name))
-                await message.attachments[0].save(fp)
+                await message.attachments[0].save(fp.name)
                 await ch.send('<@{0}> not sent a tweet: {1}'.format(message.author.id, txt))
                 #status = twitterapi.PostUpdate(txt,media=fp)
                 fp.close()
