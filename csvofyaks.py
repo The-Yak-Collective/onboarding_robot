@@ -279,7 +279,7 @@ async def on_message(message):
                 fp=tempfile.NamedTemporaryFile()
                 print('opened file {}'.format(fp.name))
                 await message.attachments[0].save(fp.file)
-
+                fp.flush() #does this help? some images workand some not without command
                 status = twitterapi.PostUpdate(txt,media=fp.name)
                 fp.close()
             else:
