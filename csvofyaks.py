@@ -295,7 +295,7 @@ async def on_message(message):
             await dm_chan.send('sorry, you need to be a "madeyak" to tweet.')
             print(str(message.author.id)+' is not a madeyak:',r)
         return
-#from here tweet TEST
+#from here tweet TEST using iamz1 info
     if message.content.startswith('$yaktwit'):
         dm_chan=await dmchan(message.author.id) #report by DM
         print('tweet '+message.content)
@@ -309,8 +309,8 @@ async def on_message(message):
                 print('has attachment')
                 fp=tempfile.NamedTemporaryFile()
                 print('opened file {}'.format(fp.name))
-                await message.attachments[0].save(fp.name)
-                status = twitterapi2.PostUpdate(txt,media=fp)
+                await message.attachments[0].save(fp.file)
+                status = twitterapi2.PostUpdate(txt,media=fp.file)
                 fp.close()
             else:
             ###here we tweet just text
