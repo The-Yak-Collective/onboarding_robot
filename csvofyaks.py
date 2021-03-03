@@ -521,7 +521,11 @@ async def do_noise(message,r):
 
 #count messages each user sent
     for ch in client.guilds[0].text_channels:
-        mess_data=await ch.history(after=wh, limit=None).flatten()
+        try:
+            mess_data=await ch.history(after=wh, limit=None).flatten()
+        except:
+            mess_data=[] #so will skip next for
+            print ("unable to read hist of chan:",ch.id)
         for m in mess_data:
             idx=m.author.id
             theweek=(now-m.created_at).days // 7 
