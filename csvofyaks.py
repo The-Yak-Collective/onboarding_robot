@@ -574,13 +574,13 @@ async def do_links(message,r):
     od=[] # here we will store link results
     regex=re.compile('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*(),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
 #get and review messages
-    async for ch in client.guilds[0].text_channels:
+    for ch in client.guilds[0].text_channels:
         try:
             mess_data=await ch.history(after=wh, limit=None).flatten()
         except:
             mess_data=[] #so will skip next for
             print ("unable to read hist of chan:",ch.id)
-        async for m in mess_data:
+        for m in mess_data:
             idx=m.author.id
             cont=m.content
             urls = regex.findall(cont)
