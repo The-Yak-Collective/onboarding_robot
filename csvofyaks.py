@@ -264,7 +264,7 @@ async def on_message(message):
         await do_activity(message,r)
         return
 #show activity of yaks
-    if message.content.startswith('$noise'):
+    if message.content.startswith('$noise') or message.content.startswith('$signal'):
         await do_noise(message,r)
         return
 #get links per phil's request
