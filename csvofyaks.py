@@ -591,11 +591,11 @@ async def do_links(message,r):
             linkto=m.jump_url
             if urls:
                 od.append((ch.name,timestamp,linkto,urls))
-    with open("links",'w') as f:
+    with open("links.txt",'w') as f:
         f.write(op)
         for u in od:
             f.write('"{0}", "{1}", "{2}", "{3}"\n'.format(u[0],u[1], u[2], "; ".join([x for x in u[3]])))
-    await message.channel.send("a file of recent links:", file=discord.File("links"))
+    await message.channel.send("a file of recent links:", file=discord.File("links.txt"))
 
 
 async def dmchan(t):
