@@ -169,7 +169,7 @@ async def on_message(message):
         print("target is:",target,flush=True)    
         await target.send('Hello! i was told by '+message.author.name+' to contact you')
         
-#generate a list of upcming events in next week
+#generate a list of upcoming events in next week
     if message.content.startswith('$upcoming'):
         await message.channel.trigger_typing() #show that robot is busy
 #this part copied form google quickstart. basically, use credentials and ask for new ones if they expired or are missing
@@ -590,10 +590,11 @@ async def do_links(message,r):
             timestamp=m.created_at
             linkto=m.jump_url
             od.append((ch.name,timestamp,linkto,urls))
-
-
-    op=op+"\n".join(str(od))
-    await splitsend(message.channel,op,codeformat)
+    with open("links",'w') as f:
+        f.write(op)
+        for u in od:
+            f.write('"{0}", "{1}", "{2}", "{3}"\n'.format(u[0],u[1], u[2], "; ".join([x for x in u[3]])))
+    await message.channel.send("a file of recent links:", file=discord.File("links"))
 
 
 async def dmchan(t):
