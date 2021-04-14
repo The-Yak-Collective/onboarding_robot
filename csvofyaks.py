@@ -589,7 +589,8 @@ async def do_links(message,r):
             urls = regex.findall(cont)
             timestamp=m.created_at
             linkto=m.jump_url
-            od.append((ch.name,timestamp,linkto,urls))
+            if urls:
+                od.append((ch.name,timestamp,linkto,urls))
     with open("links",'w') as f:
         f.write(op)
         for u in od:
