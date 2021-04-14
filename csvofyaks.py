@@ -564,7 +564,7 @@ async def do_links(message,r):
 #parse command
     cmd=message.content.split()
     howfarback=10
-    codeformat=True
+    codeformat=False
     
     if len(cmd)>1:
         howfarback=int(cmd[1])
