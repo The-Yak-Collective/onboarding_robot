@@ -102,7 +102,10 @@ async def on_member_join(member):
 def getroles(y):
 #helper function to provide array of roles of a member
     mid=client.guilds[0].get_member(y)
-    return [x.name for x in mid.roles]
+    try:
+        return [x.name for x in mid.roles]
+    except:
+        return []
 
 @client.event
 async def on_message(message):
@@ -589,7 +592,7 @@ async def do_links(message,r):
             od.append((ch.name,timestamp,linkto,urls))
 
 
-    op=op+"\n".join(od)
+    op=op+"\n".join(str(od))
     await splitsend(message.channel,op,codeformat)
 
 
