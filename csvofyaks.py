@@ -264,6 +264,10 @@ async def on_message(message):
     if message.content.startswith('$noise'):
         await do_noise(message,r)
         return
+#get links per phil's request
+    if message.content.startswith('$links'):
+        await do_links(message,r)
+        return
 #send tweet 
     if message.content.startswith('$yaktweet'):
         dm_chan=await dmchan(message.author.id) #report by DM
@@ -547,6 +551,46 @@ async def do_noise(message,r):
     op=op+"\n".join([x[0] for x in od_filtered])
     await splitsend(message.channel,op,codeformat)
 
+async def do_links(message,r): 
+#sort yaks by number of messages they send
+    if 'yakshaver' not in r and 'yakherder' not in r:
+        await message.channel.send('You must be either a yakshaver or yakherder to use this command. Your current roles are: {}'.format(r))
+        return
+    await message.channel.trigger_typing()
+
+#parse command
+    cmd=message.content.split()
+    howfarback=10
+    codeformat=True
+    
+    if len(cmd)>1:
+        howfarback=int(cmd[1])
+
+
+    now=datetime.utcnow()
+    wh=now-timedelta(days=howfarback)
+    op="links in yak collective. last {} days:\n".format(howfarback)
+    
+    od=[] # here we will store link results
+    regex=re.compile('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*(),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
+#get and review messages
+    async for ch in client.guilds[0].text_channels:
+        try:
+            mess_data=await ch.history(after=wh, limit=None).flatten()
+        except:
+            mess_data=[] #so will skip next for
+            print ("unable to read hist of chan:",ch.id)
+        async for m in mess_data:
+            idx=m.author.id
+            cont=m.content
+            urls = regex.findall(cont)
+            timestamp=m.created_at
+            linkto=m.jump_url
+            od.append((ch.name,timestamp,linkto,urls))
+
+
+    op=op+"\n".join(od)
+    await splitsend(message.channel,op,codeformat)
 
 
 async def dmchan(t):
