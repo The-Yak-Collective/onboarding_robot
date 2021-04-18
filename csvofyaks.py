@@ -128,8 +128,9 @@ async def on_message(message):
         url=message.content.split() #maxsplit=1
         #print("1",url)
         temp_l=len(url)
+        print(temp_l,url)
         if temp_l<2:
-            await message.channel.send("usage $unfurl discord_URL")
+            await message.channel.send("usage $unfurl discord_URL discord_URL/end")
         else:
             if(temp_l==2):
                 try:
@@ -147,7 +148,7 @@ async def on_message(message):
                         txt=mess.content
                         await message.channel.send("<@"+str(mess.author.id)+"> in <#"+chan+">:\n"+txt)
                 except:
-                    await message.channel.send("some bug. are you sure that is a link to a discord message?")
+                    await message.channel.send("some bug. are you sure that is a link to a discord message and teh word 'end'?")
             else:
                 try:
                     m1,chan=durl2m(url[1])
