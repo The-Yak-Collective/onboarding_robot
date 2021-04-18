@@ -123,23 +123,44 @@ async def on_message(message):
         await message.channel.send(str(newones))
         
 #unfurl
+
     if message.content.startswith('$unfurl'):
-        url=message.content.split(maxsplit=1)
+        url=message.content.split() #maxsplit=1
         #print("1",url)
-        if len(url)<2:
+        temp_l=len(url)
+        if temp_l<2:
             await message.channel.send("usage $unfurl discord_URL")
         else:
-            try:
-                url=url[1].split("/")
-                #print("2",url)
-                url=list(reversed(url))
-                #print("3",url)
-                c=client.guilds[0].get_channel(int(url[1]))
-                m=await c.fetch_message(int(url[0]))
-                txt=m.content
-                await message.channel.send("<@"+str(m.author.id)+"> in <#"+url[1]+">:\n"+txt)
-            except:
-                await message.channel.send("some bug. are you sure that is a link to a discord message?")
+            if(temp_l==2):
+                try:
+                    m,chan=durl2m(url[1])
+                    txt=m.content
+                    await message.channel.send("<@"+str(m.author.id)+"> in <#"+chan+">:\n"+txt)
+                except:
+                    await message.channel.send("some bug. are you sure that is a link to a discord message?")
+            else if (temp_l==3 and url[2]=="end"):
+                try:
+                    m,chan=durl2m(url[1])
+                    txt=m.content
+                    await message.channel.send("<@"+str(m.author.id)+"> in <#"+chan+">:\n"+txt)
+                    async for mess in chan.history(after=m)
+                        txt=mess.content
+                        await message.channel.send("<@"+str(mess.author.id)+"> in <#"+chan+">:\n"+txt)
+                except:
+                    await message.channel.send("some bug. are you sure that is a link to a discord message?")
+            else:
+                try:
+                    m1,chan=durl2m(url[1])
+                    m2,chan=durl2m(url[2])
+                    txt=m1.content
+                    await message.channel.send("<@"+str(m1.author.id)+"> in <#"+chan+">:\n"+txt)
+                    async for mess in chan.history(after=m1,before=m2)
+                        txt=mess.content
+                        await message.channel.send("<@"+str(mess.author.id)+"> in <#"+chan+">:\n"+txt)
+                    txt=m2.content
+                    await message.channel.send("<@"+str(m2.author.id)+"> in <#"+chan+">:\n"+txt)
+                except:
+                    await message.channel.send("some bug. are you sure you gave two discord message urls?")
         return
 
         
@@ -497,6 +518,14 @@ async def do_activity(message,r):
     
     op=op+"\n".join([x[0] for x in od])
     await splitsend(message.channel,op,codeformat) #is probbaly longer than 2k chars, so split
+
+async durl2m(u):
+    url=u.split("/")
+    url=list(reversed(url))
+    c=client.guilds[0].get_channel(int(url[1]))
+    m=await c.fetch_message(int(url[0]))
+    return (m,url[1])
+
 
 async def do_noise(message,r): 
 #sort yaks by number of messages they send
