@@ -134,15 +134,15 @@ async def on_message(message):
         else:
             if(temp_l==2):
                 try:
-                    print(temp_l,url[1],':',durl2m(url[1]))
-                    m,chan=durl2m(url[1])
+                    #print(temp_l,url[1],':',durl2m(url[1]))
+                    m,chan=await durl2m(url[1])
                     txt=m.content
                     await message.channel.send("<@"+str(m.author.id)+"> in <#"+chan+">:\n"+txt)
                 except:
                     await message.channel.send("some bug. are you sure that is a link to a discord message?")
             elif (temp_l==3 and url[2]=="end"):
                 try:
-                    m,chan=durl2m(url[1])
+                    m,chan=await durl2m(url[1])
                     txt=m.content
                     await message.channel.send("<@"+str(m.author.id)+"> in <#"+chan+">:\n"+txt)
                     async for mess in chan.history(after=m):
@@ -152,8 +152,8 @@ async def on_message(message):
                     await message.channel.send("some bug. are you sure that is a link to a discord message and teh word 'end'?")
             else:
                 try:
-                    m1,chan=durl2m(url[1])
-                    m2,chan=durl2m(url[2])
+                    m1,chan=await durl2m(url[1])
+                    m2,chan=await durl2m(url[2])
                     txt=m1.content
                     await message.channel.send("<@"+str(m1.author.id)+"> in <#"+chan+">:\n"+txt)
                     async for mess in chan.history(after=m1,before=m2):
