@@ -135,28 +135,28 @@ async def on_message(message):
             if(temp_l==2):
                 try:
                     #print(temp_l,url[1],':',durl2m(url[1]))
-                    m,chan=await durl2m(url[1])
+                    m,chan,c=await durl2m(url[1])
                     txt=m.content
                     await message.channel.send("<@"+str(m.author.id)+"> in <#"+chan+">:\n"+txt)
                 except:
                     await message.channel.send("some bug. are you sure that is a link to a discord message?")
             elif (temp_l==3 and url[2]=="end"):
                 #try:
-                    m,chan=await durl2m(url[1])
+                    m,chan,c=await durl2m(url[1])
                     txt=m.content
                     await message.channel.send("<@"+str(m.author.id)+"> in <#"+chan+">:\n"+txt)
-                    async for mess in chan.history(after=m.created_at):
+                    async for mess in c.history(after=m):
                         txt=mess.content
                         await message.channel.send("<@"+str(mess.author.id)+"> in <#"+chan+">:\n"+txt)
                 #except:
                     await message.channel.send("some bug. are you sure that is a link to a discord message and teh word 'end'?")
             else:
                 try:
-                    m1,chan=await durl2m(url[1])
-                    m2,chan=await durl2m(url[2])
+                    m1,chan,c=await durl2m(url[1])
+                    m2,chan,c=await durl2m(url[2])
                     txt=m1.content
                     await message.channel.send("<@"+str(m1.author.id)+"> in <#"+chan+">:\n"+txt)
-                    async for mess in chan.history(after=m1,before=m2):
+                    async for mess in c.history(after=m1,before=m2):
                         txt=mess.content
                         await message.channel.send("<@"+str(mess.author.id)+"> in <#"+chan+">:\n"+txt)
                     txt=m2.content
@@ -528,7 +528,7 @@ async def durl2m(u):
     print(url)
     c=client.guilds[0].get_channel(int(url[1]))
     m=await c.fetch_message(int(url[0]))
-    return m,url[1]
+    return m,url[1],c
 
 
 async def do_noise(message,r): 
