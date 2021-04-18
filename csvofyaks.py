@@ -145,7 +145,7 @@ async def on_message(message):
                     m,chan=await durl2m(url[1])
                     txt=m.content
                     await message.channel.send("<@"+str(m.author.id)+"> in <#"+chan+">:\n"+txt)
-                    async for mess in chan.history(after=m):
+                    async for mess in chan.history(after=m.created_at):
                         txt=mess.content
                         await message.channel.send("<@"+str(mess.author.id)+"> in <#"+chan+">:\n"+txt)
                 except:
