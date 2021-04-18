@@ -519,7 +519,7 @@ async def do_activity(message,r):
     op=op+"\n".join([x[0] for x in od])
     await splitsend(message.channel,op,codeformat) #is probbaly longer than 2k chars, so split
 
-async durl2m(u):
+async def durl2m(u):
     url=u.split("/")
     url=list(reversed(url))
     c=client.guilds[0].get_channel(int(url[1]))
