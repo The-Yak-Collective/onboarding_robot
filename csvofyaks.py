@@ -134,7 +134,7 @@ async def on_message(message):
         else:
             if(temp_l==2):
                 try:
-                    print(temp_l,url[1])
+                    print(temp_l,url[1],':',durl2m(url[1]))
                     m,chan=durl2m(url[1])
                     txt=m.content
                     await message.channel.send("<@"+str(m.author.id)+"> in <#"+chan+">:\n"+txt)
@@ -528,7 +528,7 @@ async def durl2m(u):
     print(url)
     c=client.guilds[0].get_channel(int(url[1]))
     m=await c.fetch_message(int(url[0]))
-    return (m,url[1])
+    return m,url[1]
 
 
 async def do_noise(message,r): 
