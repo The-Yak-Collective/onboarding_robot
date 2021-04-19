@@ -589,7 +589,7 @@ async def do_noise(message,r):
 
 async def do_links(message,r): 
 #sort yaks by number of messages they send
-    if 'yakshaver' not in r and 'yakherder' not in r:
+    if False: #if 'yakshaver' not in r and 'yakherder' not in r:
         await message.channel.send('You must be either a yakshaver or yakherder to use this command. Your current roles are: {}'.format(r))
         return
     await message.channel.trigger_typing()
