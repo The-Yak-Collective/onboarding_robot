@@ -103,7 +103,7 @@ def getroles(y):
 #helper function to provide array of roles of a member
     mid=client.guilds[0].get_member(y)
     try:
-        return [x.name for x in mid.roles]
+        return [x.name.replace('@','') for x in mid.roles]
     except:
         return []
 
