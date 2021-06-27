@@ -635,7 +635,7 @@ async def do_links(message,r,proc):
         f.write(op)
         for u in od:
             f.write('"{0}", "{1}", "{2}", "{3}"\n'.format(u[0],u[1], u[2], "; ".join([x for x in u[3]])))
-    await message.channel.send("a file of recent links:", file=discord.File("links.txt"))
+    await message.channel.send("a file of recent links:", file=discord.File(LOCALDIR+"links.txt"))
     if proc:
         thestringlist=['/bin/bash', 'tweetthelist.bash', "links.txt"] #using nathan's utility
         out = subprocess.Popen(thestringlist, 
@@ -644,7 +644,7 @@ async def do_links(message,r,proc):
            stderr=subprocess.STDOUT)
         stdout,stderr = out.communicate() #waits for it to finish
         #print("stderr?:"+stderr)
-        await message.channel.send("a file of extracted tweets from recent links:", file=discord.File("tweetlinks.txt"))
+        await message.channel.send("a file of extracted tweets from recent links:", file=discord.File(LOCALDIR+"tweetlinks.txt"))
         print("twits sent")
         thestringlist=['/bin/bash', 'titlethelist.bash', "links.txt"] #using nathan's utility
         out = subprocess.Popen(thestringlist, 
@@ -654,7 +654,7 @@ async def do_links(message,r,proc):
         print("asked for titles")
         stdout,stderr = out.communicate() #waits for it to finish
         #print("stderr?:"+stderr)
-        await message.channel.send("a file of extracted titles from recent links:", file=discord.File("titlelinks.txt"))
+        await message.channel.send("a file of extracted titles from recent links:", file=discord.File(LOCALDIR+"titlelinks.txt"))
         print("titles sent")
     return
 
