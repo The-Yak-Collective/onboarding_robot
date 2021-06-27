@@ -597,7 +597,10 @@ async def do_links(message,r,proc):
         await message.channel.send('You must be either a yakshaver or yakherder to use this command. Your current roles are: {}'.format(r))
         return
     await message.channel.trigger_typing()
-
+    if proc:
+        await message.channel.send('wait for three files to arrive. may be a brief while.')
+    else:
+        await message.channel.send('wait for one file to arrive. not too slow.')
 #parse command
     cmd=message.content.split()
     howfarback=10
