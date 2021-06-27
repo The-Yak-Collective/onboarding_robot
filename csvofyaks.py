@@ -11,6 +11,7 @@ import re
 import sys
 
 import tempfile
+import subprocess
 import pickle
 import requests
 import os.path
@@ -292,7 +293,10 @@ async def on_message(message):
         return
 #get links per phil's request
     if message.content.startswith('$links'):
-        await do_links(message,r)
+        await do_links(message,r,False)
+        return
+    if message.content.startswith('$lunks'):
+        await do_links(message,r,True)
         return
 #send tweet 
     if message.content.startswith('$yaktweet'):
@@ -587,7 +591,7 @@ async def do_noise(message,r):
     op=op+"\n".join([x[0] for x in od_filtered])
     await splitsend(message.channel,op,codeformat)
 
-async def do_links(message,r): 
+async def do_links(message,r,proc): 
 #sort yaks by number of messages they send
     if False: #if 'yakshaver' not in r and 'yakherder' not in r:
         await message.channel.send('You must be either a yakshaver or yakherder to use this command. Your current roles are: {}'.format(r))
@@ -629,6 +633,21 @@ async def do_links(message,r):
         for u in od:
             f.write('"{0}", "{1}", "{2}", "{3}"\n'.format(u[0],u[1], u[2], "; ".join([x for x in u[3]])))
     await message.channel.send("a file of recent links:", file=discord.File("links.txt"))
+    if proc:
+        thestringlist=['/bin/bash', 'tweetthelist.bash', "links.txt"] #using nathan's utility
+        out = subprocess.Popen(thestringlist, 
+           cwd=LOCALDIR,
+           stdout=subprocess.PIPE, 
+           stderr=subprocess.STDOUT)
+        stdout,stderr = out.communicate() #waits for it to finish
+        await message.channel.send("a file of extracted tweets from recent links:", file=discord.File("tweetlinks.txt"))
+        thestringlist=['/bin/bash', 'titlethelist.bash', "links.txt"] #using nathan's utility
+        out = subprocess.Popen(thestringlist, 
+           cwd=LOCALDIR,
+           stdout=subprocess.PIPE, 
+           stderr=subprocess.STDOUT)
+        stdout,stderr = out.communicate() #waits for it to finish
+        await message.channel.send("a file of extracted titles from recent links:", file=discord.File("titlelinks.txt"))
 
 
 async def dmchan(t):
