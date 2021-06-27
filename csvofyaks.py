@@ -631,7 +631,7 @@ async def do_links(message,r,proc):
             linkto=m.jump_url
             if urls:
                 od.append((ch.name,timestamp,linkto,urls))
-    with open("links.txt",'w') as f:
+    with open(LOCALDIR+"links.txt",'w') as f:
         f.write(op)
         for u in od:
             f.write('"{0}", "{1}", "{2}", "{3}"\n'.format(u[0],u[1], u[2], "; ".join([x for x in u[3]])))
@@ -656,7 +656,8 @@ async def do_links(message,r,proc):
         print(stderr)
         await message.channel.send("a file of extracted titles from recent links:", file=discord.File("titlelinks.txt"))
         print("titles sent")
- 
+    return
+
 
 
 async def dmchan(t):
