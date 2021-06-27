@@ -643,7 +643,7 @@ async def do_links(message,r,proc):
            stdout=subprocess.PIPE, 
            stderr=subprocess.STDOUT)
         stdout,stderr = out.communicate() #waits for it to finish
-        print(stderr)
+        print("stderr?:"+stderr)
         await message.channel.send("a file of extracted tweets from recent links:", file=discord.File("tweetlinks.txt"))
         print("twits sent")
         thestringlist=['/bin/bash', 'titlethelist.bash', "links.txt"] #using nathan's utility
@@ -653,7 +653,7 @@ async def do_links(message,r,proc):
            stderr=subprocess.STDOUT)
         print("asked for titles")
         stdout,stderr = out.communicate() #waits for it to finish
-        print(stderr)
+        print("stderr?:"+stderr)
         await message.channel.send("a file of extracted titles from recent links:", file=discord.File("titlelinks.txt"))
         print("titles sent")
     return
