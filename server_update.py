@@ -58,6 +58,10 @@ def gmailhooked():
     print('got a gmail call')
     os.system('bash '+'~/robot/'+'gmail_hook'+'/'+'readit')
     return 'ok called the prog', 200
+@app.route('/test', methods=['GET'])
+def testing():
+    print('got a test call')
+    return 'you asked for a test. i hope.', 200
 
 @app.route('/.well-known/<fileaskedfor>', methods=['POST','GET'])
 def https_stuff(fileaskedfor):
