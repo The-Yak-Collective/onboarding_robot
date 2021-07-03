@@ -306,7 +306,7 @@ async def on_message(message):
             print('madeyak')
             #send tweet
             conts=message.content.split(maxsplit=1)[1]
-            txt=('#yakborg '+conts)[:280]
+            txt=('#yakbot '+conts)[:280]
             ##check if ONE attachment. if yes, save it and then post it
             if (len(message.attachments)>0):
                 print('has attachment')
