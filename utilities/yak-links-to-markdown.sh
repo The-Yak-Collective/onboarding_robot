@@ -4,15 +4,20 @@
 #
 #     python3-bs4
 
+# The first parameter. Expects a file as parameter
 YAK_LINKS="$1"
 
+# The while loop converts the URL extracted 
 while read -r URL; do
+	# Use python request module to get raw HTML and use beautifulsoup to extract the page title
 	TITLE="$(python3 -c "import bs4, requests; print(bs4.BeautifulSoup(requests.get('$URL').text).title.text)" 2> /dev/null)"
+	# remove all the useless stuff from title/ normalize spaces, remove all the extra spaces and tabs
 	TITLE="$(echo "$TITLE" | sed -e '/^$/d')"
 	TITLE="$(echo "$TITLE" | tr '\n' ' ')"
 	TITLE="$(echo "$TITLE" | sed -e 's/ \+/ /g')"
 	TITLE="$(echo "$TITLE" | sed -e 's/^\s\+//')"
 	TITLE="$(echo "$TITLE" | sed -e 's/\s\+$//')"
+	# if the title is not good discard if it is good then use it
 	if [[ -n "$TITLE" ]] && [[ "$TITLE" != "403 Forbidden" ]] && [[ "$TITLE" != "Sorry! Something went wrong!" ]]; then
 		echo "[$TITLE]($URL)  "
 	fi
