@@ -1,2 +1,2 @@
 #!/bin/bash
-bash utilities/yak-links-to-markdown.sh $1 >titlelinks.txt
+bash utilities/yak-links.sh markdown $1 >titlelinks.txt
