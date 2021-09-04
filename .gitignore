@@ -1,5 +1,9 @@
 token.pickle
 yc-credentials.json
+links.txt
+titlelinks.txt
+markdownlinks.txt
+htmllinks.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
