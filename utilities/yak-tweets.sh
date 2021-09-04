@@ -13,3 +13,4 @@ tail +2 "$1" \
 	| sort -n \
 	| cut -f2- \
 	| grep -E "https://(www\.)?twitter\.com/.*/status/.*"
+	| sed -e 's/$/"/'

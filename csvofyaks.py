@@ -648,7 +648,7 @@ async def do_links(message,r,proc):
            stderr=subprocess.STDOUT)
         stdout,stderr = out.communicate() #waits for it to finish
         #print("stderr?:"+stderr)
-        await message.channel.send("a file of extracted tweets from recent links:", file=discord.File(LOCALDIR+"tweets.txt"))
+        await message.channel.send("a file of extracted tweets from recent links:", file=discord.File(LOCALDIR+"tweets.csv"))
         print("twits sent")
         if (proc == 'markdown'):
             thestringlist=['/bin/bash', 'markdownthelist.bash', "links.csv"] #using nathan's utility

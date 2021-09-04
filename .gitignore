@@ -8,6 +8,7 @@ links.csv
 links.md
 links.html
 tweets.txt
+tweets.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
