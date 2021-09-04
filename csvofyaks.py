@@ -293,10 +293,13 @@ async def on_message(message):
         return
 #get links per phil's request
     if message.content.startswith('$links'):
-        await do_links(message,r,False)
+        await do_links(message,r,'csv')
         return
-    if message.content.startswith('$lunks'):
-        await do_links(message,r,True)
+    if message.content.startswith('$lunks') or message.content.startswith('$mlinks'):
+        await do_links(message,r,'markdown')
+        return
+    if message.content.startswith('$hlinks'):
+        await do_links(message,r,'html')
         return
 #send tweet 
     if message.content.startswith('$yaktweet'):
@@ -597,9 +600,9 @@ async def do_links(message,r,proc):
         await message.channel.send('You must be either a yakshaver or yakherder to use this command. Your current roles are: {}'.format(r))
         return
     await message.channel.trigger_typing()
-    if proc:
-        await message.channel.send('wait for three files to arrive. may be a brief while.')
-    else:
+    if (proc == 'markdown') or (proc == 'html'):
+        await message.channel.send('wait for two files to arrive. may be a brief while.')
+    elif (proc == 'csv'):
         await message.channel.send('wait for one file to arrive. not too slow.')
 #parse command
     cmd=message.content.split()
@@ -635,8 +638,9 @@ async def do_links(message,r,proc):
         f.write(op)
         for u in od:
             f.write('"{0}", "{1}", "{2}", "{3}"\n'.format(u[0],u[1], u[2], "; ".join([x for x in u[3]])))
-    await message.channel.send("a file of recent links:", file=discord.File(LOCALDIR+"links.txt"))
-    if proc:
+    if (proc == 'csv'):
+        await message.channel.send("a file of recent links:", file=discord.File(LOCALDIR+"links.txt"))
+    elif (proc == 'markdown') or (proc == 'html'):
         thestringlist=['/bin/bash', 'tweetthelist.bash', "links.txt"] #using nathan's utility
         out = subprocess.Popen(thestringlist, 
            cwd=LOCALDIR,
@@ -646,16 +650,28 @@ async def do_links(message,r,proc):
         #print("stderr?:"+stderr)
         await message.channel.send("a file of extracted tweets from recent links:", file=discord.File(LOCALDIR+"tweetlinks.txt"))
         print("twits sent")
-        thestringlist=['/bin/bash', 'titlethelist.bash', "links.txt"] #using nathan's utility
-        out = subprocess.Popen(thestringlist, 
-           cwd=LOCALDIR,
-           stdout=subprocess.PIPE, 
-           stderr=subprocess.STDOUT)
-        print("asked for titles")
-        stdout,stderr = out.communicate() #waits for it to finish
-        #print("stderr?:"+stderr)
-        await message.channel.send("a file of extracted titles from recent links:", file=discord.File(LOCALDIR+"titlelinks.txt"))
-        print("titles sent")
+        if (proc == 'markdown'):
+            thestringlist=['/bin/bash', 'markdownthelist.bash', "links.txt"] #using nathan's utility
+            out = subprocess.Popen(thestringlist, 
+               cwd=LOCALDIR,
+               stdout=subprocess.PIPE, 
+               stderr=subprocess.STDOUT)
+            print("asked for titles")
+            stdout,stderr = out.communicate() #waits for it to finish
+            #print("stderr?:"+stderr)
+            await message.channel.send("a file of extracted titles from recent links (markdown):", file=discord.File(LOCALDIR+"markdownlinks.txt"))
+            print("titles sent")
+        elif (proc == 'html'):
+            thestringlist=['/bin/bash', 'htmlthelist.bash', "links.txt"] #using nathan's utility
+            out = subprocess.Popen(thestringlist, 
+               cwd=LOCALDIR,
+               stdout=subprocess.PIPE, 
+               stderr=subprocess.STDOUT)
+            print("asked for titles")
+            stdout,stderr = out.communicate() #waits for it to finish
+            #print("stderr?:"+stderr)
+            await message.channel.send("a file of extracted titles from recent links (html):", file=discord.File(LOCALDIR+"htmllinks.txt"))
+            print("titles sent")
     return
 
 

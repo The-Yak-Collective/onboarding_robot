@@ -18,7 +18,7 @@ fi
 #
 if [[ "$HELP" == "no" ]]; then
 	case "$CMD" in
-		markdown|html|html1|html2)
+		markdown|html)
 			if [[ ! -f "$FILE" ]]; then
 				HELP="yes"
 			fi
@@ -42,12 +42,6 @@ if [[ "$HELP" == "yes" ]]; then
 	echo ""
 	echo "<FILE> - A link text file of the sort produced by the \$links command."
 	echo ""
-	exit 1
-fi
-
-if [[ "$CMD" == "html" ]]; then
-	echo "The 'html' output format is still experimental. Use 'html1' or 'html2'"
-	echo "instead to see the current options."
 	exit 1
 fi
 
@@ -142,10 +136,10 @@ LINK_DATA="$(echo "$LINK_DATA" | sed -e '/^$/d' | sort -u)"
 
 # Opening HTML boilerplate (for testing).
 #
-if [[ "$CMD" == "html1" ]] || [[ "$CMD" == "html2" ]]; then
+if [[ "$CMD" == "html" ]]; then
 	echo "<html>"
 	echo "	<head>"
-	echo "		<title>Test Document: $CMD</title>"
+	echo "		<title>Recent Yak Collective Links From Discord</title>"
 	echo "		<style>"
 	echo "			a {"
 	echo "				text-decoration: none;"
@@ -191,15 +185,7 @@ for LINK_DATUM in $LINK_DATA; do
 			echo "#### [#$CHANNEL]($CHANNEL_URL)"
 			echo ""
 		elif [[ "$CMD" == "html" ]]; then
-			echo "???" # TODO
-		elif [[ "$CMD" == "html1" ]]; then
 			echo "<h4><a href=\"$CHANNEL_URL\">#$CHANNEL</a></h4>"
-		elif [[ "$CMD" == "html2" ]]; then
-			if [[ -n "$CURRENT_CHANNEL" ]]; then
-				echo "</ul>"
-			fi
-			echo "<strong><a href=\"$CHANNEL_URL\">#$CHANNEL</a></strong>"
-			echo "<ul>"
 		fi
 		CURRENT_CHANNEL="$CHANNEL"
 	fi
@@ -228,11 +214,7 @@ for LINK_DATUM in $LINK_DATA; do
 		if [[ "$CMD" == "markdown" ]]; then
 			echo "[🧵]($MESSAGE_URL) [$TITLE]($LINK)  "
 		elif [[ "$CMD" == "html" ]]; then
-			echo "???" # TODO
-		elif [[ "$CMD" == "html1" ]]; then
 			echo "<small><small><a href=\"$MESSAGE_URL\">&#x1f9f5;</a></small></small> <a href=\"$LINK\">$TITLE</a><br>"
-		elif [[ "$CMD" == "html2" ]]; then
-			echo "<li><a href=\"$LINK\">$TITLE</a>&nbsp;<small><small><a href=\"$MESSAGE_URL\">&#x1f9f5;</a></small></small></li>"
 		fi
 	else
 		echo "<!-- $MESSAGE_URL :: $LINK -->"
@@ -241,10 +223,7 @@ done
 
 # Closing HTML boilerplate (for testing).
 #
-if [[ "$CMD" == "html1" ]] || [[ "$CMD" == "html2" ]]; then
-	if [[ "$CMD" == "html2" ]]; then
-		echo "		</ul>"
-	fi
+if [[ "$CMD" == "html" ]]; then
 	echo "	</body>"
 	echo "</html>"
 fi
