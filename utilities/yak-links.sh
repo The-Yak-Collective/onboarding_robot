@@ -40,7 +40,7 @@ if [[ "$HELP" == "yes" ]]; then
 	echo "                  which is incompatible with the current scraping"
 	echo "                  method. These links will be output as comments only."
 	echo ""
-	echo "<FILE> - A link text file of the sort produced by the \$links command."
+	echo "<FILE> - A link CSV file of the sort produced by the \$links command."
 	echo ""
 	exit 1
 fi
@@ -56,10 +56,10 @@ fi
 #
 LINK_DATA=""
 while read -r LINE; do
-	CHANNEL="$(echo "$LINE" | sed -e 's/^"\(.*\)", "\(.*\)", "\(.*\)", "\(.*\)"/\1/')"
-	TIMESTAMP="$(echo "$LINE" | sed -e 's/^"\(.*\)", "\(.*\)", "\(.*\)", "\(.*\)"/\2/')"
-	MESSAGE_URL="$(echo "$LINE" | sed -e 's/^"\(.*\)", "\(.*\)", "\(.*\)", "\(.*\)"/\3/')"
-	LINKS="$(echo "$LINE" | sed -e 's/^"\(.*\)", "\(.*\)", "\(.*\)", "\(.*\)"/\4/')"
+	CHANNEL="$(echo "$LINE" | sed -e 's/^"\(.*\)","\(.*\)","\(.*\)","\(.*\)"/\1/')"
+	TIMESTAMP="$(echo "$LINE" | sed -e 's/^"\(.*\)","\(.*\)","\(.*\)","\(.*\)"/\2/')"
+	MESSAGE_URL="$(echo "$LINE" | sed -e 's/^"\(.*\)","\(.*\)","\(.*\)","\(.*\)"/\3/')"
+	LINKS="$(echo "$LINE" | sed -e 's/^"\(.*\)","\(.*\)","\(.*\)","\(.*\)"/\4/')"
 
 	CHANNEL_URL="$(echo "$MESSAGE_URL" | sed -e 's#/[0-9]\+$##')"
 

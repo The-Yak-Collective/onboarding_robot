@@ -4,6 +4,10 @@ links.txt
 titlelinks.txt
 markdownlinks.txt
 htmllinks.txt
+links.csv
+links.md
+links.html
+tweets.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
