@@ -137,10 +137,10 @@ async def on_message(message):
                 try:
                     #print(temp_l,url[1],':',durl2m(url[1]))
                     m,chan,c=await durl2m(url[1])
-                    print("afterdurl")
+                    #print("afterdurl")
                     txt=m.content
                     strig="<@"+str(m.author.id)+"> in <#"+chan+">:\n"+txt
-                    print(strig)
+                    #print(strig)
                     #await message.channel.send(strig) needs split as message could be long (2k chars. maybe better solution is simply to send two messages?)
                     await splitsend(message.channel,strig,False)
                 except:
@@ -152,7 +152,8 @@ async def on_message(message):
                     await message.channel.send("<@"+str(m.author.id)+"> in <#"+chan+">:\n"+txt)
                     async for mess in c.history(after=m):
                         txt=mess.content
-                        await message.channel.send("<@"+str(mess.author.id)+"> in <#"+chan+">:\n"+txt)
+                        await message.channel.send("<@"+str(mess.author.id)+"> in <#"+chan+">:\n") #moved txt to next message INSTEAD of using splitsend
+                        await message.channel.send(txt)
                 except:
                     await message.channel.send("some bug. are you sure that is a link to a discord message and teh word 'end'?")
             else:
