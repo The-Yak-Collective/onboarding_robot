@@ -141,7 +141,7 @@ async def on_message(message):
                     txt=m.content
                     strig="<@"+str(m.author.id)+"> in <#"+chan+">:\n"+txt
                     #print(strig)
-                    #await message.channel.send(strig) needs split as message could be long (2k chars. maybe better solution is simply to send two messages?)
+                    #await message.channel.send(strig) needs split as message could be long (2k chars. maybe better solution is simply to send two messages? tried it and it does not work. strange)
                     await splitsend(message.channel,strig,False)
                 except:
                     await message.channel.send("some bug. are you sure that is a link to a discord message?")
@@ -149,24 +149,35 @@ async def on_message(message):
                 try:
                     m,chan,c=await durl2m(url[1])
                     txt=m.content
-                    await message.channel.send("<@"+str(m.author.id)+"> in <#"+chan+">:\n"+txt)
+                    #await message.channel.send("<@"+str(m.author.id)+"> in <#"+chan+">:\n"+txt)
+                    strig="<@"+str(m.author.id)+"> in <#"+chan+">:\n"+txt
+                    await splitsend(message.channel,strig,False)
                     async for mess in c.history(after=m):
                         txt=mess.content
-                        await message.channel.send("<@"+str(mess.author.id)+"> in <#"+chan+">:\n") #moved txt to next message INSTEAD of using splitsend
-                        await message.channel.send(txt)
+                        #await message.channel.send("<@"+str(mess.author.id)+"> in <#"+chan+">:\n") #moved txt to next message INSTEAD of using splitsend
+                        #await message.channel.send(txt)
+                        strig="<@"+str(mess.author.id)+"> in <#"+chan+">:\n"+txt
+                        await splitsend(message.channel,strig,False)
                 except:
-                    await message.channel.send("some bug. are you sure that is a link to a discord message and teh word 'end'?")
+                    await message.channel.send("some bug. are you sure that is a link to a discord message followed by the word 'end'?")
             else:
                 try:
                     m1,chan,c=await durl2m(url[1])
                     m2,chan,c=await durl2m(url[2])
                     txt=m1.content
-                    await message.channel.send("<@"+str(m1.author.id)+"> in <#"+chan+">:\n"+txt)
+                    #await message.channel.send("<@"+str(m1.author.id)+"> in <#"+chan+">:\n"+txt)
+                    strig="<@"+str(m1.author.id)+"> in <#"+chan+">:\n"+txt
+                    await splitsend(message.channel,strig,False)
                     async for mess in c.history(after=m1,before=m2):
                         txt=mess.content
-                        await message.channel.send("<@"+str(mess.author.id)+"> in <#"+chan+">:\n"+txt)
+                        #await message.channel.send("<@"+str(mess.author.id)+"> in <#"+chan+">:\n"+txt)
+                        strig="<@"+str(mess.author.id)+"> in <#"+chan+">:\n"+txt
+                        await splitsend(message.channel,strig,False)
+
                     txt=m2.content
-                    await message.channel.send("<@"+str(m2.author.id)+"> in <#"+chan+">:\n"+txt)
+                    #await message.channel.send("<@"+str(m2.author.id)+"> in <#"+chan+">:\n"+txt)
+                    strig="<@"+str(m2.author.id)+"> in <#"+chan+">:\n"+txt
+                    await splitsend(message.channel,strig,False)
                 except:
                     await message.channel.send("some bug. are you sure you gave two discord message urls?")
         return
