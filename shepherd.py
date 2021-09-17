@@ -65,18 +65,18 @@ async def on_message(message): # a logical problem since the freeze cannot know 
     if message.author == client.user:
         return
     print("i would have checked this message:",message.content, message.channel, message.author.id)
-    if message.content.startswith("$maierme"):
+    if message.content.startswith("$maierme") or message.content.startswith("/maierme"):
         x=client.guilds[0].get_member(765463520389103638)
         await update_db_new_member(x)
-    if message.content.startswith("$help"):
+    if message.content.startswith("$help") or message.content.startswith("/help"):
         await send_dm({'discordid':message.author.id},0,"help is near. or not, as help feature not implemented yet")
         return
-    if message.content.startswith("$freezeme"):
+    if message.content.startswith("$freezeme") or message.content.startswith("/freezeme"):
         await send_dm({'discordid':message.author.id},0,"no more messages from this bot for you. dm $unfreezeme to restart")
         db_c.execute('update yakstates set ignoreme=1 where discordid=(?)',(message.author.id,))
         conn.commit()
         return
-    if message.content.startswith("$unfreezeme"):
+    if message.content.startswith("$unfreezeme") or message.content.startswith("/unfreezeme"):
         await send_dm({'discordid':message.author.id},0,"know more messages from this bot for you. dm $freezeme to freeze again")
         db_c.execute('update yakstates set ignoreme=0 where discordid=(?)',(message.author.id,))
         conn.commit()

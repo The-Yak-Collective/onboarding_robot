@@ -110,28 +110,28 @@ def getroles(y):
 
 @client.event
 async def on_message(message):
-#main workhorse - gets, parses and acts on discord messages meant for robot (must start with "$")
+#main workhorse - gets, parses and acts on discord messages meant for robot (must start with "$" or "/")
     if message.author == client.user:
         return
     r=getroles(message.author.id) #used to check permissions
     
-    if message.content.startswith('$hello'):
+    if message.content.startswith('$hello') or message.content.startswith('/hello'):
         await message.channel.send('Hello!')
         print("hello mess from "+message.author.name,flush=True);
         
 #obselete, will be removed
-    if message.content.startswith('$whosenew'):
+    if message.content.startswith('$whosenew') or message.content.startswith('/whosenew'):
         await message.channel.send(str(newones))
         
 #unfurl
 
-    if message.content.startswith('$unfurl'):
+    if message.content.startswith('$unfurl') or message.content.startswith('/unfurl'):
         url=message.content.split() #maxsplit=1
         #print("1",url)
         temp_l=len(url)
         print(temp_l,url)
         if temp_l<2:
-            await message.channel.send("usage $unfurl discord_URL discord_URL/end")
+            await message.channel.send("usage /unfurl discord_URL discord_URL/end")
         else:
             if(temp_l==2):
                 try:
@@ -171,7 +171,7 @@ async def on_message(message):
 
         
 #generates a CSV of all the discord users
-    if message.content.startswith('$givemecsv'):
+    if message.content.startswith('$givemecsv') or message.content.startswith('/givemecsv'):
         if 'yakshaver' not in r and 'yakherder' not in r:
             await message.channel.send('You must be either a yakshaver or yakherder to use this command. Your current roles are: {}'.format(r))
             return
@@ -181,15 +181,15 @@ async def on_message(message):
         await message.channel.send("a csv file of all yaks")
         await message.channel.send("actual file:", file=discord.File("memberlist.csv"))
         
-    if message.content.startswith('$test'):
+    if message.content.startswith('$test') or message.content.startswith('/test'):
         await message.channel.trigger_typing()
         await message.channel.send("this is a test...")#: "+str([(x.name,x.created_at) for x in message.author.roles]))
 #only maier can kill robot from discord, for now
-    if (message.content.startswith('$die!') and message.author.id==MAIERSNOWFLAKE):
+    if ((message.content.startswith('$die!') or message.content.startswith('/die!')) and message.author.id==MAIERSNOWFLAKE):
         exit(0)
 
 #test tool to have robot send a dm to a user. can be deleted
-    if message.content.startswith('$dm'):
+    if message.content.startswith('$dm') or message.content.startswith('/dm'):
         print("dm",flush=True);
         t=int(message.content[3:])
         target=await dmchan(t)
@@ -197,7 +197,7 @@ async def on_message(message):
         await target.send('Hello! i was told by '+message.author.name+' to contact you')
         
 #generate a list of upcoming events in next week
-    if message.content.startswith('$upcoming'):
+    if message.content.startswith('$upcoming') or message.content.startswith('/upcoming'):
         await message.channel.trigger_typing() #show that robot is busy
 #this part copied form google quickstart. basically, use credentials and ask for new ones if they expired or are missing
         nice = len(message.content.split(maxsplit=1))>1
@@ -287,22 +287,25 @@ async def on_message(message):
         await message.channel.send(s)
         
 #show activity in channels
-    if message.content.startswith('$activity'):
+    if message.content.startswith('$activity') or message.content.startswith('/activity'):
         await do_activity(message,r)
         return
 #show activity of yaks
-    if message.content.startswith('$noise') or message.content.startswith('$signal'):
+    if message.content.startswith('$noise') or message.content.startswith('/noise') or message.content.startswith('$signal') or message.content.startswith('/signal'):
         await do_noise(message,r)
         return
 #get links per phil's request
-    if message.content.startswith('$links'):
-        await do_links(message,r,False)
+    if message.content.startswith('$links') or message.content.startswith('/links'):
+        await do_links(message,r,'csv')
         return
-    if message.content.startswith('$lunks'):
-        await do_links(message,r,True)
+    if message.content.startswith('$lunks') or message.content.startswith('/lunks') or message.content.startswith('$mlinks') or message.content.startswith('/mlinks'):
+        await do_links(message,r,'markdown')
+        return
+    if message.content.startswith('$hlinks') or message.content.startswith('/hlinks'):
+        await do_links(message,r,'html')
         return
 #send tweet 
-    if message.content.startswith('$yaktweet'):
+    if message.content.startswith('$yaktweet') or message.content.startswith('/yaktweet'):
         dm_chan=await dmchan(message.author.id) #report by DM
         print('tweet '+message.content)
         if 'madeyak' in r:
@@ -333,7 +336,7 @@ async def on_message(message):
             print(str(message.author.id)+' is not a madeyak:',r)
         return
 #from here tweet TEST using iamz1 info
-    if message.content.startswith('$yaktwit'):
+    if message.content.startswith('$yaktwit') or message.content.startswith('/yaktwit'):
         dm_chan=await dmchan(message.author.id) #report by DM
         print('tweet '+message.content)
         if 'madeyak' in r:
@@ -369,7 +372,7 @@ async def on_message(message):
             print(str(message.author.id)+' is not a madeyak:',r)
         return
 #beta feature - help yaks learn about other yaks. for now show info in introduction chan.  and only of last message. later show data from knack and of all people in last message. consider deleting the message itself OR working on message ID in a private channel, so yak can be circumspect
-    if message.content.startswith('$intro'):#of course intros should be in a local db...
+    if message.content.startswith('$intro') or message.content.startswith('/intro'):#of course intros should be in a local db...
         await message.channel.trigger_typing() #say you are busy
         last_mess=await message.channel.history(limit=1).flatten() #get last message
         last_mess=last_mess[0]
@@ -387,7 +390,7 @@ async def on_message(message):
         return
 #vinay idea - per user history
 #beta feature - help yaks learn about other yaks. for now show message history of a single user.  and only of last message. later show data from knack and of all people in last message. consider deleting the message itself OR working on message ID in a private channel, so yak can be circumspect
-    if message.content.startswith('$pintro'):
+    if message.content.startswith('$pintro') or message.content.startswith('/pintro'):
         cmd=message.content.split()
         howfarback=10
         if len(cmd)>1:
@@ -421,7 +424,7 @@ async def on_message(message):
         await target.send('here is the activity of {}:\n'.format(last_author.name)+s)
         return
 #try 2
-    if message.content.startswith('$qintro'):
+    if message.content.startswith('$qintro') or message.content.startswith('/qintro'):
         cmd=message.content.split()
         howfarback=10
         howmany=5
@@ -466,7 +469,7 @@ async def on_message(message):
 
         return
 #show help message
-    if message.content.startswith('$help') or message.content.startswith('$howto'):
+    if message.content.startswith('$help') or message.content.startswith('/help') or message.content.startswith('$howto') or message.content.startswith('/howto'):
         sp=message.content.split()
         if len(sp)==1:
             sp.append('')
@@ -600,9 +603,9 @@ async def do_links(message,r,proc):
         await message.channel.send('You must be either a yakshaver or yakherder to use this command. Your current roles are: {}'.format(r))
         return
     await message.channel.trigger_typing()
-    if proc:
-        await message.channel.send('wait for three files to arrive. may be a brief while.')
-    else:
+    if (proc == 'markdown') or (proc == 'html'):
+        await message.channel.send('wait for two files to arrive. may be a brief while.')
+    elif (proc == 'csv'):
         await message.channel.send('wait for one file to arrive. not too slow.')
 #parse command
     cmd=message.content.split()
@@ -634,31 +637,44 @@ async def do_links(message,r,proc):
             linkto=m.jump_url
             if urls:
                 od.append((ch.name,timestamp,linkto,urls))
-    with open(LOCALDIR+"links.txt",'w') as f:
+    with open(LOCALDIR+"links.csv",'w') as f:
         f.write(op)
         for u in od:
-            f.write('"{0}", "{1}", "{2}", "{3}"\n'.format(u[0],u[1], u[2], "; ".join([x for x in u[3]])))
-    await message.channel.send("a file of recent links:", file=discord.File(LOCALDIR+"links.txt"))
-    if proc:
-        thestringlist=['/bin/bash', 'tweetthelist.bash', "links.txt"] #using nathan's utility
+            f.write('"{0}","{1}","{2}","{3}"\n'.format(u[0],u[1], u[2], "; ".join([x for x in u[3]])))
+    if (proc == 'csv'):
+        await message.channel.send("a file of recent links:", file=discord.File(LOCALDIR+"links.csv"))
+    elif (proc == 'markdown') or (proc == 'html'):
+        thestringlist=['/bin/bash', 'tweetthelist.bash', "links.csv"] #using nathan's utility
         out = subprocess.Popen(thestringlist, 
            cwd=LOCALDIR,
            stdout=subprocess.PIPE, 
            stderr=subprocess.STDOUT)
         stdout,stderr = out.communicate() #waits for it to finish
         #print("stderr?:"+stderr)
-        await message.channel.send("a file of extracted tweets from recent links:", file=discord.File(LOCALDIR+"tweetlinks.txt"))
+        await message.channel.send("a file of extracted tweets from recent links:", file=discord.File(LOCALDIR+"tweets.csv"))
         print("twits sent")
-        thestringlist=['/bin/bash', 'titlethelist.bash', "links.txt"] #using nathan's utility
-        out = subprocess.Popen(thestringlist, 
-           cwd=LOCALDIR,
-           stdout=subprocess.PIPE, 
-           stderr=subprocess.STDOUT)
-        print("asked for titles")
-        stdout,stderr = out.communicate() #waits for it to finish
-        #print("stderr?:"+stderr)
-        await message.channel.send("a file of extracted titles from recent links:", file=discord.File(LOCALDIR+"titlelinks.txt"))
-        print("titles sent")
+        if (proc == 'markdown'):
+            thestringlist=['/bin/bash', 'markdownthelist.bash', "links.csv"] #using nathan's utility
+            out = subprocess.Popen(thestringlist, 
+               cwd=LOCALDIR,
+               stdout=subprocess.PIPE, 
+               stderr=subprocess.STDOUT)
+            print("asked for titles")
+            stdout,stderr = out.communicate() #waits for it to finish
+            #print("stderr?:"+stderr)
+            await message.channel.send("a file of extracted titles from recent links (markdown):", file=discord.File(LOCALDIR+"links.md"))
+            print("titles sent")
+        elif (proc == 'html'):
+            thestringlist=['/bin/bash', 'htmlthelist.bash', "links.csv"] #using nathan's utility
+            out = subprocess.Popen(thestringlist, 
+               cwd=LOCALDIR,
+               stdout=subprocess.PIPE, 
+               stderr=subprocess.STDOUT)
+            print("asked for titles")
+            stdout,stderr = out.communicate() #waits for it to finish
+            #print("stderr?:"+stderr)
+            await message.channel.send("a file of extracted titles from recent links (html):", file=discord.File(LOCALDIR+"links.html"))
+            print("titles sent")
     return
 
 

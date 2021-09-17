@@ -1,6 +1,6 @@
-$givemecsv      generates a csv file member data. 
-$activity       shows activity summary. more: $help activity
-$noise          shows activity of yaks. more: $help noise. see also $signal
-$intro          (beta) tries to extract the #introduction message written  by author of last message in channel. TBD function of intro based on @mention & sent by dm
-$whosenew       list of yaks that joined since bot restarted
-$links N    delivers file with list of links in last N days
+/givemecsv      generates a csv file member data. 
+/activity       shows activity summary. more: $help activity
+/signal         shows activity of yaks. more: $help noise. see also $signal
+/intro          (beta) tries to extract the #introduction message written  by author of last message in channel. TBD function of intro based on @mention & sent by dm
+/whosenew       list of yaks that joined since bot restarted
+/links N    delivers file with list of links in last N days

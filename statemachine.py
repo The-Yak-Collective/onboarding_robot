@@ -98,7 +98,7 @@ newyak={
 'regular':{ #not much happening here, but we could track what is going on
     'id':2,
     'onenter': send_dm, 
-    'onenter_params': ['if you ever need help, pls send me a dm "$help"'],
+    'onenter_params': ['if you ever need help, pls send me a dm "/help"'],
     'transitions':[]
     },
 'out':{ #not much happening here, but we coudl track what is going on
