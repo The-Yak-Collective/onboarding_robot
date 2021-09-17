@@ -137,8 +137,11 @@ async def on_message(message):
                 try:
                     #print(temp_l,url[1],':',durl2m(url[1]))
                     m,chan,c=await durl2m(url[1])
+                    print("afterdurl")
                     txt=m.content
-                    await message.channel.send("<@"+str(m.author.id)+"> in <#"+chan+">:\n"+txt)
+                    strig="<@"+str(m.author.id)+"> in <#"+chan+">:\n"+txt
+                    print(strig)
+                    await message.channel.send(strig)
                 except:
                     await message.channel.send("some bug. are you sure that is a link to a discord message?")
             elif (temp_l==3 and url[2]=="end"):
