@@ -141,7 +141,7 @@ async def on_message(message):
                     txt=m.content
                     strig="<@"+str(m.author.id)+"> in <#"+chan+">:\n"+txt
                     print(strig)
-                    #await message.channel.send(strig)
+                    #await message.channel.send(strig) needs split as message could be long (2k chars. maybe better solution is simply to send two messages?)
                     await splitsend(message.channel,strig,False)
                 except:
                     await message.channel.send("some bug. are you sure that is a link to a discord message?")
