@@ -62,7 +62,7 @@ for event in events:
     days, hours, minutes = int(seconds2go //(3600*24)), int((seconds2go // 3600) % 24), int(seconds2go // 60 % 60)
     el=event.get('location','')
     if el!='':
-        el='\n'+el
+        el='\n> '+el
     if (days==0):
         ts=str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes '
         if(tod!=""):
