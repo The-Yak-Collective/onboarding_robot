@@ -60,21 +60,24 @@ for event in events:
     start = parse(event['start'].get('dateTime', event['start'].get('date')))
     seconds2go=(start-datetime.utcnow().astimezone()).total_seconds()
     days, hours, minutes = int(seconds2go //(3600*24)), int((seconds2go // 3600) % 24), int(seconds2go // 60 % 60)
+    el=event.get('location','')
+    if el!='':
+        el='\n'+el
     if (days==0):
         ts=str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes '
         if(tod!=""):
             tod=tod+"\n"
-        tod=tod+"> **"+event['summary'].replace("and Yak Collective","")+ '**\n> Starts in '+ ts+'\n'
+        tod=tod+"> **"+event['summary'].replace("and Yak Collective","")+ '**'+el+'\n> Starts in '+ ts+'\n'
     if (days==1):
         if(tom!=""):
             tom=tom+"\n"
         ts=str(days) + ' day and '+str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes '
-        tom=tom+"> **"+event['summary'].replace("and Yak Collective","")+ '**\n> Starts in '+ ts+'\n'
+        tom=tom+"> **"+event['summary'].replace("and Yak Collective","")+ '**'+el+'\n> Starts in '+ ts+'\n'
     if(days>1):
         if(too!=""):
             too=too+"\n"
         ts=str(days) + ' days and '+str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes '
-        too=too+"> **"+event['summary'].replace("and Yak Collective","")+ '**\n> Starts in '+ ts+'\n'
+        too=too+"> **"+event['summary'].replace("and Yak Collective","")+ '**'+el+'\n> Starts in '+ ts+'\n'
 if (tod==""):
     tod="No upcoming events in next 24 hours\n"
 if (tom==""):
