@@ -131,8 +131,26 @@ async def on_message(message):
         yakrole=discord.utils.get(client.guilds[0].roles, name="yak")
         await message.author.add_roles(yakrole)
         await message.channel.send("Welcome to the Yak Collective Discord server, "+message.author.name)
-        #really should have a file upload mechanism so we have a nice message
+        with open(LOCALDIR+"/welcomemess") as f:
+            themessage=f.read()
+        await message.channel.send(themessage)
+        #maybe should have a file upload mechanism so we have a nice message
     return
+#upload further message. lets start with plain text
+    if message.content.startswith('$uploadwelcome') or message.content.startswith('/uploadwelcome'):
+        themessage= message.content.split(1)[1]
+        if len(themessage)>0:
+            with open(LOCALDIR+"/welcomemess",'wb') as f:
+                f.write(themessage)
+            await message.channel.send('''this is what it will look like''')
+            await message.channel.send(themessage)
+        else:
+            await message.channel.send('''
+            please provide a welcome message to upload. plain text, use markdown, etc.''')
+    return
+
+
+
 #unfurl
 
     if message.content.startswith('$unfurl') or message.content.startswith('/unfurl'):
