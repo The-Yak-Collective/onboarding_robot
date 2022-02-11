@@ -138,7 +138,7 @@ async def on_message(message):
         return
 #upload further message. lets start with plain text
     if message.content.startswith('$uploadwelcome') or message.content.startswith('/uploadwelcome'):
-        themessage= message.content.split(1)[1]
+        themessage= message.content.split(maxsplit=1)[1]
         if len(themessage)>0:
             with open(LOCALDIR+"/welcomemess",'wb') as f:
                 f.write(themessage)
