@@ -123,6 +123,16 @@ async def on_message(message):
     if message.content.startswith('$whosenew') or message.content.startswith('/whosenew'):
         await message.channel.send(str(newones))
         
+#somebody posted in #introductions
+    if message.channel.id==INTRO_CHAN and not message.content[0] in ['$','/']: # a real message in intro
+        whoposted=message.author.id
+        if 'yak' in getroles(whoposted):
+            return #only non yaks are responded to
+        yakrole=discord.utils.get(bot.guilds[0].roles, name="yak")
+        message.author.add_roles(yakrole)
+        message.channel.send("Welcome to the Yak Collective Discord server, "+message.author.name)
+        #really shoudl have a file upload mechanism so we have a nice message
+    return
 #unfurl
 
     if message.content.startswith('$unfurl') or message.content.startswith('/unfurl'):
