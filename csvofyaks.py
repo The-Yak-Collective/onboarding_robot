@@ -135,7 +135,7 @@ async def on_message(message):
             themessage=f.read()
         await message.channel.send(themessage)
         #maybe should have a file upload mechanism so we have a nice message
-    return
+        return
 #upload further message. lets start with plain text
     if message.content.startswith('$uploadwelcome') or message.content.startswith('/uploadwelcome'):
         themessage= message.content.split(1)[1]
@@ -147,7 +147,7 @@ async def on_message(message):
         else:
             await message.channel.send('''
             please provide a welcome message to upload. plain text, use markdown, etc.''')
-    return
+        return
 
 
 
