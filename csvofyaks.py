@@ -128,7 +128,7 @@ async def on_message(message):
         whoposted=message.author.id
         if 'yak' in getroles(whoposted):
             return #only non yaks are responded to
-        yakrole=discord.utils.get(bot.guilds[0].roles, name="yak")
+        yakrole=discord.utils.get(client.guilds[0].roles, name="yak")
         message.author.add_roles(yakrole)
         message.channel.send("Welcome to the Yak Collective Discord server, "+message.author.name)
         #really shoudl have a file upload mechanism so we have a nice message
