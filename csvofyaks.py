@@ -140,7 +140,7 @@ async def on_message(message):
     if message.content.startswith('$uploadwelcome') or message.content.startswith('/uploadwelcome'):
         themessage= message.content.split(maxsplit=1)[1]
         if len(themessage)>0:
-            with open(LOCALDIR+"/welcomemess",'wb') as f:
+            with open(LOCALDIR+"/welcomemess",'w') as f:
                 f.write(themessage)
             await message.channel.send('''this is what it will look like''')
             await message.channel.send(themessage)
