@@ -131,7 +131,7 @@ async def on_message(message):
         yakrole=discord.utils.get(client.guilds[0].roles, name="yak")
         await message.author.add_roles(yakrole)
         target=message.channel #and then we immediatly flip to personal DM - for testing
-        target=await dm_chan(message.author.id)
+        target=await dmchan(message.author.id)
         await target.send("Welcome to the Yak Collective Discord server, "+message.author.name)
         with open(LOCALDIR+"/welcomemess") as f:
             themessage=f.read()
