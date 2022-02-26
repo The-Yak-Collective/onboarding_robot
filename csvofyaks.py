@@ -130,11 +130,13 @@ async def on_message(message):
             return #only non yaks are responded to
         yakrole=discord.utils.get(client.guilds[0].roles, name="yak")
         await message.author.add_roles(yakrole)
-        await message.channel.send("Welcome to the Yak Collective Discord server, "+message.author.name)
+        target=message.channel #and then we immediatly flip to personal DM - for testing
+        target=await dm_chan(message.author.id)
+        await target.send("Welcome to the Yak Collective Discord server, "+message.author.name)
         with open(LOCALDIR+"/welcomemess") as f:
             themessage=f.read()
-        await message.channel.send(themessage)
-        #maybe should have a file upload mechanism so we have a nice message
+        await target.send(themessage)
+        #maybe should have a file upload mechanism but see $uploadwelcome below
         return
 #upload further message. lets start with plain text
     if message.content.startswith('$uploadwelcome') or message.content.startswith('/uploadwelcome'):
