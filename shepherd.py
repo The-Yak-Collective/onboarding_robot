@@ -126,7 +126,8 @@ async def read_and_add():
 #    mem=await g.fetch_members(after=datetime.datetime.fromtimestamp(prevread)).flatten() # reads only ones added since prevread
 #    print("fetched only:",len(mem))
 #seems datetime might not work, but can try snowflake - timestamp from 1995 epoch <<22. see https://discord.com/developers/docs/reference
-    mem1=await g.fetch_members(limit=10).flatten() # reads only ones added since prevread. for now, limiting to just 10 (to reduce size of potential catastrophe)
+    #mem1=await g.fetch_members(limit=10).flatten() # reads only ones added since prevread. for now, limiting to just 10 (to reduce size of potential catastrophe)
+    mem1=g.members #fails on api call will try on list. this may fail above 1000 members, and we are getting close
     mem=[x for x in mem1 if x.joined_at.timestamp()>prevread]
     print("fetched:",len(mem1), "filtered to:",len(mem))
 

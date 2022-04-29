@@ -49,7 +49,8 @@ load_dotenv(HOMEDIR+'.env')
 
 intents = discord.Intents.default()
 intents.members = True #if you want memebr data you need to say so in advance
-
+intents.messages=True
+intents.message_content=True #and now also to read messages...
 
 client = discord.Client(intents=intents)
 
