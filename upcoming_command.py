@@ -19,6 +19,8 @@ from dotenv import load_dotenv
 HOMEDIR='/home/yak/'
 CALID='o995m43173bpslmhh49nmrp5i4@group.calendar.google.com' #yakcollective google calender id
 
+SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
+
 load_dotenv(HOMEDIR+'.env')
 
 creds = None
