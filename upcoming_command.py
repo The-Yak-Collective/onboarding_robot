@@ -31,7 +31,7 @@ if not creds or not creds.valid:
     if creds and creds.expired and creds.refresh_token:
         creds.refresh(Request())
     else:
-        flow = InstalledAppFlow.from_client_secrets_file('yc-credentials.json', SCOPES)
+        flow = InstalledAppFlow.from_client_secrets_file(HOMEDIR+'yc-credentials.json', SCOPES)
         creds = flow.run_local_server(port=9000)
     with open(HOMEDIR+'token.pickle', 'wb') as token:
         pickle.dump(creds, token)
