@@ -2,7 +2,7 @@
 
 # Make sure that the log directory exists
 #
-[[ ! -d "$HOME/logs" ]] mkdir -p "$HOME/logs"
+[[ ! -d "$HOME/logs" ]] && mkdir -p "$HOME/logs"
 
 # Which bot to restart? Pass this in on the command line. If nothing is
 # passed in, restart everything.
