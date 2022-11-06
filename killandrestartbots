@@ -1,0 +1,114 @@
+#!/bin/bash
+
+# Make sure that the log directory exists
+#
+[[ ! -d "$HOME/logs" ]] mkdir -p "$HOME/logs"
+
+# Which bot to restart? Pass this in on the command line. If nothing is
+# passed in, restart everything.
+#
+if [[ $# -eq 0 ]]; then
+	WHICH_BOT="all"
+else
+	WHICH_BOT="$1"
+fi
+
+# Check if we got a bot...
+#
+GOT_A_BOT="no"
+
+# Big block of bots
+#
+if [[ "$WHICH_BOT" == "server_update" ]] || [[ "$WHICH_BOT" == "all" ]]; then
+	if [[ $(ps auxww | grep "server_update.py" | grep -v grep | wc -l) -ge 1 ]]; then
+		echo "[$(date --iso-8601=seconds)] Killing server_update.py"
+		pkill -f server_update.py
+		sleep 5
+	fi
+	echo "[$(date --iso-8601=seconds)] Starting server_update.py"
+	nohup python3 ~/robot/onboarding_robot/server_update.py >> "$HOME/logs/server_update.log" 2>&1 &
+	GOT_A_BOT="yes"
+fi
+
+if [[ "$WHICH_BOT" == "csvofyaks" ]] || [[ "$WHICH_BOT" == "all" ]]; then
+	if [[ $(ps auxww | grep "csvofyaks.py" | grep -v grep | wc -l) -ge 1 ]]; then
+		echo "[$(date --iso-8601=seconds)] Killing csvofyaks.py"
+		pkill -f csvofyaks.py
+		sleep 5
+	fi
+	echo "[$(date --iso-8601=seconds)] Starting csvofyaks.py"
+	nohup python3 ~/robot/onboarding_robot/csvofyaks.py >> "$HOME/logs/csvofyaks.log" 2>&1 &
+	GOT_A_BOT="yes"
+fi
+
+if [[ "$WHICH_BOT" == "shepherd" ]] || [[ "$WHICH_BOT" == "all" ]]; then
+	if [[ $(ps auxww | grep "shepherd.py" | grep -v grep | wc -l) -ge 1 ]]; then
+		echo "[$(date --iso-8601=seconds)] Killing shepherd.py"
+		pkill -f shepherd.py
+		sleep 5
+	fi
+	echo "[$(date --iso-8601=seconds)] Starting shepherd.py"
+	nohup python3 ~/robot/onboarding_robot/shepherd.py >> "$HOME/logs/shepherd.log" 2>&1 &
+	GOT_A_BOT="yes"
+fi
+
+if [[ "$WHICH_BOT" == "gigayak" ]] || [[ "$WHICH_BOT" == "all" ]]; then
+	if [[ $(ps auxww | grep "gigayak.py" | grep -v grep | wc -l) -ge 1 ]]; then
+		echo "[$(date --iso-8601=seconds)] Killing gigayak.py"
+		pkill -f gigayak.py
+		sleep 5
+	fi
+	echo "[$(date --iso-8601=seconds)] Starting gigayak.py"
+	nohup python3 ~/robot/gigayak/gigayak.py >> "$HOME/logs/gigayak.log" 2>&1 &
+	GOT_A_BOT="yes"
+fi
+
+if [[ "$WHICH_BOT" == "menus" ]] || [[ "$WHICH_BOT" == "all" ]]; then
+	if [[ $(ps auxww | grep "menus.py" | grep -v grep | wc -l) -ge 1 ]]; then
+		echo "[$(date --iso-8601=seconds)] Killing menus.py"
+		pkill -f menus.py
+		sleep 5
+	fi
+	echo "[$(date --iso-8601=seconds)] Starting menus.py"
+	nohup python3 ~/robot/menus/menus.py >> "$HOME/logs/menus.log" 2>&1 &
+	GOT_A_BOT="yes"
+fi
+
+if [[ "$WHICH_BOT" == "project_ui" ]] || [[ "$WHICH_BOT" == "all" ]]; then
+	if [[ $(ps auxww | grep "project_ui.py" | grep -v grep | wc -l) -ge 1 ]]; then
+		echo "[$(date --iso-8601=seconds)] Killing project_ui.py"
+		pkill -f project_ui.py
+		sleep 5
+	fi
+	echo "[$(date --iso-8601=seconds)] Starting project_ui.py"
+	nohup python3 ~/robot/project_ui/project_ui.py >> "$HOME/logs/project_ui.log" 2>&1 &
+	GOT_A_BOT="yes"
+fi
+
+if [[ "$WHICH_BOT" == "slashayak" ]] || [[ "$WHICH_BOT" == "all" ]]; then
+	if [[ $(ps auxww | grep "slashayak.py" | grep -v grep | wc -l) -ge 1 ]]; then
+		echo "[$(date --iso-8601=seconds)] Killing slashayak.py"
+		pkill -f slashayak.py
+		sleep 5
+	fi
+	echo "[$(date --iso-8601=seconds)] Starting slashayak.py"
+	nohup python3 ~/robot/slashayak/slashayak.py >> "$HOME/logs/slashayak.log" 2>&1 &
+	GOT_A_BOT="yes"
+fi
+
+if [[ "$WHICH_BOT" == "promptschool" ]] || [[ "$WHICH_BOT" == "all" ]]; then
+	if [[ $(ps auxww | grep "promptschool.py" | grep -v grep | wc -l) -ge 1 ]]; then
+		echo "[$(date --iso-8601=seconds)] Killing promptschool.py"
+		pkill -f promptschool.py
+		sleep 5
+	fi
+	echo "[$(date --iso-8601=seconds)] Starting promptschool.py"
+	nohup python3 ~/robot/promptschool/promptschool.py >> "$HOME/logs/promptschool.log" 2>&1 &
+	GOT_A_BOT="yes"
+fi
+
+# Output message if no bots.
+#
+if [[ "$GOT_A_BOT" == "np" ]]; then
+	echo "Didn't find specified bot $WHICH_BOT..."
+fi

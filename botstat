@@ -1,5 +1,5 @@
 #! /bin/bash
-echo "starting botstat"
+echo "[$(date --iso-8601=seconds)] Running botstat"
 pwd
 source /home/yak/.env
 echo '{"content": "' >botstat.info
