@@ -43,7 +43,7 @@ events_result = cal.events().list(calendarId=CALID, timeMin=now,timeMax=(datetim
                                     singleEvents=True,
                                     orderBy='startTime').execute()
 events = events_result.get('items', [])
-#print('events len:', len(events))
+#print("events len:", len(events))
 
 #generate a message string
 

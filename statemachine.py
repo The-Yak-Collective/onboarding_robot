@@ -6,7 +6,7 @@
 
 from discord_shepherd import *
 
-
+import datetime
 
 #here be functions used in the above state table. note they are called by predefined functions, like "on_message"
 #all are async because some are async and no way of knowing which is which. but they can probbaly all run in parallel, any order
@@ -24,22 +24,22 @@ async def has_role(yak,y,x):
     return 0
 
 async def kick_out(yak,y,x):
-    print("kick out id with message (sent by dm):",yak['discordid'],x[0])
+    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nkick out id with message (sent by dm):",yak['discordid'],x[0])
     return 0
 
 async def send_dm(yak,y,x):
-    print("here i send a DM to the current yak we are looking at, with text:",yak['discordid'],x[0])
-    print("client:", client, client.get_user, client.get_user(yak['discordid']))
+    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nhere i send a DM to the current yak we are looking at, with text:",yak['discordid'],x[0])
+    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nclient:", client, client.get_user, client.get_user(yak['discordid']))
     target=client.get_user(yak['discordid']).dm_channel
     if (not target): 
-        print("need to create dm channel",flush=True)
+        print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nneed to create dm channel",flush=True)
         target=await client.get_user(yak['discordid']).create_dm()
-    print("target is:",target,flush=True)    
+    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\ntarget is:",target,flush=True)    
     #await target.send(x[0])# do not want to actually send yet
     return 0
 
 async def posted_introduction(yak,m,x):
-    print('check if this message is in introduction channel. if yes, return 1, otherwise 0')
+    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\ncheck if this message is in introduction channel. if yes, return 1, otherwise 0")
     if m.channel.id==INTRODUCTIONCHANNELID:
         return 1
     return 0

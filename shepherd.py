@@ -22,7 +22,7 @@ async def test_tick():
     for m in machines:
         for item in m['lut']['on_tick']:
             state=item[0]
-            print('state in tick:',state, item)
+            print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nstate in tick:",state, item)
             yaks_it=db_c.execute('select * from yakstates where state=(?) and machine=(?)',(state,m['name']))
             yak_list=[r2yak(x) for x in yaks_it]
             for theyak in yak_list:
@@ -30,9 +30,9 @@ async def test_tick():
                     continue;
                 print(theyak)
                 for trans in m['states'][state]['transitions']:
-                    print("trans:",trans)
+                    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\ntrans:",trans)
                     if "on_tick" in trans:
-                        print("found on_tick")
+                        print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nfound on_tick")
                         if (trans['on_tick']['run_params'][0]==0) or (tick % trans['on_tick']['run_params'][0]==0):#really, should not be zero...
                             val=await trans['on_tick']['run'](theyak,tick,trans['on_tick']['run_params'][1:])
                             await transition_on(theyak, val, trans['on_tick']['goto'],m)
@@ -46,7 +46,7 @@ load_dotenv('/home/yak/.env')
 @client.event
 async def on_ready(): 
 
-    print('We have logged in as {0.user}'.format(client),  client.guilds)
+    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nWe have logged in as {0.user}".format(client),  client.guilds)
     setup_sm() # needs to be first, (or maybe not) as update_database calls on_enter
     await update_database()
     test_tick.start() #makes sure we have DB
@@ -54,7 +54,7 @@ async def on_ready():
 
 @client.event
 async def on_member_join(member):
-    print("i think somebody joined:",member.id)
+    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\ni think somebody joined:",member.id)
     await update_db_new_member(member)
     #and now also apply state machine on him? or wait for events? after all, he did just join a state
     
@@ -64,7 +64,7 @@ async def on_member_join(member):
 async def on_message(message): # a logical problem since the freeze cannot know which machine to freeze. nevermind. maybe will do seperate commands for each. maybe each machine sends a first introductory message with a unique freeze command (one for each machine). later...
     if message.author == client.user:
         return
-    print("i would have checked this message:",message.content, message.channel, message.author.id)
+    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\ni would have checked this message:",message.content, message.channel, message.author.id)
     if message.content.startswith("$maierme") or message.content.startswith("/maierme"):
         x=client.guilds[0].get_member(765463520389103638)
         await update_db_new_member(x)
@@ -85,7 +85,7 @@ async def on_message(message): # a logical problem since the freeze cannot know 
     for m in machines:
         theyak=get_yak_mac(message.author.id,m) #for now we only look at who sent, not who got. 
         if  not theyak:
-            print("message from somebody not in db:",message.author.id)
+            print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nmessage from somebody not in db:",message.author.id)
             return 
         if theyak['ignoreme']!=0:
             continue;
@@ -97,7 +97,7 @@ async def on_message(message): # a logical problem since the freeze cannot know 
                     await transition_on(theyak, val, trans['on_message']['goto'],m)
     
 async def transition_on(yak,val,where,m):
-    print("transition of {} who is at {} using vector {} with val {} to {}".format(yak['discordid'],yak['state'],where,val, where[val]))
+    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\ntransition of {} who is at {} using vector {} with val {} to {}".format(yak['discordid'],yak['state'],where,val, where[val]))
     newstate=where[val]
     if newstate=='':
         return
@@ -122,21 +122,21 @@ async def read_and_add():
     g=client.guilds[0]
     db_c.execute('''select * from lastread''')
     prevread=int(db_c.fetchone()[0])
-    print("prevread=",prevread,datetime.datetime.fromtimestamp(prevread))
+    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nprevread=",prevread,datetime.datetime.fromtimestamp(prevread))
 #    mem=await g.fetch_members(after=datetime.datetime.fromtimestamp(prevread)).flatten() # reads only ones added since prevread
 #    print("fetched only:",len(mem))
 #seems datetime might not work, but can try snowflake - timestamp from 1995 epoch <<22. see https://discord.com/developers/docs/reference
     #mem1=await g.fetch_members(limit=10).flatten() # reads only ones added since prevread. for now, limiting to just 10 (to reduce size of potential catastrophe)
     mem1=g.members #fails on api call will try on list. this may fail above 1000 members, and we are getting close
     mem=[x for x in mem1 if x.joined_at.timestamp()>prevread]
-    print("fetched:",len(mem1), "filtered to:",len(mem))
+    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nfetched:",len(mem1), "filtered to:",len(mem))
 
     db_c.execute('''UPDATE lastread
     set timestamp=(?)''',(lastread,)) 
     for m in machines:
         #mem1=[x for x in mem if datetime.datetime.timestamp(x.joined_at)>prevread]
         print(m)
-        print("adding {} members to machine {}".format(len(mem), m['name']))
+        print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nadding {} members to machine {}".format(len(mem), m['name']))
         db_c.executemany('''insert into yakstates values
          (?, ?, ?, ?, ?, ?)''',[(x.id,m['name'],m['startat'],lastread,0, roles(x)) for x in mem])
         for y in mem:
@@ -154,18 +154,18 @@ async def update_db_new_member(member):
         print(member.id, " not in db yet")
         lastread=int(time.time()) #could not be exectly correct. so one solution is to run fetchall again. another is to check. which we did
         for m in machines:
-            print("before insert")
+            print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nbefore insert")
             db_c.execute('''insert into yakstates values
              (?, ?, ?, ?, ?, ?)''',(x.id,m['name'],m['startat'],lastread, 0, roles(x)))# new yaks get benifit of doubt... as if they joined just now
 
-            print("after insert")
+            print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nafter insert")
         db_c.execute('''UPDATE lastread set timestamp=(?)''',(lastread,))
-        print("after update timestamp")
+        print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nafter update timestamp")
         conn.commit()
         for m in machines:
             yak=get_yak_mac(x.id,m)
             await do_on_enter(m,yak,m['startat'])
-    print('add new member to db, if not already in it', member.name, member.id)
+    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nadd new member to db, if not already in it", member.name, member.id)
 
 
 def roles(x):
@@ -187,11 +187,11 @@ def r2yak(r):
 def setup_sm():
     for m in machines: #make sit easier if machines are a global
         for state in m['states']:
-            print('state:',state,m['states'][state]['transitions'])
+            print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nstate:",state,m['states'][state]['transitions'])
             for trans in m['states'][state]['transitions']:
-                print('and trans:',trans)
+                print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nand trans:",trans)
                 for t in trans:
-                    print('and t is:',t)
+                    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nand t is:",t)
                     m['lut'][t].append((state,trans[t]['run'],trans[t]['run_params'])) #not clear why we need all three
 
 

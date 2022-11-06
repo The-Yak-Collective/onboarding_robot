@@ -7,6 +7,7 @@ import time
 
 import hmac
 import hashlib
+import datetime
 #from waitress import serve #newly added. but also waitress does not provide ssl native
 
 app = Flask(__name__) #run using "nohup flask run --host 0.0.0.0 #and note flask_app is an environment variable and you need kill -9 to kill flask server.  nohup is needed
@@ -17,7 +18,7 @@ SERVER_UPDATE=os.getenv("SERVER_UPDATE")
 
 @app.route('/update_robot/<repname>', methods=['POST'])
 def webhook(repname='onboarding_robot'):
-    print("got update request")
+    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\ngot update request")
     if(os.getenv("DEPLOY_"+repname,'17')=='17'):
         os.environ["DEPLOY_"+repname]='1' #default setting is to deploy
     if(os.getenv("DEPLOY_"+repname)!='1'):
@@ -25,14 +26,14 @@ def webhook(repname='onboarding_robot'):
     if request.method == 'POST':
         x_hub_signature = request.headers.get('X-Hub-Signature')
         if not is_valid_signature(x_hub_signature, request.data, SERVER_UPDATE):
-            print("missing correct token/secret for server_update")
+            print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nmissing correct token/secret for server_update")
             return 'missing password', 400
         repo = git.Repo('~/robot/'+repname)
-        print("repo:",repo) 
+        print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nrepo:",repo) 
         origin = repo.remotes.origin
-        print("origin:",origin)
-        print("pulling:",origin.pull()) #not supposed to affect local files we changed that are not changed on parent
-        print("... with secret") 
+        print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\norigin:",origin)
+        print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\npulling:",origin.pull()) #not supposed to affect local files we changed that are not changed on parent
+        print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\n... with secret") 
         os.environ["TIMEVERSION_"+repname]=str(int(time.time())) #
         os.system('bash '+'~/robot/'+repname+'/'+'aftergit') #for post merge to work, it need to be an execuatble. but this way it is easier to manage the post activities
         return 'Updated robot successfully', 200
@@ -55,17 +56,17 @@ def nodeploy(repname='onboarding_robot'):
 
 @app.route('/gmail', methods=['POST'])
 def gmailhooked():
-    print('got a gmail call')
+    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\ngot a gmail call")
     os.system('bash '+'~/robot/'+'gmail_hook'+'/'+'readit')
     return 'ok called the prog', 200
 @app.route('/test', methods=['GET'])
 def testing():
-    print('got a test call')
+    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\ngot a test call")
     return 'you asked for a test. i hope.', 200
 
 @app.route('/.well-known/<fileaskedfor>', methods=['POST','GET'])
 def https_stuff(fileaskedfor):
-    print('they asked for',fileaskedfor) #if we want webroot renewal. but it is actually a subdirectory - acme-challenge. soc hange to "standalone" mode
+    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nthey asked for",fileaskedfor) #if we want webroot renewal. but it is actually a subdirectory - acme-challenge. soc hange to "standalone" mode
     return 'lets not serve these yet', 200
     return send_from_directory('/etc/letsencrypt/live/robots.yakcollective.org',fileaskedfor, as_attachment=True)
 
@@ -73,7 +74,7 @@ def https_stuff(fileaskedfor):
 def is_valid_signature(x_hub_signature, data, private_key):
     # x_hub_signature and data are from the webhook payload
     # private key is your webhook secret
-    #print('signature=',x_hub_signature)
+    #print("signature=",x_hub_signature)
     #print("private key=",private_key)
     hash_algorithm, github_signature = x_hub_signature.split('=', 1)
     algorithm = hashlib.__dict__.get(hash_algorithm)
