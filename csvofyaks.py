@@ -85,7 +85,7 @@ mem=[]
 @client.event
 async def on_ready(): 
 #connecting to discord takes time and is asynchornous
-    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nWe have logged in as {0.user}".format(client),  client.guilds)#, client.guilds[0].text_channels)
+    print("---\n[" + kindatimestamp() + "]\nWe have logged in as {0.user}".format(client),  client.guilds)#, client.guilds[0].text_channels)
     g=client.guilds[0]
     #mem=await g.fetch_members().flatten() # no need to read until asked
     #for u in mem:
@@ -95,7 +95,7 @@ async def on_ready():
 @client.event
 async def on_member_join(member):
 #for now, we track when new members join. but this functionality shoudleb moved to shepherd
-    print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nnew member: "+str(member.name), flush=True)
+    print("---\n[" + kindatimestamp() + "]\nnew member: "+str(member.name), flush=True)
     newones.append("new member"+str(member.name))
     me2 = client.get_user(MAIERSNOWFLAKE).dm_channel #for now send messages to me
     await me2.send("new member: "+str(member.name)+" id: "+str(member.id))
@@ -118,7 +118,7 @@ async def on_message(message):
     
     if message.content.startswith('$hello') or message.content.startswith('/hello'):
         await message.channel.send('Hello!')
-        print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nhello mess from "+message.author.name,flush=True);
+        print("---\n[" + kindatimestamp() + "]\nhello mess from "+message.author.name,flush=True);
         
 #obselete, will be removed
     if message.content.startswith('$whosenew') or message.content.startswith('/whosenew'):
@@ -219,7 +219,7 @@ async def on_message(message):
         if 'yakshaver' not in r and 'yakherder' not in r:
             await message.channel.send('You must be either a yakshaver or yakherder to use this command. Your current roles are: {}'.format(r))
             return
-        print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nworking on memberlist")
+        print("---\n[" + kindatimestamp() + "]\nworking on memberlist")
         await message.channel.trigger_typing() #show that robot is busy
         await makecsvfile()
         await message.channel.send("a csv file of all yaks")
@@ -234,10 +234,10 @@ async def on_message(message):
 
 #test tool to have robot send a dm to a user. can be deleted
     if message.content.startswith('$dm') or message.content.startswith('/dm'):
-        print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\ndm",flush=True);
+        print("---\n[" + kindatimestamp() + "]\ndm",flush=True);
         t=int(message.content[3:])
         target=await dmchan(t)
-        print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\ntarget is:",target,flush=True)    
+        print("---\n[" + kindatimestamp() + "]\ntarget is:",target,flush=True)    
         await target.send('Hello! i was told by '+message.author.name+' to contact you')
         
 #generate a list of upcoming events in next week
@@ -265,7 +265,7 @@ async def on_message(message):
                                             singleEvents=True,
                                             orderBy='startTime').execute()
         events = events_result.get('items', [])
-        print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nevents len:", len(events))
+        print("---\n[" + kindatimestamp() + "]\nevents len:", len(events))
         
 #generate a message string
         if not nice:
@@ -289,7 +289,7 @@ async def on_message(message):
                     ts=ts + '**Today**'
                 s=s+event['summary'].replace("and Yak Collective","")+ ' **Starts in:** '+ ts+'\n'
         else:
-            print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nyes nice")
+            print("---\n[" + kindatimestamp() + "]\nyes nice")
             s="Upcoming in next week:\n"
             if not events:
                 s=s+'No upcoming events found.'
@@ -327,7 +327,7 @@ async def on_message(message):
                 too="No other upcoming events"
             s=s+"\n__**Today**__ (next 24 hours)\n"+tod+"\n__**Tomorrow**__\n"+tom+"\n__**Later this week**__ \n"+too
 
-        print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\ns:",s)
+        print("---\n[" + kindatimestamp() + "]\ns:",s)
         await message.channel.send(s)
         
 #show activity in channels
@@ -351,17 +351,17 @@ async def on_message(message):
 #send tweet 
     if message.content.startswith('$yaktweet') or message.content.startswith('/yaktweet'):
         dm_chan=await dmchan(message.author.id) #report by DM
-        print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\ntweet "+message.content)
+        print("---\n[" + kindatimestamp() + "]\ntweet "+message.content)
         if 'madeyak' in r:
-            print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nmadeyak")
+            print("---\n[" + kindatimestamp() + "]\nmadeyak")
             #send tweet
             conts=message.content.split(maxsplit=1)[1]
             txt=(conts+' #yakbot')[:280]
             ##check if ONE attachment. if yes, save it and then post it
             if (len(message.attachments)>0):
-                print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nhas attachment")
+                print("---\n[" + kindatimestamp() + "]\nhas attachment")
                 fp=tempfile.NamedTemporaryFile()
-                print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nopened file {}".format(fp.name))
+                print("---\n[" + kindatimestamp() + "]\nopened file {}".format(fp.name))
                 await message.attachments[0].save(fp.file)
                 fp.flush() #does this help? some images workand some not without command
                 status = twitterapi.PostUpdate(txt,media=fp.name)
@@ -382,17 +382,17 @@ async def on_message(message):
 #from here tweet TEST using iamz1 info
     if message.content.startswith('$yaktwit') or message.content.startswith('/yaktwit'):
         dm_chan=await dmchan(message.author.id) #report by DM
-        print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\ntweet "+message.content)
+        print("---\n[" + kindatimestamp() + "]\ntweet "+message.content)
         if 'madeyak' in r:
-            print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nmadeyak")
+            print("---\n[" + kindatimestamp() + "]\nmadeyak")
             #send tweet
             conts=message.content.split(maxsplit=1)[1]
             txt=(conts+' #yakbot')[:280]
             ##check if ONE attachment. if yes, save it and then post it
             if (len(message.attachments)>0):
-                print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nhas attachment")
+                print("---\n[" + kindatimestamp() + "]\nhas attachment")
                 fp=tempfile.NamedTemporaryFile(delete=False)
-                print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nopened file {}".format(fp.name))
+                print("---\n[" + kindatimestamp() + "]\nopened file {}".format(fp.name))
                 n=fp.name
                 await message.attachments[0].save(fp.file)
                 fp.close()
@@ -562,7 +562,7 @@ async def do_activity(message,r):
                 print(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2])
                 mess_data=''
                 ws='unavailable'
-                print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\ncannot access channel: ",ch.name)
+                print("---\n[" + kindatimestamp() + "]\ncannot access channel: ",ch.name)
             tot=len(mess_data)
             if not codeformat: # more format string
                 tmp=((ch.name+':').ljust(maxlen)+"   total messages: "+'**'+str(tot).ljust(5)+'**'+'    _weekly_: '+ws, tot)
@@ -627,7 +627,7 @@ async def do_noise(message,r):
                 cnt[idx]['weekly'][theweek]+=1
                 cnt[idx]['tot']+=1
             except: #probbaly fail for users who left server
-                print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nfailed for ",idx)
+                print("---\n[" + kindatimestamp() + "]\nfailed for ",idx)
 #format answer
     for k in cnt:
         ws=""
@@ -696,29 +696,29 @@ async def do_links(message,r,proc):
         stdout,stderr = out.communicate() #waits for it to finish
         #print("stderr?:"+stderr)
         await message.channel.send("a file of extracted tweets from recent links:", file=discord.File(LOCALDIR+"tweets.csv"))
-        print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\ntwits sent")
+        print("---\n[" + kindatimestamp() + "]\ntwits sent")
         if (proc == 'markdown'):
             thestringlist=['/bin/bash', 'markdownthelist.bash', "links.csv"] #using nathan's utility
             out = subprocess.Popen(thestringlist, 
                cwd=LOCALDIR,
                stdout=subprocess.PIPE, 
                stderr=subprocess.STDOUT)
-            print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nasked for titles")
+            print("---\n[" + kindatimestamp() + "]\nasked for titles")
             stdout,stderr = out.communicate() #waits for it to finish
             #print("stderr?:"+stderr)
             await message.channel.send("a file of extracted titles from recent links (markdown):", file=discord.File(LOCALDIR+"links.md"))
-            print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\ntitles sent")
+            print("---\n[" + kindatimestamp() + "]\ntitles sent")
         elif (proc == 'html'):
             thestringlist=['/bin/bash', 'htmlthelist.bash', "links.csv"] #using nathan's utility
             out = subprocess.Popen(thestringlist, 
                cwd=LOCALDIR,
                stdout=subprocess.PIPE, 
                stderr=subprocess.STDOUT)
-            print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nasked for titles")
+            print("---\n[" + kindatimestamp() + "]\nasked for titles")
             stdout,stderr = out.communicate() #waits for it to finish
             #print("stderr?:"+stderr)
             await message.channel.send("a file of extracted titles from recent links (html):", file=discord.File(LOCALDIR+"links.html"))
-            print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\ntitles sent")
+            print("---\n[" + kindatimestamp() + "]\ntitles sent")
     return
 
 
@@ -727,7 +727,7 @@ async def dmchan(t):
 #generate a dmc hannel to a yak, if needed
     target=client.get_user(t).dm_channel
     if (not target): 
-        print("---\n[" + datetime.datetime.now().astimezone().replace(microsecond=0).isoformat() + "]\nneed to create dm channel",flush=True)
+        print("---\n[" + kindatimestamp() + "]\nneed to create dm channel",flush=True)
         target=await client.get_user(t).create_dm()
     return target
 
@@ -766,6 +766,8 @@ async def splitsend(ch,st,codeformat):
             await ch.send(st[0:x])
         await splitsend(ch,st[x+1:],codeformat)
     
+def kindatimestamp():
+    return datetime.now().astimezone().replace(microsecond=0).isoformat()
 
 async def makecsvfile(): 
 #create csv file from discord member data
