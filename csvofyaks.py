@@ -37,6 +37,7 @@ from datetime import datetime
 HOMEDIR='/home/yak/'
 LOCALDIR=HOMEDIR+'robot/onboarding_robot/'
 CALID='o995m43173bpslmhh49nmrp5i4@group.calendar.google.com' #yakcollective google calender id
+TRUSTED_ROLE='yak-contributor'
 
 ##discord specific settings. the discord key is that of the yak_scraper robot and is, for now, in the .env file
 
@@ -352,8 +353,8 @@ async def on_message(message):
     if message.content.startswith('$yaktweet') or message.content.startswith('/yaktweet'):
         dm_chan=await dmchan(message.author.id) #report by DM
         print(newlinetimestamp() + "tweet "+message.content)
-        if 'madeyak' in r:
-            print(newlinetimestamp() + "madeyak")
+        if TRUSTED_ROLE in r:
+            print(newlinetimestamp() + TRUSTED_ROLE)
             #send tweet
             conts=message.content.split(maxsplit=1)[1]
             txt=(conts+' #yakbot')[:280]
