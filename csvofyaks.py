@@ -37,7 +37,7 @@ from datetime import datetime
 HOMEDIR='/home/yak/'
 LOCALDIR=HOMEDIR+'robot/onboarding_robot/'
 CALID='o995m43173bpslmhh49nmrp5i4@group.calendar.google.com' #yakcollective google calender id
-TRUSTED_ROLE='yak-contributor'
+TRUSTED_ROLE='yaktributor'
 
 ##discord specific settings. the discord key is that of the yak_scraper robot and is, for now, in the .env file
 
