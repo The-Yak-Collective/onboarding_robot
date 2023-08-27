@@ -1,4 +1,4 @@
-##yak_scraper robot. current real functins are generating a list of yak members, indicating activities in the YC and reporting on upcoming events
+##yak_scraper robot. current real functins are generating a list of yak members and indicating activities in the YC
 ##permissions needed are read/write channels, mainly, but also member intents. for now, we are not tracking presence.
 ##working on converting this to a modular design
 
@@ -18,12 +18,6 @@ import os.path
 import os
 from array import *
 
-#google specific stuff for calendar
-from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
-from dateutil.parser import parse
-
 from datetime import datetime, timedelta
 from pytz import timezone
 import pytz
@@ -36,7 +30,6 @@ from datetime import datetime
 
 HOMEDIR='/home/yak/'
 LOCALDIR=HOMEDIR+'robot/onboarding_robot/'
-CALID='o995m43173bpslmhh49nmrp5i4@group.calendar.google.com' #yakcollective google calender id
 TRUSTED_ROLE='yaktributor'
 
 ##discord specific settings. the discord key is that of the yak_scraper robot and is, for now, in the .env file
@@ -240,96 +233,6 @@ async def on_message(message):
         target=await dmchan(t)
         print(newlinetimestamp() + "target is:",target,flush=True)    
         await target.send('Hello! i was told by '+message.author.name+' to contact you')
-        
-#generate a list of upcoming events in next week
-    if message.content.startswith('$upcoming') or message.content.startswith('/upcoming'):
-        await message.channel.trigger_typing() #show that robot is busy
-#this part copied form google quickstart. basically, use credentials and ask for new ones if they expired or are missing
-        nice = len(message.content.split(maxsplit=1))>1
-        creds = None
-        if os.path.exists(HOMEDIR+'token.pickle'):
-            with open(HOMEDIR+'token.pickle', 'rb') as token:
-                creds = pickle.load(token)
-        if not creds or not creds.valid:
-            if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
-                flow = InstalledAppFlow.from_client_secrets_file('yc-credentials.json', SCOPES)
-                creds = flow.run_local_server(port=9000)
-            with open(HOMEDIR+'token.pickle', 'wb') as token:
-                pickle.dump(creds, token)
-#ask fro next 7 days of events
-        cal = build('calendar', 'v3', credentials=creds)
-
-        now = datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-        events_result = cal.events().list(calendarId=CALID, timeMin=now,timeMax=(datetime.utcnow()+timedelta(days=7)).isoformat()+ 'Z',
-                                            singleEvents=True,
-                                            orderBy='startTime').execute()
-        events = events_result.get('items', [])
-        print(newlinetimestamp() + "events len:", len(events))
-        
-#generate a message string
-        if not nice:
-            s="Upcoming in next week (beta version):\n"
-            if not events:
-                s=s+'No upcoming events found.'
-            
-
-            for event in events:
-                if (event['status']=="canceled" or event['summary'].startswith("Canceled:")):
-                    continue
-    #for each event figure out how long until it starts and generate a nice (?) format of it
-                start = parse(event['start'].get('dateTime', event['start'].get('date')))
-                #print(start, datetime.utcnow(),datetime.now().astimezone())
-                seconds2go=(start-datetime.utcnow().astimezone()).total_seconds()
-                days, hours, minutes = int(seconds2go //(3600*24)), int((seconds2go // 3600) % 24), int(seconds2go // 60 % 60)
-
-                ts=str(days) + ' days and '
-                ts=ts+ str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes '
-                if days==0:
-                    ts=ts + '**Today**'
-                s=s+event['summary'].replace("and Yak Collective","")+ ' **Starts in:** '+ ts+'\n'
-        else:
-            print(newlinetimestamp() + "yes nice")
-            s="Upcoming in next week:\n"
-            if not events:
-                s=s+'No upcoming events found.'
-            tod=""
-            tom=""
-            too=""
-
-            for event in events:
-                if (event['status']=="canceled" or event['summary'].startswith("Canceled:")):
-                    continue
-    #for each event figure out how long until it starts and generate a nice format of it, base don nathan ack's suggestion
-                start = parse(event['start'].get('dateTime', event['start'].get('date')))
-                seconds2go=(start-datetime.utcnow().astimezone()).total_seconds()
-                days, hours, minutes = int(seconds2go //(3600*24)), int((seconds2go // 3600) % 24), int(seconds2go // 60 % 60)
-                if (days==0):
-                    ts=str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes '
-                    if(tod!=""):
-                        tod=tod+"\n"
-                    tod=tod+"> **"+event['summary'].replace("and Yak Collective","")+ '**\n> Starts in '+ ts+'\n'
-                if (days==1):
-                    if(tom!=""):
-                        tom=tom+"\n"
-                    ts=str(days) + ' day and '+str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes '
-                    tom=tom+"> **"+event['summary'].replace("and Yak Collective","")+ '**\n> Starts in '+ ts+'\n'
-                if(days>1):
-                    if(too!=""):
-                        too=too+"\n"
-                    ts=str(days) + ' days and '+str(hours)+ ' hours' +' and '+str(minutes)+ ' minutes '
-                    too=too+"> **"+event['summary'].replace("and Yak Collective","")+ '**\n> Starts in '+ ts+'\n'
-            if (tod==""):
-                tod="No upcoming events in next 24 hours"
-            if (tom==""):
-                tom="No upcoming events tomorrow"
-            if (too==""):
-                too="No other upcoming events"
-            s=s+"\n__**Today**__ (next 24 hours)\n"+tod+"\n__**Tomorrow**__\n"+tom+"\n__**Later this week**__ \n"+too
-
-        print(newlinetimestamp() + "s:",s)
-        await message.channel.send(s)
         
 #show activity in channels
     if message.content.startswith('$activity') or message.content.startswith('/activity'):
