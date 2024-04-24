@@ -112,7 +112,7 @@ fi
 if [[ "$WHICH_BOT" == "gpt3discord" ]] || [[ "$WHICH_BOT" == "all" ]]; then
 	if [[ $(ps auxww | grep "gpt3discord.py" | grep -v grep | wc -l) -ge 1 ]]; then
 		echo "[$(date --iso-8601=seconds)] Killing gpt3discord.py"
-		pkill -f gpt3discord.py
+		pkill -9 -f gpt3discord.py
 		sleep 5
 	fi
 	echo "[$(date --iso-8601=seconds)] Starting gpt3discord.py"
