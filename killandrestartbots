@@ -4,6 +4,13 @@
 #
 [[ ! -d "$HOME/logs" ]] && mkdir -p "$HOME/logs"
 
+# Create necessary virtual environment
+#
+if [[ ! -d "$HOME/robot-venv" ]]; then
+	python3 -m venv --system-site-packages "$HOME/robot-venv"
+	$HOME/robot-venv/bin/pip install python-twitter
+fi
+
 # Which bot to restart? Pass this in on the command line. If nothing is
 # passed in, restart everything.
 #
@@ -26,7 +33,7 @@ if [[ "$WHICH_BOT" == "server_update" ]] || [[ "$WHICH_BOT" == "all" ]]; then
 		sleep 5
 	fi
 	echo "[$(date --iso-8601=seconds)] Starting server_update.py"
-	nohup python3 $HOME/robot/onboarding_robot/server_update.py >> "$HOME/logs/server_update.log" 2>&1 &
+	nohup $HOME/robot-venv/bin/python3 $HOME/robot/onboarding_robot/server_update.py >> "$HOME/logs/server_update.log" 2>&1 &
 	GOT_A_BOT="yes"
 fi
 
@@ -37,7 +44,7 @@ if [[ "$WHICH_BOT" == "csvofyaks" ]] || [[ "$WHICH_BOT" == "all" ]]; then
 		sleep 5
 	fi
 	echo "[$(date --iso-8601=seconds)] Starting csvofyaks.py"
-	nohup python3 $HOME/robot/onboarding_robot/csvofyaks.py >> "$HOME/logs/csvofyaks.log" 2>&1 &
+	nohup $HOME/robot-venv/bin/python3 $HOME/robot/onboarding_robot/csvofyaks.py >> "$HOME/logs/csvofyaks.log" 2>&1 &
 	GOT_A_BOT="yes"
 fi
 
@@ -48,7 +55,7 @@ if [[ "$WHICH_BOT" == "shepherd" ]] || [[ "$WHICH_BOT" == "all" ]]; then
 		sleep 5
 	fi
 	echo "[$(date --iso-8601=seconds)] Starting shepherd.py"
-	nohup python3 $HOME/robot/onboarding_robot/shepherd.py >> "$HOME/logs/shepherd.log" 2>&1 &
+	nohup $HOME/robot-venv/bin/python3 $HOME/robot/onboarding_robot/shepherd.py >> "$HOME/logs/shepherd.log" 2>&1 &
 	GOT_A_BOT="yes"
 fi
 
@@ -59,7 +66,7 @@ if [[ "$WHICH_BOT" == "gigayak" ]] || [[ "$WHICH_BOT" == "all" ]]; then
 		sleep 5
 	fi
 	echo "[$(date --iso-8601=seconds)] Starting gigayak.py"
-	nohup python3 $HOME/robot/gigayak/gigayak.py >> "$HOME/logs/gigayak.log" 2>&1 &
+	nohup $HOME/robot-venv/bin/python3 $HOME/robot/gigayak/gigayak.py >> "$HOME/logs/gigayak.log" 2>&1 &
 	GOT_A_BOT="yes"
 fi
 
@@ -70,7 +77,7 @@ if [[ "$WHICH_BOT" == "menus" ]] || [[ "$WHICH_BOT" == "all" ]]; then
 		sleep 5
 	fi
 	echo "[$(date --iso-8601=seconds)] Starting menus.py"
-	nohup python3 $HOME/robot/menus/menus.py >> "$HOME/logs/menus.log" 2>&1 &
+	nohup $HOME/robot-venv/bin/python3 $HOME/robot/menus/menus.py >> "$HOME/logs/menus.log" 2>&1 &
 	GOT_A_BOT="yes"
 fi
 
@@ -81,7 +88,7 @@ if [[ "$WHICH_BOT" == "project_ui" ]] || [[ "$WHICH_BOT" == "all" ]]; then
 		sleep 5
 	fi
 	echo "[$(date --iso-8601=seconds)] Starting project_ui.py"
-	nohup python3 $HOME/robot/project_ui/project_ui.py >> "$HOME/logs/project_ui.log" 2>&1 &
+	nohup $HOME/robot-venv/bin/python3 $HOME/robot/project_ui/project_ui.py >> "$HOME/logs/project_ui.log" 2>&1 &
 	GOT_A_BOT="yes"
 fi
 
@@ -92,7 +99,7 @@ if [[ "$WHICH_BOT" == "slashayak" ]] || [[ "$WHICH_BOT" == "all" ]]; then
 		sleep 5
 	fi
 	echo "[$(date --iso-8601=seconds)] Starting slashayak.py"
-	nohup python3 $HOME/robot/slashayak/slashayak.py >> "$HOME/logs/slashayak.log" 2>&1 &
+	nohup $HOME/robot-venv/bin/python3 $HOME/robot/slashayak/slashayak.py >> "$HOME/logs/slashayak.log" 2>&1 &
 	GOT_A_BOT="yes"
 fi
 
@@ -103,7 +110,7 @@ if [[ "$WHICH_BOT" == "promptschool" ]] || [[ "$WHICH_BOT" == "all" ]]; then
 		sleep 5
 	fi
 	echo "[$(date --iso-8601=seconds)] Starting promptschool.py"
-	nohup python3 $HOME/robot/promptschool/promptschool.py >> "$HOME/logs/promptschool.log" 2>&1 &
+	nohup $HOME/robot-venv/bin/python3 $HOME/robot/promptschool/promptschool.py >> "$HOME/logs/promptschool.log" 2>&1 &
 	GOT_A_BOT="yes"
 fi
 
